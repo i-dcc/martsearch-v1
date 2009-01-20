@@ -1,0 +1,7 @@
+({
+  url:                  '/htgt/biomart/martservice',
+  name:                 'Gene Trapping Constructs',
+  description:          '',
+  datasetConfigVersion: 0.6,
+  dataset_name:         'HTGT_TRAP'
+})

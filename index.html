@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>
+      I-DCC
+    </title>
+    
+    <!-- Blueprint CSS from http://www.blueprintcss.org/ -->
+    <link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection" />
+    <link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print" />
+    <!--[if IE]>
+      <link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection">
+    <![endif]-->
+    <link rel="stylesheet" href="css/blueprint/plugins/fancy-type/screen.css" type="text/css" media="screen, projection">
+    
+    <!-- easymart CSS -->
+    <link rel="stylesheet" href="css/easymart.css" type="text/css" media="screen, projection">
+    
+    <!-- jQuery JavaScript from http://jquery.com/ -->
+    <script src="js/jquery-1.2.6.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/jquery-jtemplates.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/jquery.togglecontrol.min.js" type="text/javascript" charset="utf-8"></script>
+    
+    <!-- easymart JS -->
+    <script src="js/easymart.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+      $(document).ready(function() { easymart.init(); });
+    </script>
+  </head>
+  <body>
+    
+    <!-- header and navigation -->
+    <div id="header" class="container">
+      
+      <div class="span-6">
+        <h1>I-DCC</h1>
+      </div>
+      
+      <div id="navigation" class="span-17 append-1 last right">
+        <ul>
+          <li>About</li>
+          <li>Search</li>
+          <li>Configuration</li>
+        </ul>
+      </div>
+      
+      <hr />
+    </div>
+    
+    <!-- search -->
+    <div id="search" class="container">
+      <div class="center">
+        <form id="search" action="index_submit" method="get" accept-charset="utf-8">
+          <input type="text" name="query" value="" id="query" size="50" /> 
+          <input type="submit" value="search" /> 
+        </form>
+      </div>
+      <hr class="space" />
+      <div id="loading" class="center" style="display:none;"><span>searching...</span></div>
+    </div>
+    
+    <!-- messages/status to the user -->
+    <div id="messages" class="container">
+      <div id="msg" class="span-16 prepend-4 append-4"></div>
+    </div>
+    
+    <!-- results section -->
+    <hr class="space" />
+    <div id="results" class="container"></div>
+    
+    <!-- footer -->
+    <div id="footer" class="container">
+      <hr />
+      <div class="span-12">
+        &copy; 2009, I-DCC project.
+      </div>
+      <div class="span-11 append-1 last right">
+        powered by <strong><em>easymart</em></strong>
+      </div>
+    </div>
+    
+  </body>
+</html>

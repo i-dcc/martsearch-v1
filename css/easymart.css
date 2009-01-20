@@ -1,0 +1,33 @@
+/* @override http://idcc.site/css/easymart.css */
+
+/* Layout */
+
+body {
+	font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.left {
+	text-align: left;
+}
+
+.right {
+	text-align: right;
+}
+
+.center {
+	text-align: center;
+}
+
+/* Navigation */
+
+#navigation ul {
+	list-style-type: none;
+	margin-top: 15px;
+	font-size: larger;
+}
+
+#navigation ul li {
+	display: inline-block;
+	padding-left: 5px;
+	margin-right: 5px;
+}

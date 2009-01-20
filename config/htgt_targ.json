@@ -1,0 +1,7 @@
+({
+  url:                  '/htgt/biomart/martservice',
+  name:                 'Gene Targeting Constructs',
+  description:          '',
+  datasetConfigVersion: 0.6,
+  dataset_name:         'HTGT_TARG'
+})
