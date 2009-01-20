@@ -32,7 +32,7 @@ var easymart = {
     $("#loading").ajaxStop(function(){ $(this).hide(); });
     
     // Override the submit function on the form
-    $('#search').submit( function(){
+    $('#easymart_search').submit( function(){
       easymart.search.run( $('#query').val() );
       return false;
     });
