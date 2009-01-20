@@ -48,26 +48,35 @@
       <hr />
     </div>
     
-    <!-- search -->
-    <div id="search" class="container">
-      <div class="center">
-        <form id="search" action="index_submit" method="get" accept-charset="utf-8">
-          <input type="text" name="query" value="" id="query" size="50" /> 
-          <input type="submit" value="search" /> 
-        </form>
+    <!-- main div for the searches -->
+    <div id="search">
+      <!-- search form -->
+      <div class="container">
+        <div class="center">
+          <form id="easymart_search" action="index_submit" method="get" accept-charset="utf-8">
+            <input type="text" name="query" value="" id="query" size="50" /> 
+            <input type="submit" value="search" /> 
+          </form>
+        </div>
+        <hr class="space" />
+        <div id="loading" class="center" style="display:none;"><span>searching...</span></div>
       </div>
+
+      <!-- messages/status to the user -->
+      <div id="messages" class="container">
+        <div id="msg" class="span-16 prepend-4 append-4"></div>
+      </div>
+
+      <!-- results section -->
       <hr class="space" />
-      <div id="loading" class="center" style="display:none;"><span>searching...</span></div>
+      <div id="results" class="container"></div>
     </div>
     
-    <!-- messages/status to the user -->
-    <div id="messages" class="container">
-      <div id="msg" class="span-16 prepend-4 append-4"></div>
-    </div>
+    <!-- about -->
+    <div id="about" style="display:none;"></div>
     
-    <!-- results section -->
-    <hr class="space" />
-    <div id="results" class="container"></div>
+    <!-- configuration -->
+    <div id="config" style="display:none;"></div>
     
     <!-- footer -->
     <div id="footer" class="container">
