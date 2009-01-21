@@ -4,6 +4,7 @@
 
 body {
 	font-family: Georgia, "Times New Roman", Times, serif;
+	background: url(../images/header-bg.png) repeat-x;
 }
 
 .left {
@@ -18,12 +19,21 @@ body {
 	text-align: center;
 }
 
+/* Headings */
+
+#header h1 {
+	background-image: url(../images/idcc-logo.png);
+	text-indent: -999px;
+	width: 238px;
+	height: 151px;
+}
+
 /* Navigation */
 
 #navigation ul {
 	list-style-type: none;
-	margin-top: 15px;
-	font-size: larger;
+	font-size: 18px;
+	margin-top: 70px;
 }
 
 #navigation ul li {
