@@ -14,8 +14,6 @@ $.extend({
 */
 var easymart = {
   
-  debug: true,
-  
   conf: {
     marts: {
       ensembl:    '/config/ensembl.json',
@@ -73,6 +71,7 @@ var easymart = {
     load: function () {
       $.each( easymart.conf.marts, function (name, url) {
         $.getJSON( url, function (json) {
+          log.info('[config] loaded ' + name);
           easymart.conf.marts[name] = json;
         });
       });
