@@ -79,18 +79,24 @@ var easymart = {
     build_biomart_xml: function ( mart, query ) {
       var xml = '';
       xml += '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE Query>';
-      xml += '<Query  virtualSchemaName = "default" formatter = "CSV" header = "0" uniqueRows = "1" count = "" datasetConfigVersion = "' + mart.datasetConfigVersion + '" >';
-      xml += '<Dataset name = "' + mart.dataset_name + '" interface = "default" >';
+      xml += '<Query  virtualSchemaName="default" formatter="CSV" header="0" uniqueRows="1" count="" datasetConfigVersion="' + mart.datasetConfigVersion + '" >';
+      xml += '<Dataset name="' + mart.dataset_name + '" interface="default" >';
 
-      var filt_n_attrs = new Array();
-
-      for (var i=0; i < mart.vars.length; i++) {
-        var variable = mart.vars[i];
-        if ( variable.filter ) { filt_n_attrs.unshift('<Filter name = "' + variable.name + '" value = "'+ query +'"/>'); }
-        if ( variable.attribute ) { filt_n_attrs.push('<Attribute name = "' + variable.name + '" />'); }
+      var params = new Array();
+      
+      for (var i=0; i < mart.filters.length; i++) {
+        if ( mart.filters[i].enabled ) {
+          params.push('<Filter name="' + mart.filters[i].name + '" value="'+ query +'"/>');
+        };
       };
-
-      xml += filt_n_attrs.join('');
+      
+      for (var i=0; i < mart.attributes.length; i++) {
+        if ( mart.attributes[i].enabled ) {
+          params.push('<Attribute name="' + mart.attributes[i].name + '" />');
+        };
+      };
+      
+      xml += params.join('');
       xml += '</Dataset>';
       xml += '</Query>';
       return xml;
@@ -123,4 +129,4 @@ var easymart = {
     
   }
   
-}
+};
