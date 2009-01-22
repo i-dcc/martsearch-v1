@@ -20,7 +20,6 @@ var easymart = {
       htgt_targ:  '/config/htgt_targ.json'
       //htgt_trap:  '/config/htgt_trap.json',
     },
-    // FIXME: Need a way to define the 'flow' of the searches through the marts
     search: [
       {
         name:     'ensembl',
@@ -97,6 +96,7 @@ var easymart = {
       $('#msg').html('');
       $('#results').html('');
       
+      // TODO: We need to make easymart.conf.search and easymart.conf.marts generated dynamically from user prefs
       $.each( easymart.conf.search, function () {
         easymart.search.submit( easymart.conf.marts[this.name], this, queryStr );
       });
