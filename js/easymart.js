@@ -8,24 +8,13 @@ $.extend({
   }
 });
 
-// Dummy log variable to stop errors when blackbird is not loaded.
-var log = {
-  toggle:   function() {},
-  move:     function() {},
-  resize:   function() {},
-  clear:    function() {},
-  debug:    function() {},
-  info:     function() {},
-  warn:     function() {},
-  error:    function() {},
-  profile:  function() {}
-};
-
 /*
-* The easymart object - everything is enclosed within this object in oreder
-* to avoid namespace clashes if/when we make this thing available as a widget/plugin...
+* easymart - everything is enclosed within this object in order to avoid namespace 
+* clashes if/when we make this thing available as a widget/plugin...
 */
 var easymart = {
+  
+  debug: true,
   
   conf: {
     marts: {
@@ -40,7 +29,7 @@ var easymart = {
           {
             name:     'htgt_targ',
             join_on:  'ensembl_gene_id'
-          },
+          }
         ]
       }
     ]
@@ -50,7 +39,9 @@ var easymart = {
   init: function() {
     
     // Load in the configuration files and configure the interface
+    log.profile('config loading');
     easymart.config.load();
+    log.profile('config loading');
     
     // Focus the input on the search bar
     $('#query').focus();
@@ -95,7 +86,7 @@ var easymart = {
       $.each( easymart.conf.marts, function (name, conf) {
         
       });
-    },
+    }
     
   },
   
@@ -162,6 +153,11 @@ var easymart = {
       
     },
     
+    // search.build_results - Function to build and display the results structure
+    build_results: function () {
+      // body...
+    },
+    
     // search.build_biomart_xml - Helper for writing the biomart XML to a variable
     build_biomart_xml: function ( mart, query, filter_override ) {
       var xml = '';
@@ -222,6 +218,19 @@ var easymart = {
       return json;
     }
     
-  }
+  },
   
+};
+
+// Dummy log variable to stop errors when blackbird is not loaded.
+var log = {
+  toggle:   function() {},
+  move:     function() {},
+  resize:   function() {},
+  clear:    function() {},
+  debug:    function() {},
+  info:     function() {},
+  warn:     function() {},
+  error:    function() {},
+  profile:  function() {}
 };

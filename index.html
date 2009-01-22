@@ -26,9 +26,16 @@
       $(document).ready(function() { easymart.init(); });
     </script>
     
+    <!-- Blackbird - javascript logging/profiling tool (comment out for production) -->
     <script src="js/blackbirdjs/blackbird.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+      $(document).ready(function() {
+        $('#bbird_controls').show();
+        $('#bbird_toggle').click( function () { log.toggle(); });
+        $('#bbird_move').click( function () { log.move(); });
+      });
+    </script>
     <link type="text/css" rel="Stylesheet" href="js/blackbirdjs/blackbird.css" />
-    
   </head>
   <body>
     
@@ -86,6 +93,10 @@
       </div>
       <div class="span-11 append-1 last right">
         powered by <strong><em>easymart</em></strong>
+        <span id="bbird_controls" style="display: none;">
+          <br /><a id="bbird_toggle">toggle blackbird</a>
+          <br /><a id="bbird_move">move blackbird</a>
+        </span>
       </div>
     </div>
     
