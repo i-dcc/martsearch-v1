@@ -1,14 +1,22 @@
+
 var easymart = {
   
   conf: {
     marts: {
       ensembl:    '/config/ensembl.json',
-      htgt_targ:  '/config/htgt_targ.json',
-      htgt_trap:  '/config/htgt_trap.json',
+      htgt_targ:  '/config/htgt_targ.json'
+      //htgt_trap:  '/config/htgt_trap.json',
     },
     // FIXME: Need a way to define the 'flow' of the searches through the marts
     search: [
-      
+      {
+        name: 'ensembl',
+        links: [
+          { 
+            name: 'htgt_targ'
+          }
+        ]
+      }
     ]
   },
   
@@ -66,26 +74,35 @@ var easymart = {
   // search - Function group that handles all aspects of the search.
   search: {
     
-    // search.run - Function to run the user query
+    // search.run - Controller function to manage and drive the search
     run: function ( queryStr ) {
       
       // Clean up the page
       $('#msg').html('');
       $('#results').html('');
       
-      $.each( easymart.conf.marts, function (name, mart) {
-        $.ajax({
-          type:     "POST",
-          url:      mart.url,
-          data:     { query: easymart.search.build_biomart_xml( mart, queryStr ) },
-          success:  function (data) {
-            if (data) {
-              $('#results').append(data);
-            } else {
-              $('#results').append('<span class="no-results">Sorry, no results were returned by your search.</span>');
-            };
-          }
-        })
+      $.each( easymart.conf.search, function () {
+        easymart.search.submit( easymart.conf.marts[this.name], queryStr );
+      });
+      
+    },
+    
+    
+    
+    // search.submit - Helper for submitting a given search
+    submit: function ( mart, queryStr ) {
+      
+      $.ajax({
+        type:     "POST",
+        url:      mart.url,
+        data:     { query: easymart.search.build_biomart_xml( mart, queryStr ) },
+        success:  function (data) {
+          if (data) {
+            $('#results').append(data);
+          } else {
+            $('#results').append('<span class="no-results">Sorry, no results were returned by your search.</span>');
+          };
+        }
       });
       
     },
