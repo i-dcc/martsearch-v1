@@ -24,7 +24,7 @@ var easymart = {
     // Attach an error reporter to the 'msg' div on the page
     $('#msg').ajaxError( function(event, request, settings){
       $('#loading').hide();
-      $(this).append("<div class='error'>Sorry, there was an error with the search.<br />Error requesting page " + settings.url + "<br />Please re-submit your request.</div>");
+      $(this).append("<div class='error'>Sorry, error has occured requesting '" + settings.url + "'<br />Please re-submit your request.</div>");
     });
 
     // Attach ajax listeners to the 'loading' div (don't you just love jQuery?!?!?)
