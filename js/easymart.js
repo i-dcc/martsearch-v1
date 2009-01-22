@@ -150,7 +150,7 @@ var easymart = {
     },
     
     // search.build_biomart_xml - Helper for writing the biomart XML to a variable
-    build_biomart_xml: function ( mart, query ) {
+    build_biomart_xml: function ( mart, query, filter_override ) {
       var xml = '';
       xml += '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE Query>';
       xml += '<Query  virtualSchemaName="default" formatter="CSV" header="0" uniqueRows="1" count="" datasetConfigVersion="' + mart.datasetConfigVersion + '" >';
@@ -158,10 +158,16 @@ var easymart = {
 
       var params = [];
       
-      for (var i=0; i < mart.filters.length; i++) {
-        if ( mart.filters[i].enabled ) {
-          params.push('<Filter name="' + mart.filters[i].name + '" value="'+ query +'"/>');
+      if ( filter_override ) {
+        params.push('<Filter name="' filter_override '" value="'+ query +'"/>');
+      } else {
+        
+        for (var i=0; i < mart.filters.length; i++) {
+          if ( mart.filters[i].enabled ) {
+            params.push('<Filter name="' + mart.filters[i].name + '" value="'+ query +'"/>');
+          };
         };
+        
       };
       
       for (var i=0; i < mart.attributes.length; i++) {
