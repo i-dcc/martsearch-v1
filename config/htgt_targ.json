@@ -3,5 +3,32 @@
   name:                 'Gene Targeting Constructs',
   description:          '',
   datasetConfigVersion: 0.6,
-  dataset_name:         'HTGT_TARG'
+  dataset_name:         'HTGT_TARG',
+  importables:
+    [
+      { name: 'ensembl_gene_id' }
+    ],
+  exportables:
+    [
+      { name: 'ensembl_gene_id' }
+    ],
+  filters:
+    [
+      { name: 'ensembl_gene_id',  display: 'Ensembl Gene ID' },
+      { name: 'gene_symbol',      display: 'Gene Symbol', enabled: true }
+    ],
+  attributes:
+    [
+      { name: 'ensembl_gene_id',  display: 'Ensembl Gene ID',   enabled: true },
+      { name: 'gene_symbol',      display: 'Gene Symbol',       enabled: true },
+      { name: 'status',           display: 'Status',            enabled: true },
+    ],
+  templates:
+    [
+      {
+        name: 'Gene Targeting Constructs',
+        template: new String (),
+        enabled: true
+      }
+    ]
 })

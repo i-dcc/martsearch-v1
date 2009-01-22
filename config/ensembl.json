@@ -3,5 +3,32 @@
   name:                 'Ensembl (Mus Musculus)',
   description:          '',
   datasetConfigVersion: 0.6,
-  dataset_name:         'mmusculus_gene_ensembl'
+  dataset_name:         'mmusculus_gene_ensembl',
+  importables:
+    [
+      { name: 'ensembl_gene_id' }
+    ],
+  exportables:
+    [
+      { name: 'ensembl_gene_id' }
+    ],
+  filters:
+    [
+      { name: 'ensembl_gene_id',  display: 'Ensembl Gene ID' },
+      { name: 'mgi_symbol',       display: 'Gene Symbol', enabled: true }
+    ],
+  attributes:
+    [
+      { name: 'ensembl_gene_id',  display: 'Ensembl Gene ID',   enabled: true },
+      { name: 'mgi_symbol',       display: 'Gene Symbol',       enabled: true },
+      { name: 'description',      display: 'Description',       enabled: true },
+    ],
+  templates:
+    [
+      {
+        name: 'Gene Information - EnsEMBL (Mus Musculus)',
+        template: new String (),
+        enabled: true
+      }
+    ]
 })
