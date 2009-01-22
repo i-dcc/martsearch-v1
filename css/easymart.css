@@ -41,3 +41,13 @@ body {
 	padding-left: 5px;
 	margin-right: 5px;
 }
+
+/* Notifications */
+
+#loading span {
+	background: #fff url(../images/loading.gif) no-repeat left center;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 35px;
+	display: inline-block;
+}
