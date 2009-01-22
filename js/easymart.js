@@ -130,7 +130,7 @@ var easymart = {
                 // Extract the info that we are going to query the second mart by
                 $.each( json_data, function (j) {
                   if ( this[ search_path.children[i].join_on ] ) {
-                    child_query[ new String(this[ search_path.children[i].join_on ]) ] = '';
+                    child_query[ this[ search_path.children[i].join_on ] ] = '';
                   };
                 });
                 
