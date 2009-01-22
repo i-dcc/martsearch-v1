@@ -71,7 +71,22 @@ var easymart = {
       
       // Clean up the page
       $('#msg').html('');
-      $('#results').html(queryStr);
+      $('#results').html('');
+      
+      $.each( easymart.conf.marts, function (name, mart) {
+        $.ajax({
+          type:     "POST",
+          url:      mart.url,
+          data:     { query: easymart.search.build_biomart_xml( mart, queryStr ) },
+          success:  function (data) {
+            if (data) {
+              $('#results').append(data);
+            } else {
+              $('#results').append('<span class="no-results">Sorry, no results were returned by your search.</span>');
+            };
+          }
+        })
+      });
       
     },
     
