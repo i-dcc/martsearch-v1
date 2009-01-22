@@ -84,3 +84,26 @@
   #blackbird .footer div.left label { display:block;color:#BBB;margin:8px 0 0 16px; position:relative; font-family:Arial,sans-serif; _margin:4px 0 0 8px;}
     #blackbird .footer div.left label input { padding:0;vertical-align:middle; }
 #blackbird .footer div.right { background-position:bottom right; width:150px; _width:0; }
+
+/* easymart/idcc hacks */
+
+#bbird_controls {
+	padding: 10px;
+	border: 2px solid #fff;
+	-webkit-box-shadow: 0px 0px 10px #333;
+	background-color: #151515;
+	display: block;
+	float: none;
+	color: #fff;
+	font: 11px "Lucida Grande", Lucida, Verdana, sans-serif;
+	margin: 10px 0;
+}
+
+#bbird_controls a  {
+	color: #008240;
+}
+
+#bbird_controls a:hover {
+	cursor: pointer;
+	color: #ff7c00;
+}
