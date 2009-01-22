@@ -1,4 +1,17 @@
 
+// jQuery extension to allow us to extract the keys out of a hash object.
+$.extend({
+  keys: function(obj){
+    var a = [];
+    $.each(obj, function(k){ a.push(k) });
+    return a;
+  }
+});
+
+/*
+* The easymart object - everything is enclosed within this object in oreder
+* to avoid namespace clashes if/when we make this thing available as a widget/plugin...
+*/
 var easymart = {
   
   conf: {
@@ -10,11 +23,12 @@ var easymart = {
     // FIXME: Need a way to define the 'flow' of the searches through the marts
     search: [
       {
-        name: 'ensembl',
-        links: [
-          { 
-            name: 'htgt_targ'
-          }
+        name:     'ensembl',
+        children: [
+          {
+            name:     'htgt_targ',
+            join_on:  'ensembl_gene_id'
+          },
         ]
       }
     ]
@@ -34,6 +48,8 @@ var easymart = {
       $('#loading').hide();
       $(this).append("<div class='error'>Sorry, error has occured requesting '" + settings.url + "'<br />Please re-submit your request.</div>");
     });
+    
+    // TODO: Put in a proper error reporting function using the 'error' param from the $.ajax function
 
     // Attach ajax listeners to the 'loading' div (don't you just love jQuery?!?!?)
     $("#loading").ajaxStart(function(){ $(this).show(); });
@@ -63,7 +79,7 @@ var easymart = {
     build: function () {
       var configuration_page = '';
       
-      // TODO: Complete this function...
+      // TODO: Complete the configuration builder function...
       $.each( easymart.conf.marts, function (name, conf) {
         
       });
@@ -74,7 +90,7 @@ var easymart = {
   // search - Function group that handles all aspects of the search.
   search: {
     
-    // search.run - Controller function to manage and drive the search
+    // search.run - Controller function to kick off the search
     run: function ( queryStr ) {
       
       // Clean up the page
@@ -82,15 +98,13 @@ var easymart = {
       $('#results').html('');
       
       $.each( easymart.conf.search, function () {
-        easymart.search.submit( easymart.conf.marts[this.name], queryStr );
+        easymart.search.submit( easymart.conf.marts[this.name], this, queryStr );
       });
       
     },
     
-    
-    
-    // search.submit - Helper for submitting a given search
-    submit: function ( mart, queryStr ) {
+    // search.submit - Fnuction for submitting the searches
+    submit: function ( mart, search_path, queryStr ) {
       
       $.ajax({
         type:     "POST",
@@ -98,12 +112,40 @@ var easymart = {
         data:     { query: easymart.search.build_biomart_xml( mart, queryStr ) },
         success:  function (data) {
           if (data) {
-            $('#results').append(data);
+            
+            // Do something with the data...
+            var json_data = easymart.search.csv2json( mart, data );
+            
+            // TODO: Need to do something more with the data here...
+            $('#results').append( data );
+            
+            // Now see if we need to submit any child searches
+            if ( search_path.children ) {
+              
+              $.each( search_path.children, function (i) {
+
+                var child_mart = easymart.conf.marts[ search_path.children[i].name ];
+                var child_query = {};
+
+                // Extract the info that we are going to query the second mart by
+                $.each( json_data, function (j) {
+                  if ( this[ search_path.children[i].join_on ] ) {
+                    child_query[ new String(this[ search_path.children[i].join_on ]) ] = '';
+                  };
+                });
+                
+                easymart.search.submit( child_mart, search_path.children[i], $.keys(child_query).join(",") );
+                
+              });
+              
+            };
+            
           } else {
             $('#results').append('<span class="no-results">Sorry, no results were returned by your search.</span>');
           };
         }
       });
+      
       
     },
     
@@ -114,7 +156,7 @@ var easymart = {
       xml += '<Query  virtualSchemaName="default" formatter="CSV" header="0" uniqueRows="1" count="" datasetConfigVersion="' + mart.datasetConfigVersion + '" >';
       xml += '<Dataset name="' + mart.dataset_name + '" interface="default" >';
 
-      var params = new Array();
+      var params = [];
       
       for (var i=0; i < mart.filters.length; i++) {
         if ( mart.filters[i].enabled ) {
@@ -138,9 +180,11 @@ var easymart = {
     csv2json: function ( mart, data ) {
       // First we'll figure out our keys for our JSON objects - this
       // is the 'pretty' property of each variable in our mart config
-      var names = new Array();
-      for (var i=0; i < mart.vars.length; i++) {
-        names.push(mart.vars[i].pretty);
+      var names = [];
+      for (var i=0; i < mart.attributes.length; i++) {
+        if ( mart.attributes[i].enabled ) {
+          names.push(mart.attributes[i].name);
+        };
       };
 
       // Now split the csv string on newlines, then each line on commas
