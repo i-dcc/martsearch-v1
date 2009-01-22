@@ -8,6 +8,19 @@ $.extend({
   }
 });
 
+// Dummy log variable to stop errors when blackbird is not loaded.
+var log = {
+  toggle:   function() {},
+  move:     function() {},
+  resize:   function() {},
+  clear:    function() {},
+  debug:    function() {},
+  info:     function() {},
+  warn:     function() {},
+  error:    function() {},
+  profile:  function() {}
+};
+
 /*
 * The easymart object - everything is enclosed within this object in oreder
 * to avoid namespace clashes if/when we make this thing available as a widget/plugin...
