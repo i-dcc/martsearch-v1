@@ -104,12 +104,12 @@ var easymart = {
     },
     
     // search.submit - Fnuction for submitting the searches
-    submit: function ( mart, search_path, queryStr ) {
+    submit: function ( mart, search_path, queryStr, filter_override ) {
       
       $.ajax({
         type:     "POST",
         url:      mart.url,
-        data:     { query: easymart.search.build_biomart_xml( mart, queryStr ) },
+        data:     { query: easymart.search.build_biomart_xml( mart, queryStr, filter_override ) },
         success:  function (data) {
           if (data) {
             
@@ -134,7 +134,7 @@ var easymart = {
                   };
                 });
                 
-                easymart.search.submit( child_mart, search_path.children[i], $.keys(child_query).join(",") );
+                easymart.search.submit( child_mart, search_path.children[i], $.keys(child_query).join(","), search_path.children[i].join_on );
                 
               });
               
@@ -159,7 +159,7 @@ var easymart = {
       var params = [];
       
       if ( filter_override ) {
-        params.push('<Filter name="' filter_override '" value="'+ query +'"/>');
+        params.push('<Filter name="'+ filter_override +'" value="'+ query +'"/>');
       } else {
         
         for (var i=0; i < mart.filters.length; i++) {
