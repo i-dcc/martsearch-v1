@@ -15,7 +15,7 @@ $.extend({
 var easymart = {
   
   conf: {
-    marts: {
+    sources: {
       ensembl:    '/config/ensembl.json',
       htgt_targ:  '/config/htgt_targ.json'
       //htgt_trap:  '/config/htgt_trap.json',
@@ -37,9 +37,9 @@ var easymart = {
   init: function() {
     
     // Load in the configuration files and configure the interface
-    log.profile('config loading');
+    log.profile('[config] easymart.config.load()');
     easymart.config.load();
-    log.profile('config loading');
+    log.profile('[config] easymart.config.load()');
     
     // Focus the input on the search bar
     $('#query').focus();
@@ -67,12 +67,12 @@ var easymart = {
   // config - Function group used to configure the application.
   config: {
     
-    // config.load - Function to load and process the mart configuration files.
+    // config.load - Function to load and process the source configuration files.
     load: function () {
-      $.each( easymart.conf.marts, function (name, url) {
+      $.each( easymart.conf.sources, function (name, url) {
         $.getJSON( url, function (json) {
+          easymart.conf.sources[name] = json;
           log.info('[config] loaded ' + name);
-          easymart.conf.marts[name] = json;
         });
       });
     },
@@ -82,7 +82,7 @@ var easymart = {
       var configuration_page = '';
       
       // TODO: Complete the configuration builder function...
-      $.each( easymart.conf.marts, function (name, conf) {
+      $.each( easymart.conf.sources, function (name, conf) {
         
       });
     }
@@ -99,25 +99,31 @@ var easymart = {
       $('#msg').html('');
       $('#results').html('');
       
-      // TODO: We need to make easymart.conf.search and easymart.conf.marts generated dynamically from user prefs
+      // TODO: We need to make easymart.conf.search and easymart.conf.sources generated dynamically from user prefs
       $.each( easymart.conf.search, function () {
-        easymart.search.submit( easymart.conf.marts[this.name], this, queryStr );
+        easymart.search.submit( easymart.conf.sources[this.name], this, queryStr );
       });
       
     },
     
     // search.submit - Fnuction for submitting the searches
-    submit: function ( mart, search_path, queryStr, filter_override ) {
+    submit: function ( source, search_path, queryStr, filter_override ) {
       
+      log.debug('[search] searching for \'' + queryStr + '\' - ' + source.name);
+      log.profile('[search] easymart.search $.ajax request - ' + source.name);
       $.ajax({
         type:     "POST",
-        url:      mart.url,
-        data:     { query: easymart.search.build_biomart_xml( mart, queryStr, filter_override ) },
+        url:      source.url,
+        data:     { query: easymart.search.biomart_xml( source, queryStr, filter_override ) },
         success:  function (data) {
           if (data) {
             
+            log.profile('[search] easymart.search $.ajax request - ' + source.name);
+            
             // Do something with the data...
-            var json_data = easymart.search.csv2json( mart, data );
+            log.profile('[search] easymart.search.biomart_csv2json()');
+            var json_data = easymart.search.biomart_csv2json( source, data );
+            log.profile('[search] easymart.search.biomart_csv2json()');
             
             // TODO: Need to do something more with the data here...
             $('#results').append( data );
@@ -127,17 +133,17 @@ var easymart = {
               
               $.each( search_path.children, function (i) {
 
-                var child_mart = easymart.conf.marts[ search_path.children[i].name ];
+                var child_source = easymart.conf.sources[ search_path.children[i].name ];
                 var child_query = {};
 
-                // Extract the info that we are going to query the second mart by
+                // Extract the info that we are going to query the second source by
                 $.each( json_data, function (j) {
                   if ( this[ search_path.children[i].join_on ] ) {
                     child_query[ this[ search_path.children[i].join_on ] ] = '';
                   };
                 });
                 
-                easymart.search.submit( child_mart, search_path.children[i], $.keys(child_query).join(","), search_path.children[i].join_on );
+                easymart.search.submit( child_source, search_path.children[i], $.keys(child_query).join(","), search_path.children[i].join_on );
                 
               });
               
@@ -149,7 +155,6 @@ var easymart = {
         }
       });
       
-      
     },
     
     // search.build_results - Function to build and display the results structure
@@ -158,7 +163,7 @@ var easymart = {
     },
     
     // search.build_biomart_xml - Helper for writing the biomart XML to a variable
-    build_biomart_xml: function ( mart, query, filter_override ) {
+    biomart_xml: function ( mart, query, filter_override ) {
       var xml = '';
       xml += '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE Query>';
       xml += '<Query  virtualSchemaName="default" formatter="CSV" header="0" uniqueRows="1" count="" datasetConfigVersion="' + mart.datasetConfigVersion + '" >';
@@ -190,8 +195,8 @@ var easymart = {
       return xml;
     },
     
-    // search.csv2json - Helper to convert a CSV file to a JSON object
-    csv2json: function ( mart, data ) {
+    // search.biomart_csv2json - Helper to convert a biomart CSV file to a JSON object
+    biomart_csv2json: function ( mart, data ) {
       // First we'll figure out our keys for our JSON objects - this
       // is the 'pretty' property of each variable in our mart config
       var names = [];
