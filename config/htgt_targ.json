@@ -14,8 +14,8 @@
     ],
   filters:
     [
-      { name: 'ensembl_gene_id',  display: 'Ensembl Gene ID' },
-      { name: 'gene_symbol',      display: 'Gene Symbol', enabled: true }
+      { name: 'gene_symbol',      display: 'Gene Symbol', enabled: true },
+      { name: 'ensembl_gene_id',  display: 'Ensembl Gene ID' }
     ],
   attributes:
     [
@@ -23,12 +23,27 @@
       { name: 'gene_symbol',      display: 'Gene Symbol',       enabled: true },
       { name: 'status',           display: 'Status',            enabled: true },
     ],
-  templates:
-    [
-      {
-        name: 'Gene Targeting Constructs',
-        template: new String (),
-        enabled: true
-      }
-    ]
+  template: new String(
+    '<h4>{$T.source.name}</h4>'+
+    '<table>'+
+      '<thead>'+
+        '<tr>'+
+        '{#foreach $T.source.attributes as attribute}'+
+          '{#if $T.attribute.enabled}'+
+          '<th>{$T.attribute.display}</th>'+
+          '{#/if}'+
+        '{#/for}'+
+        '</tr>'+
+      '</thead>'+
+      '<tbody>'+
+        '{#foreach $T.results as result_array}'+
+          '<tr>'+
+          '{#foreach $T.result_array as result}'+
+              '<td>{$T.result}</td>'+
+          '{#/for}'+
+          '</tr>'+
+        '{#/for}'+
+      '</tbody>'+
+    '</table>'
+  )
 })

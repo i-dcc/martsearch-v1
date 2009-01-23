@@ -23,6 +23,7 @@ var easymart = {
     search: [
       {
         name:     'ensembl',
+        focus:    'mgi_symbol',
         children: [
           {
             name:     'htgt_targ',
@@ -121,29 +122,30 @@ var easymart = {
             log.profile('[search] easymart.search $.ajax request - ' + source.name);
             
             // Do something with the data...
-            log.profile('[search] easymart.search.biomart_csv2json()');
-            var json_data = easymart.search.biomart_csv2json( source, data );
-            log.profile('[search] easymart.search.biomart_csv2json()');
             
-            // TODO: Need to do something more with the data here...
-            $('#results').append( data );
+            log.profile('[search] easymart.search.biomart_tsv2json()');
+            var json_data = easymart.search.biomart_tsv2json_ah( source, data );
+            log.profile('[search] easymart.search.biomart_tsv2json()');
+            
+            easymart.search.build_results( source, json_data );
             
             // Now see if we need to submit any child searches
             if ( search_path.children ) {
               
               $.each( search_path.children, function (i) {
-
+                
                 var child_source = easymart.conf.sources[ search_path.children[i].name ];
-                var child_query = {};
-
+                var child_query_hash = {};
+                
                 // Extract the info that we are going to query the second source by
                 $.each( json_data, function (j) {
                   if ( this[ search_path.children[i].join_on ] ) {
-                    child_query[ this[ search_path.children[i].join_on ] ] = '';
+                    child_query_hash[ this[ search_path.children[i].join_on ] ] = '';
                   };
                 });
                 
-                easymart.search.submit( child_source, search_path.children[i], $.keys(child_query).join(","), search_path.children[i].join_on );
+                // Submit the child search
+                easymart.search.submit( child_source, search_path.children[i], $.keys(child_query_hash).join(","), search_path.children[i].join_on );
                 
               });
               
@@ -158,15 +160,21 @@ var easymart = {
     },
     
     // search.build_results - Function to build and display the results structure
-    build_results: function () {
-      // body...
+    build_results: function ( source, results ) {
+      
+      
+      $('#results').setTemplate( source.template );
+      $('#results').processTemplate( { source: source, results: results } );
+      
+      
+      
     },
     
     // search.build_biomart_xml - Helper for writing the biomart XML to a variable
     biomart_xml: function ( mart, query, filter_override ) {
       var xml = '';
       xml += '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE Query>';
-      xml += '<Query  virtualSchemaName="default" formatter="CSV" header="0" uniqueRows="1" count="" datasetConfigVersion="' + mart.datasetConfigVersion + '" >';
+      xml += '<Query  virtualSchemaName="default" formatter="TSV" header="0" uniqueRows="1" count="" datasetConfigVersion="' + mart.datasetConfigVersion + '" >';
       xml += '<Dataset name="' + mart.dataset_name + '" interface="default" >';
 
       var params = [];
@@ -195,24 +203,40 @@ var easymart = {
       return xml;
     },
     
-    // search.biomart_csv2json - Helper to convert a biomart CSV file to a JSON object
-    biomart_csv2json: function ( mart, data ) {
-      // First we'll figure out our keys for our JSON objects - this
-      // is the 'pretty' property of each variable in our mart config
-      var names = [];
-      for (var i=0; i < mart.attributes.length; i++) {
-        if ( mart.attributes[i].enabled ) {
-          names.push(mart.attributes[i].name);
+    // search.biomart_tsv2json_aa - Helper to convert a biomart TSV file to a JSON object (array of arrays)
+    biomart_tsv2json_aa: function ( mart, data ) {
+      // Split the tsv string on newlines, then each line on tabs
+      // before building into the JSON output
+      var json = [];
+      var data_by_line = data.split("\n");
+
+      for (var i=0; i < data_by_line.length; i++) {
+        var intermediate_array = [];
+        var data_by_item = data_by_line[i].split("\t");
+        for (var j=0; j < data_by_item.length; j++) {
+          intermediate_array.push(data_by_item[j]);
         };
+        json.push(intermediate_array);
       };
 
-      // Now split the csv string on newlines, then each line on commas
+      return json;
+    },
+    
+    // search.biomart_tsv2json_ah - Helper to convert a biomart TSV file to a JSON object (array of hashes)
+    biomart_tsv2json_ah: function ( mart, data ) {
+      // First we'll figure out our keys for our JSON objects
+      var names = new Array();
+      for (var i=0; i < mart.attributes.length; i++) {
+        names.push(mart.attributes[i].name);
+      };
+
+      // Now split the tsv string on newlines, then each line on tabs
       // before building into the JSON output
       var json = [];
       var data_by_line = data.split("\n");
       for (var i=0; i < data_by_line.length; i++) {
-        var intermediate_hash = new Object();
-        var data_by_item = data_by_line[i].split(",");
+        var intermediate_hash = {};
+        var data_by_item = data_by_line[i].split("\t");
         for (var j=0; j < data_by_item.length; j++) {
           intermediate_hash[names[j]] = data_by_item[j];
         };
