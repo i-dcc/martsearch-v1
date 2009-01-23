@@ -22,12 +22,16 @@ var easymart = {
     },
     search: [
       {
+        level:    0,
         name:     'ensembl',
-        focus:    'mgi_symbol',
+        join_on:  'mgi_symbol',
+        results: '',
         children: [
           {
+            level:    1,
             name:     'htgt_targ',
-            join_on:  'ensembl_gene_id'
+            join_on:  'ensembl_gene_id',
+            results:  ''
           }
         ]
       }
@@ -93,6 +97,9 @@ var easymart = {
   // search - Function group that handles all aspects of the search.
   search: {
     
+    // search.results - Placeholder variable that will be filled with the results from a search
+    results: {},
+    
     // search.run - Controller function to kick off the search
     run: function ( queryStr ) {
       
@@ -123,11 +130,10 @@ var easymart = {
             
             // Do something with the data...
             
-            log.profile('[search] easymart.search.biomart_tsv2json()');
             var json_data = easymart.search.biomart_tsv2json_ah( source, data );
-            log.profile('[search] easymart.search.biomart_tsv2json()');
-            
-            easymart.search.build_results( source, json_data );
+            search_path.results = json_data;
+            easymart.search.build_results( source, search_path, filter_override );
+            //easymart.search.display_results();
             
             // Now see if we need to submit any child searches
             if ( search_path.children ) {
@@ -159,14 +165,78 @@ var easymart = {
       
     },
     
-    // search.build_results - Function to build and display the results structure
-    build_results: function ( source, results ) {
+    // search.build_results - Function to build the results object...
+    build_results: function ( source, search_path, join_parent_on ) {
+      
+      var search_results = {};
+      search_results[ search_path.level ] = {};
+      
+      log.debug('working on '+ search_path.name + ' (level ' + search_path.level + ')');
+      log.debug('merging on '+ search_path.join_on);
+      log.debug('got '+ search_path.results.length + ' result(s)');
+      
+      $.each( search_path.results, function( i, result ) {
+        
+        log.debug(result[search_path.join_on]);
+        
+        if ( search_results[ search_path.level ][ result[search_path.join_on] ] ) {
+          if ( search_results[ search_path.level ][ result[search_path.join_on] ][ search_path.name ] ) {
+          } else {
+            search_results[ search_path.level ][ result[search_path.join_on] ][ search_path.name ] = [];
+          };
+        } else {
+          search_results[ search_path.level ][ result[search_path.join_on] ] = {};
+          search_results[ search_path.level ][ result[search_path.join_on] ][ search_path.name ] = [];
+        };
+        
+        search_results[ search_path.level ][ result[search_path.join_on] ][ search_path.name ].push(result);
+        
+      });
+      
+      $.extend( true, easymart.search.results, search_results );
       
       
-      $('#results').setTemplate( source.template );
-      $('#results').processTemplate( { source: source, results: results } );
       
+    },
+    
+    // search.display_results - Function to draw the results object to screen
+    display_results: function () {
       
+      // FIXME: display_results is fooked - needs to be redesigned to accomodate the new results obj
+      
+      $.each( easymart.search.results, function(focus_val, sources) {
+        
+        // Do we need to add a new holding div for the focus object?
+        var new_holding_div = true;
+        $('#results div.container').each( function () {
+          if ( this.id && this.id.match(focus_val) ) {
+            new_holding_div = false;
+          };
+        });
+        
+        if ( new_holding_div ) {
+          $('#results').append('<div id="'+focus_val+'" class="container"><div class="span-4">'+focus_val+'</div><div class="span-20 last"></div></div>')
+        };
+        
+        $.each( sources, function (source, results) {
+          
+          var new_source_div = true;
+          $('#results #'+focus_val+' .span-20 div').each( function () {
+            if ( this.id && this.id.match(focus_val+'_'+source) ) {
+              new_source_div = false;
+            };
+          });
+          
+          if ( new_source_div ) {
+            $('#results #'+focus_val+' .span-20').append('<div id="'+focus_val+'_'+source+'"></div>');
+          };
+          
+          $('#'+focus_val+'_'+source).setTemplate( easymart.conf.sources[source].template );
+          $('#'+focus_val+'_'+source).processTemplate( { source: easymart.conf.sources[source], results: results } );
+          
+        });
+        
+      });
       
     },
     
@@ -209,6 +279,7 @@ var easymart = {
       // before building into the JSON output
       var json = [];
       var data_by_line = data.split("\n");
+      data_by_line.pop(); // Remove the last entry - this is always empty
 
       for (var i=0; i < data_by_line.length; i++) {
         var intermediate_array = [];
@@ -234,13 +305,15 @@ var easymart = {
       // before building into the JSON output
       var json = [];
       var data_by_line = data.split("\n");
+      data_by_line.pop(); // Remove the last entry - this is always empty
+      
       for (var i=0; i < data_by_line.length; i++) {
-        var intermediate_hash = {};
-        var data_by_item = data_by_line[i].split("\t");
-        for (var j=0; j < data_by_item.length; j++) {
-          intermediate_hash[names[j]] = data_by_item[j];
-        };
-        json.push(intermediate_hash);
+          var intermediate_hash = {};
+          var data_by_item = data_by_line[i].split("\t");
+          for (var j=0; j < data_by_item.length; j++) {
+            intermediate_hash[names[j]] = data_by_item[j];
+          };
+          json.push(intermediate_hash);
       };
 
       return json;
