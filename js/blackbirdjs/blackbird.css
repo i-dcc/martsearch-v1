@@ -88,22 +88,33 @@
 /* easymart/idcc hacks */
 
 #bbird_controls {
-	padding: 10px;
-	border: 2px solid #fff;
-	-webkit-box-shadow: 0px 0px 10px #333;
-	background-color: #151515;
-	display: block;
-	float: none;
-	color: #fff;
 	font: 11px "Lucida Grande", Lucida, Verdana, sans-serif;
 	margin: 10px 0;
+	padding: 10px;
+	border: 2px solid #ccc;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	width: auto;
+	float: right;
 }
 
 #bbird_controls a  {
 	color: #008240;
+	padding-left: 18px;
+	padding-bottom: 2px;
+
 }
 
 #bbird_controls a:hover {
 	cursor: pointer;
 	color: #ff7c00;
 }
+
+#bbird_controls #bbird_toggle {
+	background: url(application.png) no-repeat 0 center;
+}
+
+#bbird_controls #bbird_move {
+	background: url(application_go.png) no-repeat 0 center;
+}
+
