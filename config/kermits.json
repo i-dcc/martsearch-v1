@@ -1,0 +1,62 @@
+({
+  url:                  '/htgt/biomart/martservice',
+  name:                 'Microinjection Data (Kermits)',
+  description:          '',
+  datasetConfigVersion: 0.6,
+  dataset_name:         'KERMITS',
+  importables:
+    [
+      { name: 'escell_clone_name' }
+    ],
+  exportables:
+    [
+      { name: 'escell_clone_name' }
+    ],
+  filters:
+    [
+      { name: 'escell_clone_name',  display: 'ES Cell Clone', enabled: true }
+    ],
+  attributes:
+    [
+      { name: 'escell_clone_name',          display: 'ES Cell Clone Name',                  enabled: true },
+      { name: 'escell_line_strain',         display: 'ES Cell Line Strain',                 enabled: true },
+      { name: 'mi_centre',                  display: 'Microinjection Centre',               enabled: true },
+      { name: 'attempt_number',             display: 'Attempt Number',                      enabled: true },
+      { name: 'mi_date',                    display: 'Microinjection Date',                 enabled: true },
+      { name: 'blastocyst_strain',          display: 'Blastocyst Strain',                   enabled: true },
+      { name: 'num_blasts_transfer',        display: '# Blasts Transfer',                   enabled: true },
+      { name: 'num_pups_born',              display: '# Pups Born',                         enabled: true },
+      { name: 'num_chimeras',               display: '# Chimeras (Total)',                  enabled: true },
+      { name: 'num_male_chimeras',          display: '# Male Chimeras',                     enabled: true },
+      { name: 'num_female_chimeras',        display: '# Female Chimeras',                   enabled: true },
+      { name: 'num_male_ccc_lt_40_percent', display: '# Male Coat Colour Coverage <40%',    enabled: true },
+      { name: 'num_male_ccc_40-80_percent', display: '# Male Coat Colour Coverage 40-80%',  enabled: true },
+      { name: 'num_male_ccc_gt_80_percent', display: '# Male Coat Colour Coverage >80%',    enabled: true },
+      { name: 'num_male_ccc_100_percent',   display: '# Male Coat Colour Coverage 100%',    enabled: true },
+      { name: 'num_with_glt',               display: '# Chimeras With GLT',                 enabled: true },
+      { name: 'mi_comments',                display: 'Microinjection Comments',             enabled: true }
+    ],
+  template: new String(
+    '<strong>{ $T.source.name }</strong>'+
+    '<table>'+
+      '<thead>'+
+        '<tr>'+
+        '{#foreach $T.source.attributes as attribute}'+
+          '{#if $T.attribute.enabled}'+
+          '<th>{$T.attribute.display}</th>'+
+          '{#/if}'+
+        '{#/for}'+
+        '</tr>'+
+      '</thead>'+
+      '<tbody>'+
+        '{#foreach $T.results as result_array}'+
+          '<tr>'+
+          '{#foreach $T.result_array as result}'+
+              '<td>{$T.result}</td>'+
+          '{#/for}'+
+          '</tr>'+
+        '{#/for}'+
+      '</tbody>'+
+    '</table>'
+  )
+})

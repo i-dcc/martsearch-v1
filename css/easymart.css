@@ -59,23 +59,30 @@ body {
 }
 
 #results div.result {
-	border: 2px solid #ccc;
+	margin-bottom: 5px;
+}
+
+#results div.result span.heading {
+	border: 2px solid gray;
+	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	display: inline-block;
+	background-color: #ccc;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+#results div.result .data {
+	border: 1px solid #ccc;
 	-webkit-border-radius: 7px;
 	-moz-border-radius: 7px;
 	padding: 10px;
 	margin-bottom: 5px;
 }
 
-#results div.result.child {
-	border: none;
-	background: url(../images/connect_child_to_parent.png) no-repeat left 20px;
-	padding-left: 20px;
+#results div.result .child {
+	background: url(../images/connect_child_to_parent.png) no-repeat 5px 5px;
+	padding-left: 25px;
 }
 
-#results div.result.child .data {
-	border: 1px solid #ccc;
-	-webkit-border-radius: 7px;
-	-moz-border-radius: 7px;
-	padding: 10px;
-}
 

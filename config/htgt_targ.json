@@ -6,11 +6,15 @@
   dataset_name:         'HTGT_TARG',
   importables:
     [
-      { name: 'ensembl_gene_id' }
+      { name: 'ensembl_gene_id' },
+      { name: 'gene_symbol' },
+      { name: 'escell_clone_name' }
     ],
   exportables:
     [
-      { name: 'ensembl_gene_id' }
+      { name: 'ensembl_gene_id' },
+      { name: 'gene_symbol' },
+      { name: 'escell_clone_name' }
     ],
   filters:
     [
@@ -19,12 +23,16 @@
     ],
   attributes:
     [
-      { name: 'ensembl_gene_id',  display: 'Ensembl Gene ID',   enabled: true },
-      { name: 'gene_symbol',      display: 'Gene Symbol',       enabled: true },
-      { name: 'status',           display: 'Status',            enabled: true },
+      { name: 'ensembl_gene_id',   display: 'Ensembl Gene ID',    enabled: true },
+      { name: 'gene_symbol',      display: 'Gene Symbol',         enabled: false },
+      { name: 'status',            display: 'Status',             enabled: true },
+      { name: 'allele_name',       display: 'Allele Name',        enabled: true },
+      { name: 'escell_clone_name', display: 'ES Cell Clone Name', enabled: true },
+      { name: 'es_cell_line',      display: 'ES Cell Line',       enabled: true },
+      { name: 'epd_pass_level',    display: 'ES Cell QC',         enabled: true }
     ],
   template: new String(
-    '<h4>{$T.source.name}</h4>'+
+    '<strong>{ $T.source.name }</strong>'+
     '<table>'+
       '<thead>'+
         '<tr>'+

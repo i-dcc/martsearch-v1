@@ -24,7 +24,7 @@
       { name: 'description',      display: 'Description',       enabled: true },
     ],
   template: new String(
-    '<h4>{$T.source.name}</h4>'+
+    '<strong>{ $T.source.name }</strong>'+
     '<table>'+
       '<thead>'+
         '<tr>'+

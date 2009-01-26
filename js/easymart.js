@@ -17,7 +17,8 @@ var easymart = {
   conf: {
     sources: {
       ensembl:    '/config/ensembl.json',
-      htgt_targ:  '/config/htgt_targ.json'
+      htgt_targ:  '/config/htgt_targ.json',
+      kermits:    '/config/kermits.json'
       //htgt_trap:  '/config/htgt_trap.json',
     },
     search: [
@@ -25,13 +26,21 @@ var easymart = {
         level:    0,
         name:     'ensembl',
         join_on:  'mgi_symbol',
-        results: '',
+        results:  '',
         children: [
           {
             level:    1,
             name:     'htgt_targ',
             join_on:  'ensembl_gene_id',
-            results:  ''
+            results:  '',
+            children: [
+              {
+                level:    2,
+                name:     'kermits',
+                join_on:  'escell_clone_name',
+                results:  ''
+              }
+            ]
           }
         ]
       }
@@ -172,9 +181,9 @@ var easymart = {
       var search_results = {};
       search_results[ search_path.level ] = {};
       
-      log.debug('working on '+ search_path.name + ' (level ' + search_path.level + ')');
-      log.debug('merging on '+ search_path.join_on);
-      log.debug('got '+ search_path.results.length + ' result(s)');
+      log.debug('working on '+search_path.name+' (level '+search_path.level+')');
+      log.debug('merging on '+search_path.join_on);
+      log.debug('got '+search_path.results.length+' result(s)');
       
       $.each( search_path.results, function( i, result ) {
         
@@ -199,7 +208,7 @@ var easymart = {
     display_results: function ( search_paths, parent_search ) {
       
       if ( search_paths ) {} 
-      else               { search_paths = easymart.conf.search; };
+      else                { search_paths = easymart.conf.search; };
       
       $.each( search_paths, function () {
         var search = this;
@@ -213,26 +222,36 @@ var easymart = {
             
             log.info('[display_results] working on '+search.name);
             
-            var new_primary_div = true;
-            $('#results div.container').each( function () {
-              if ( this.id && this.id.match( result[search.join_on] ) ) { new_primary_div = false; };
-            });
-            
-            if ( new_primary_div ) {
-              $('#results').append('<div id="'+result[search.join_on]+'" class="container"><h3>'+result[search.join_on]+'</h3></div>');
-            };
-            
             var new_source_div = true;
-            $('#results #'+result[search.join_on]+' div').each( function () {
+            $('#results > div').each( function () {
               if ( this.id && this.id.match(result[search.join_on]+'__'+search.name) ) { new_source_div = false; };
             });
             
             if ( new_source_div ) {
-              $('#results #'+result[search.join_on]).append('<div id="'+result[search.join_on]+'__'+search.name+'" class="level-'+search.level+' result"></div>');
+              
+              var template = 
+                '<div id="'+result[search.join_on]+'__'+search.name+'" class="level-'+search.level+' result">'+
+                  '<span class="heading">'+
+                    '<a class="show_data" onclick="easymart.search.show_results('+
+                      "'"+'#'+result[search.join_on]+'__'+search.name+"'"+','+
+                      "'"+search.name+"'"+','+
+                      "'"+search.level+"'"+','+
+                      "'"+result[search.join_on]+"'"+
+                    ')">'+
+                    result[search.join_on]+
+                    '</a>';
+              
+              var no_results = easymart.search.results_cache[ search.level ][ result[search.join_on] ][ search.name ].length;
+              if (no_results == 1) { template += '<small> ('+no_results+' result)</small>'; }
+              else                 { template += '<small> ('+no_results+' results)</small>'; };
+              
+              template += '</span><div class="data" style="display:none;"></div ></div>';
+              
+              $('#results').append( template );
             };
             
-            $('#'+result[search.join_on]+'__'+search.name).setTemplate( easymart.conf.sources[search.name].template );
-            $('#'+result[search.join_on]+'__'+search.name).processTemplate( { source: easymart.conf.sources[search.name], results: easymart.search.results_cache[ search.level ][ result[search.join_on] ][ search.name ] } );
+            //$('#'+result[search.join_on]+'__'+search.name+' div.data').setTemplate( easymart.conf.sources[search.name].template );
+            //$('#'+result[search.join_on]+'__'+search.name+' div.data').processTemplate( { source: easymart.conf.sources[search.name], results: easymart.search.results_cache[ search.level ][ result[search.join_on] ][ search.name ] } );
             
           }
           // We're not looking at a containing div, we need to sort things more carefully...
@@ -258,11 +277,30 @@ var easymart = {
             });
             
             if ( new_source_div ) {
-              $('#'+parent_result_mapping[ result[search.join_on] ]).append('<div id="'+result[search.join_on]+'__'+search.name+'" class="level-'+search.level+' result child"><div class="data"></div ></div>');
+              var template = 
+                '<div id="'+result[search.join_on]+'__'+search.name+'" class="level-'+search.level+' result child">'+
+                  '<span class="heading">'+
+                  '<a class="show_data" onclick="easymart.search.show_results('+
+                    "'"+'#'+result[search.join_on]+'__'+search.name+"'"+','+
+                    "'"+search.name+"'"+','+
+                    "'"+search.level+"'"+','+
+                    "'"+result[search.join_on]+"'"+
+                  ')">'+
+                  result[search.join_on]+
+                  '</a>';
+              
+              var no_results = easymart.search.results_cache[ search.level ][ result[search.join_on] ][ search.name ].length;
+              if (no_results == 1) { template += '<small> ('+no_results+' result)</small>'; }
+              else                 { template += '<small> ('+no_results+' results)</small>'; };
+              
+              template += '</span><div class="data" style="display:none;"></div ></div>';
+              
+              $('#'+parent_result_mapping[ result[search.join_on] ]).append( template );
+              
             };
             
-            $('#'+parent_result_mapping[ result[search.join_on] ]+' div.data').setTemplate( easymart.conf.sources[search.name].template );
-            $('#'+parent_result_mapping[ result[search.join_on] ]+' div.data').processTemplate( { source: easymart.conf.sources[search.name], results: easymart.search.results_cache[ search.level ][ result[search.join_on] ][ search.name ] } );
+            //$('#'+parent_result_mapping[ result[search.join_on] ]+' div.data').setTemplate( easymart.conf.sources[search.name].template );
+            //$('#'+parent_result_mapping[ result[search.join_on] ]+' div.data').processTemplate( { source: easymart.conf.sources[search.name], results: easymart.search.results_cache[ search.level ][ result[search.join_on] ][ search.name ] } );
             
           };
           
@@ -275,6 +313,18 @@ var easymart = {
         
       });
       
+    },
+    
+    show_results: function ( id, dataset, level, join_on ) {
+      
+      if ( $(id+' > div.data').css('display') == 'none' ) {
+        
+        $(id+' > div.data').setTemplate( easymart.conf.sources[dataset].template );
+        $(id+' > div.data').processTemplate( { source: easymart.conf.sources[dataset], results: easymart.search.results_cache[ level ][ join_on ][ dataset ] } );
+        
+      };
+      
+      $(id+' > div.data').toggle();
       
     },
     
