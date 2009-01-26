@@ -423,7 +423,9 @@ var easymart = {
       // First we'll figure out our keys for our JSON objects
       var names = new Array();
       for (var i=0; i < mart.attributes.length; i++) {
-        names.push(mart.attributes[i].name);
+        if ( mart.attributes[i].enabled ) {
+          names.push(mart.attributes[i].name);
+        };
       };
 
       // Now split the tsv string on newlines, then each line on tabs
