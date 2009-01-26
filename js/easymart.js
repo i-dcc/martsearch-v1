@@ -34,12 +34,6 @@ var easymart = {
             results:  ''
           }
         ]
-      },
-      {
-        level:    0,
-        name:     'htgt_targ',
-        join_on:  'gene_symbol',
-        results:  ''
       }
     ]
   },
@@ -173,6 +167,8 @@ var easymart = {
     // search.build_results_cache - Function to build the results_cache object...
     build_results_cache: function ( source, search_path, join_parent_on ) {
       
+      log.info('[build_results_cache] - building cache for '+search_path.name);
+      
       var search_results = {};
       search_results[ search_path.level ] = {};
       
@@ -181,8 +177,6 @@ var easymart = {
       log.debug('got '+ search_path.results.length + ' result(s)');
       
       $.each( search_path.results, function( i, result ) {
-        
-        log.debug(result[search_path.join_on]);
         
         if ( search_results[ search_path.level ][ result[search_path.join_on] ] ) {
           if ( search_results[ search_path.level ][ result[search_path.join_on] ][ search_path.name ] ) {
@@ -217,11 +211,11 @@ var easymart = {
           // If we're looking at a top-level resultset, also create the containing divs...
           if ( search.level == 0 ) {
             
+            log.info('[display_results] working on '+search.name);
+            
             var new_primary_div = true;
             $('#results div.container').each( function () {
-              if ( this.id && this.id.match( result[search.join_on] ) ) {
-                new_primary_div = false;
-              };
+              if ( this.id && this.id.match( result[search.join_on] ) ) { new_primary_div = false; };
             });
             
             if ( new_primary_div ) {
@@ -230,9 +224,7 @@ var easymart = {
             
             var new_source_div = true;
             $('#results #'+result[search.join_on]+' div').each( function () {
-              if ( this.id && this.id.match(result[search.join_on]+'__'+search.name) ) {
-                new_source_div = false;
-              };
+              if ( this.id && this.id.match(result[search.join_on]+'__'+search.name) ) { new_source_div = false; };
             });
             
             if ( new_source_div ) {
@@ -246,7 +238,7 @@ var easymart = {
           // We're not looking at a containing div, we need to sort things more carefully...
           else {
             
-            log.debug('[disp] working on '+search.name+' - child of '+parent_search.name);
+            log.info('[display_results] working on '+search.name+' - child of '+parent_search.name);
             
             // First we need to work out where we need to insert our results...
             var parent_result_mapping = {};
@@ -256,10 +248,6 @@ var easymart = {
                   parent_result_mapping[ result[search.join_on] ] = parent_identifier+'__'+parent_search.name;
                 });
               });
-            });
-            
-            $.each( parent_result_mapping, function( primary, map_to) {
-              log.warn('[disp]'+primary+' -> '+map_to);
             });
             
             var new_source_div = true;
@@ -272,8 +260,6 @@ var easymart = {
             if ( new_source_div ) {
               $('#'+parent_result_mapping[ result[search.join_on] ]).append('<div id="'+result[search.join_on]+'__'+search.name+'" class="level-'+search.level+' result child"><div class="data"></div ></div>');
             };
-            
-            // TODO: Sort out horrendous variable dereferencing into something more friendly...
             
             $('#'+parent_result_mapping[ result[search.join_on] ]+' div.data').setTemplate( easymart.conf.sources[search.name].template );
             $('#'+parent_result_mapping[ result[search.join_on] ]+' div.data').processTemplate( { source: easymart.conf.sources[search.name], results: easymart.search.results_cache[ search.level ][ result[search.join_on] ][ search.name ] } );
