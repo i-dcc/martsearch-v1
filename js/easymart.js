@@ -133,7 +133,7 @@ var easymart = {
             var json_data = easymart.search.biomart_tsv2json_ah( source, data );
             search_path.results = json_data;
             easymart.search.build_results( source, search_path, filter_override );
-            //easymart.search.display_results();
+            easymart.search.display_results();
             
             // Now see if we need to submit any child searches
             if ( search_path.children ) {
@@ -195,8 +195,6 @@ var easymart = {
       
       $.extend( true, easymart.search.results, search_results );
       
-      
-      
     },
     
     // search.display_results - Function to draw the results object to screen
@@ -204,7 +202,133 @@ var easymart = {
       
       // FIXME: display_results is fooked - needs to be redesigned to accomodate the new results obj
       
-      $.each( easymart.search.results, function(focus_val, sources) {
+      // First we process each 'level' of search results at a time...
+      $.each( easymart.search.results, function(level, level_grouped_results) {
+        
+        var parent_level = level - 1;
+        
+        // And each grouping of results within that 'level'...
+        $.each( level_grouped_results, function(identifier, id_grouped_results) {
+          
+          // If we're looking at a top-level resultset, just print the containing divs...
+          if ( level == 0 ) {
+            
+            var new_primary_div = true;
+            $('#results div.container').each( function () {
+              if ( this.id && this.id.match(identifier) ) {
+                new_primary_div = false;
+              };
+            });
+            
+            if ( new_primary_div ) {
+              $('#results').append('<div id="'+identifier+'" class="container"></div><hr />');
+            };
+            
+            $.each( id_grouped_results, function (source, results) {
+              
+              var new_source_div = true;
+              $('#results #'+identifier+' div').each( function () {
+                if ( this.id && this.id.match(identifier+'__'+source) ) {
+                  new_source_div = false;
+                };
+              });
+              
+              if ( new_source_div ) {
+                $('#results #'+identifier).append('<div id="'+identifier+'__'+source+'" class="level-'+level+'"></div>');
+              };
+              
+              $('#'+identifier+'__'+source).setTemplate( easymart.conf.sources[source].template );
+              $('#'+identifier+'__'+source).processTemplate( { source: easymart.conf.sources[source], results: results } );
+              
+            });
+            
+            
+          } 
+          // We're not looking at a containing div, we need to sort things more carefully...
+          else {
+            
+            log.error('w00t');
+            
+            // Go through the results and try to figure out what our 'join_on' value is.
+            var found_join_on = false;
+            var join_on = '';
+            $.each( id_grouped_results, function (source, results) {
+              
+              if ( ! found_join_on ) {
+                $.each( results, function() {
+                  
+                  if ( ! found_join_on ) {
+                    $.each( this, function(identifier_name, result) {
+                      
+                      if ( result == identifier) {
+                        found_join_on = true;
+                        join_on = identifier_name;
+                      };
+                      
+                    });
+                  };
+                  
+                });
+              };
+              
+            });
+            
+            // Then go through the previous level's results to get the primary values that level used.
+            var primary_mapping = {};
+            $.each( easymart.search.results[ parent_level ], function( parent_identifier, id_grouped_results ) {
+              $.each( id_grouped_results, function (source, results) {
+                $.each( results, function(index, result) {
+                  primary_mapping[ result[join_on] ] = parent_identifier + '__' + source;
+                });
+              });
+            });
+            
+            $.each( primary_mapping, function( primary, map_to) {
+              log.warn( primary + ' -> ' + map_to );
+            });
+            
+            // Now go through the results again with the previous levels results and try to link our data.
+            $.each( id_grouped_results, function (source, results) {
+              
+              $.each( results, function(index, result) {
+                
+                var new_source_div = true;
+                $('#'+primary_mapping[ result[join_on] ]+' div').each( function () {
+                  if ( this.id && this.id.match(identifier+'__'+source) ) {
+                    new_source_div = false;
+                  };
+                });
+                
+                if ( new_source_div ) {
+                  $('#'+primary_mapping[ result[join_on] ]).append('<div id="'+identifier+'__'+source+'" class="level-'+level+'"></div>');
+                };
+
+                $('#'+identifier+'__'+source).setTemplate( easymart.conf.sources[source].template );
+                $('#'+identifier+'__'+source).processTemplate( { source: easymart.conf.sources[source], results: results } );
+                
+                
+              });
+              
+            });
+            
+            
+            
+            
+          };
+          
+          
+          
+          
+          
+          
+        });
+        
+      });
+      
+      
+      
+      /*
+      $.each( sorted_results, function(focus_val, sources) {
         
         // Do we need to add a new holding div for the focus object?
         var new_holding_div = true;
@@ -237,6 +361,7 @@ var easymart = {
         });
         
       });
+      */
       
     },
     
