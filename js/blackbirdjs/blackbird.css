@@ -35,7 +35,7 @@
   #blackbird.bbLarge .footer { _width:472px; }
 
 #blackbird .header span { position:relative; width:16px; height:16px; margin:0 4px; float:left; background-image:url(blackbird_icons.png); background-repeat:no-repeat; }
-	#blackbird .header span.error           { background-position:0px 0px; padding: 0; border: none; }
+	#blackbird .header span.error           { background-position:0px 0px; }
 	#blackbird .header span.errorDisabled   { background-position:-16px 0px; }
 	#blackbird .header span.warn            { background-position:0px -16px; }
 	#blackbird .header span.warnDisabled    { background-position:-16px -16px; }
@@ -86,6 +86,21 @@
 #blackbird .footer div.right { background-position:bottom right; width:150px; _width:0; }
 
 /* easymart/idcc hacks */
+
+#blackbird .main .mainBody ol li.error {
+	background-color: transparent;
+	border: none;
+	border-bottom: 1px solid #333;
+}
+
+#blackbird .header span.error {
+	padding: 0;
+	border: none;
+}
+
+#blackbird span.icon {
+	border: none !important;
+}
 
 #bbird_controls {
 	font: 11px "Lucida Grande", Lucida, Verdana, sans-serif;
