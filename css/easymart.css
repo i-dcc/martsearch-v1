@@ -63,6 +63,7 @@ body {
 	-webkit-border-radius: 7px;
 	-moz-border-radius: 7px;
 	padding: 10px;
+	margin-bottom: 5px;
 }
 
 #results div.result.child {
