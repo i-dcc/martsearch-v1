@@ -72,6 +72,16 @@ body {
 	margin-bottom: 5px;
 }
 
+#results div.result span.heading a {
+	text-decoration: none;
+	color: #324143;
+}
+
+#results div.result span.heading a:hover {
+	cursor: pointer;
+	color: #6595a3;
+}
+
 #results div.result .data {
 	border: 1px solid #ccc;
 	-webkit-border-radius: 7px;
