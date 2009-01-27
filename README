@@ -1,0 +1,11 @@
+
+
+### httpd.conf ###
+
+You will need to add a line to your httpd.conf for each different mart server that is called by your app (to get around cross-site scripting limits) - this relies on you using apache with mod_proxy or something equivalent...
+
+i.e.
+
+ProxyPass /htgt/ http://www.sanger.ac.uk/htgt/
+ProxyPass /biomart/ http://www.biomart.org/
+
