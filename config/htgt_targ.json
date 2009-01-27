@@ -28,8 +28,8 @@
       { name: 'status',            display: 'Status',             enabled: true },
       { name: 'allele_name',       display: 'Allele Name',        enabled: true },
       { name: 'escell_clone_name', display: 'ES Cell Clone Name', enabled: true },
-      { name: 'es_cell_line',      display: 'ES Cell Line',       enabled: true },
-      { name: 'epd_pass_level',    display: 'ES Cell QC',         enabled: true }
+      { name: 'es_cell_line',      display: 'ES Cell Line',       enabled: false },
+      { name: 'epd_pass_level',    display: 'ES Cell QC',         enabled: false }
     ],
   template: new String(
     '<strong>{ $T.source.name }</strong>'+
