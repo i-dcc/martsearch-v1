@@ -62,7 +62,7 @@ body {
 	margin-bottom: 5px;
 }
 
-#results div.result span.heading {
+#results div.result span.heading a {
 	border: 2px solid gray;
 	-webkit-border-radius: 7px;
 	-moz-border-radius: 7px;
@@ -70,16 +70,15 @@ body {
 	background-color: #ccc;
 	padding: 5px;
 	margin-bottom: 5px;
-}
-
-#results div.result span.heading a {
 	text-decoration: none;
 	color: #324143;
 }
 
 #results div.result span.heading a:hover {
 	cursor: pointer;
-	color: #6595a3;
+	color: #fff;
+	border: 2px solid #007cc0;
+	background-color: #5aa5ce;
 }
 
 #results div.result .data {
@@ -95,4 +94,51 @@ body {
 	padding-left: 25px;
 }
 
+/* Configuration */
+
+span.source_container {
+	display: inline-block;
+	float: left;
+	margin-right: 10px;
+}
+
+div#search_template span.source_container {
+	background: url(../images/arrow_right.png) no-repeat left center;
+	padding-left: 25px;
+}
+
+div#search_template .source_container.first {
+	background: none;
+	padding-left: 0px;
+}
+
+ul.source_list {
+	list-style-type: none; 
+	margin: 0;
+	border: 1px solid gray;
+	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	background: #ccc;
+	min-width: 150px;
+	min-height: 100px;
+}
+
+li.source {
+	padding: 10px;
+	margin: 5px;
+	border: 1px solid #007cc0;
+	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	background-color: #5aa5ce;
+}
+
+#other_sources {
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+#other_sources li {
+	display: inline-block;
+	float: left;
+}
 

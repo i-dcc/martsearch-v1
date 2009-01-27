@@ -18,8 +18,8 @@ var easymart = {
     sources: {
       ensembl:    '/config/ensembl.json',
       htgt_targ:  '/config/htgt_targ.json',
+      htgt_trap:  '/config/htgt_trap.json',
       kermits:    '/config/kermits.json'
-      //htgt_trap:  '/config/htgt_trap.json',
     },
     search: [
       {
@@ -55,6 +55,10 @@ var easymart = {
     easymart.config.load();
     log.profile('[config] easymart.config.load()');
     
+    log.profile('[config] easymart.config.build()');
+    easymart.config.build();
+    log.profile('[config] easymart.config.build()');
+    
     // Focus the input on the search bar
     $('#query').focus();
     
@@ -84,19 +88,63 @@ var easymart = {
     // config.load - Function to load and process the source configuration files.
     load: function () {
       $.each( easymart.conf.sources, function (name, url) {
-        $.getJSON( url, function (json) {
-          easymart.conf.sources[name] = json;
-          log.info('[config] loaded ' + name);
+        $.ajax({
+          url:      url,
+          type:     'GET',
+          dataType: 'json',
+          async:    false,
+          success: function (json) {
+            easymart.conf.sources[name] = json;
+            log.info('[config] loaded ' + name);
+          }
         });
       });
     },
     
     // config.build - Function to build the configuration page.
     build: function () {
-      var configuration_page = '';
+      // Draw the default search to screen...
+      $.each( easymart.conf.search, function ( row_index ) {
+        easymart.config.build_deafult_search( this, row_index );
+      });
       
-      // TODO: Complete the configuration builder function...
-      $.each( easymart.conf.sources, function (name, conf) {
+      // Add any datasources that aren't in the default search
+      easymart.config.build_other_sources();
+      
+      // After the build is finished, add a listener to the 'Configuration' link...
+      $('#config_toggle').click( function () {
+        $('#search').slideToggle('fast');
+        $('#config').slideToggle('fast');
+      })
+      
+      // Then make the query builder draggable/sortable...
+      $('#config ul.source_list').sortable({ connectWith: ['ul.source_list'] });
+    },
+    
+    // config.build_deafult_search - Helper function to put the default search config onto the page.
+    build_deafult_search: function ( search_path, row_index ) {
+      var source = easymart.conf.sources[search_path.name];
+      var template = '<li id="'+search_path.name+'" class="source"><strong>'+source.name+'</strong></li>';
+      $('#search_template #search_row_'+row_index+' #search-level-'+row_index+'-'+search_path.level).append(template);
+      
+      if ( search_path.children ) {
+        $.each( search_path.children, function() {
+          easymart.config.build_deafult_search( this, row_index );
+        });
+      };
+    },
+    
+    // config.build_other_sources - Helper function to add other available sources onto the page.
+    build_other_sources: function () {
+      $.each( easymart.conf.sources, function( name, source ) {
+        
+        var test = $('#search_template li#'+name);
+        if ( test.length == 1 ) {
+          // do nothing - this source is in the default search
+        } else {
+          var template = '<li id="'+name+'" class="source"><strong>'+source.name+'</strong></li>';
+          $('ul#other_sources').append(template);
+        };
         
       });
     }
@@ -121,6 +169,10 @@ var easymart = {
         easymart.search.submit( easymart.conf.sources[this.name], this, queryStr );
       });
       
+    },
+    
+    clean_caches: function () {
+      // TODO: write function to clean the caches at the beginning of each search so that old results are perged from memory.
     },
     
     // search.submit - Fnuction for submitting the searches
@@ -324,7 +376,7 @@ var easymart = {
         
       };
       
-      $(id+' > div.data').toggle();
+      $(id+' > div.data').toggle("fast");
       
     },
     
