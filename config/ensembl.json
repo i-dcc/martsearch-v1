@@ -19,8 +19,8 @@
     ],
   attributes:
     [
-      { name: 'ensembl_gene_id',  display: 'Ensembl Gene ID',   enabled: true },
       { name: 'mgi_symbol',       display: 'Gene Symbol',       enabled: true },
+      { name: 'ensembl_gene_id',  display: 'Ensembl Gene ID',   enabled: true },
       { name: 'description',      display: 'Description',       enabled: true },
     ],
   template: new String(
