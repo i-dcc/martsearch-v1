@@ -1,6 +1,10 @@
+h1. Easymart Readme
 
+Welcome to easymart!  Easymart is a configurable web services based search interface for "Biomart":http://www.biomart.org/.  It is being developed primarily for (intended) use with the i-DCC project (International Data Coordination Centre), a (soon to be coming) central portal for mouse mutation information.
 
-### httpd.conf ###
+The interface is 100% javascript and uses the "jQuery":http://jquery.com library.
+
+h2. Apache httpd.conf
 
 You will need to add a line to your httpd.conf for each different mart server that is called by your app (to get around cross-site scripting limits) - this relies on you using apache with mod_proxy or something equivalent...
 
