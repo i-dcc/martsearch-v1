@@ -306,12 +306,12 @@ var easymart = {
                         "'"+search.level+"'"+','+
                         "'"+result[search.join_on]+"'"+
                       ')">'+
-                      source.name+': '+result[search.join_on]+
+                      result[search.join_on]+
                       '</a>';
 
                 var no_results = easymart.search.results_cache[ search.level ][ result[search.join_on] ][ search.name ].length;
-                if (no_results == 1) { template += '<small> ('+no_results+' result)</small>'; }
-                else                 { template += '<small> ('+no_results+' results)</small>'; };
+                if (no_results == 1) { template += ' <small>'+source.name+': ('+no_results+' result)</small>'; }
+                else                 { template += ' <small>'+source.name+': ('+no_results+' results)</small>'; };
 
                 template += '</span><div class="data" style="display:none;"></div ></div>';
 
@@ -354,12 +354,12 @@ var easymart = {
                       "'"+search.level+"'"+','+
                       "'"+result[search.join_on]+"'"+
                     ')">'+
-                    source.name+': '+result[search.join_on]+
+                    result[search.join_on]+
                     '</a>';
 
                 var no_results = easymart.search.results_cache[ search.level ][ result[search.join_on] ][ search.name ].length;
-                if (no_results == 1) { template += '<small> ('+no_results+' result)</small>'; }
-                else                 { template += '<small> ('+no_results+' results)</small>'; };
+                if (no_results == 1) { template += ' <small>'+source.name+': ('+no_results+' result)</small>'; }
+                else                 { template += ' <small>'+source.name+': ('+no_results+' results)</small>'; };
 
                 template += '</span><div class="data" style="display:none;"></div ></div>';
 

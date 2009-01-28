@@ -1,6 +1,6 @@
 ({
   url:                  '/biomart/biomart/martservice',
-  name:                 'Ensembl (Mus Musculus)',
+  name:                 'Ensembl',
   description:          '',
   datasetConfigVersion: 0.6,
   dataset_name:         'mmusculus_gene_ensembl',
