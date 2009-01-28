@@ -41,6 +41,20 @@ var easymart = {
                 results:  ''
               }
             ]
+          },
+          {
+            level:    1,
+            name:     'htgt_trap',
+            join_on:  'ensembl_gene_id',
+            results:  '',
+            children: [
+              {
+                level:    2,
+                name:     'kermits',
+                join_on:  'escell_clone_name',
+                results:  ''
+              }
+            ]
           }
         ]
       }
@@ -186,7 +200,6 @@ var easymart = {
         data:     { query: easymart.search.biomart_xml( source, queryStr, filter_override ) },
         success:  function (data) {
           if (data) {
-            
             log.profile('[search] easymart.search $.ajax request - ' + source.name);
             
             // Do something with the data...
@@ -217,8 +230,6 @@ var easymart = {
               
             };
             
-          } else {
-            $('#results').append('<span class="no-results">Sorry, no results were returned by your search.</span>');
           };
         }
       });
