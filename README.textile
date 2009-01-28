@@ -1,15 +1,33 @@
-h1. Easymart Readme
+h1. Easymart
 
-Welcome to easymart!  Easymart is a configurable web services based search interface for "Biomart":http://www.biomart.org/.  It is being developed primarily for (intended) use with the i-DCC project (International Data Coordination Centre), a (soon to be coming) central portal for mouse mutation information.
+Welcome to easymart! Easymart is a configurable web services based search interface for "Biomart":http://www.biomart.org/. It is
+being developed primarily for (intended) use with the "i-DCC project":http://i-dcc.org (International Data Coordination Centre), a (soon to be
+coming) central portal for mouse mutation information.
 
 The interface is 100% javascript and uses the "jQuery":http://jquery.com library.
 
 h2. Apache httpd.conf
 
-You will need to add a line to your httpd.conf for each different mart server that is called by your app (to get around cross-site scripting limits) - this relies on you using apache with mod_proxy or something equivalent...
+You will need to add a couple of lines to your httpd.conf for each different mart server that is called by your app (to get
+around cross-site scripting limits) - this relies on you using apache with mod_proxy or something equivalent...
 
-i.e.
+i.e. Here's our internal apache conf:
 
-ProxyPass /htgt/ http://www.sanger.ac.uk/htgt/
-ProxyPass /biomart/ http://www.biomart.org/
+<pre>
+  <code>
+    ProxyRequests Off
+
+    <Proxy *>
+    Order deny,allow
+    Allow from all
+    </Proxy>
+
+    ProxyPass /htgt http://gtrap1a.internal.sanger.ac.uk:9001/htgt
+    ProxyPassReverse /htgt http://gtrap1a.internal.sanger.ac.uk:9001/htgt
+
+    ProxyPass /biomart http://www.biomart.org
+    ProxyPassReverse /biomart http://www.biomart.org
+    ProxyRemote http://www.biomart.org http://wwwcache.sanger.ac.uk:3128
+  </code>
+</pre>
 
