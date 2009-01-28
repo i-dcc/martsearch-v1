@@ -3,5 +3,86 @@
   name:                 'Gene Trapping Constructs',
   description:          '',
   datasetConfigVersion: 0.6,
-  dataset_name:         'HTGT_TRAP'
+  dataset_name:         'HTGT_TRAP',
+  
+  importables:
+    [
+      { name: 'ensembl_gene_id' },
+      { name: 'gene_symbol' },
+      { name: 'escell_clone_name' }
+    ],
+  
+  exportables:
+    [
+      { name: 'ensembl_gene_id' },
+      { name: 'gene_symbol' },
+      { name: 'escell_clone_name' }
+    ],
+  
+  filters:
+    [
+      { name: 'gene_symbol',                display: 'Gene Symbol',                         enabled: true },
+      { name: 'gene_name',                  display: 'Gene Name',                           enabled: false },
+      { name: 'mgi_accession_id',           display: 'MGI Accession ID',                    enabled: false },
+      { name: 'ensembl_gene_id',            display: 'Ensembl Gene ID',                     enabled: false },
+      { name: 'vega_gene_id',               display: 'Vega Gene ID',                        enabled: false },
+      { name: 'entrez_gene_id',             display: 'Entrez Gene ID',                      enabled: false },
+      
+      { name: 'escell_clone_name',          display: 'ES Cell Clone Name',                  enabled: false }
+    ],
+  
+  
+  attributes:
+    [
+      { name: 'gene_symbol',                display: 'Gene Symbol',                         enabled: true },
+      { name: 'gene_name',                  display: 'Gene Name',                           enabled: false },
+      { name: 'mgi_accession_id',           display: 'MGI Accession ID',                    enabled: false },
+      { name: 'ensembl_gene_id',            display: 'Ensembl Gene ID',                     enabled: false },
+      { name: 'vega_gene_id',               display: 'Vega Gene ID',                        enabled: false },
+      { name: 'entrez_gene_id',             display: 'Entrez Gene ID',                      enabled: false },
+      
+      { name: 'escell_clone_name',          display: 'ES Cell Clone Name',                  enabled: false },
+      
+      { name: "is_paired",                  display: "Paired Read?",                        enabled: false },
+      { name: "splink_orientation",         display: "Splink Orientation",                  enabled: false },
+      { name: "five_prime_chr",             display: "5' Chromosome",                       enabled: false },
+      { name: "five_prime_strand",          display: "5' Strand",                           enabled: false },
+      { name: "five_prime_start",           display: "5' Start",                            enabled: false },
+      { name: "five_prime_end",             display: "5' End",                              enabled: false },
+      { name: "five_prime_align_quality",   display: "5' Alignment Quality",                enabled: false },
+      { name: "five_prime_seq",             display: "5' Sequence",                         enabled: false },
+      { name: "three_prime_chr",            display: "3' Chromosome",                       enabled: false },
+      { name: "three_prime_strand",         display: "3' Strand",                           enabled: false },
+      { name: "three_prime_start",          display: "3' Start",                            enabled: false },
+      { name: "three_prime_end",            display: "3' End",                              enabled: false },
+      { name: "three_prime_align_quality",  display: "3' Alignment Quality",                enabled: false },
+      { name: "three_prime_seq",            display: "3' Sequence",                         enabled: false },
+      { name: "frt_found",                  display: "FRT Found",                           enabled: false },
+      { name: "frt_lengths",                display: "FRT Lengths",                         enabled: false },
+      { name: "frtp_seq",                   display: "FRTP Sequence",                       enabled: false }
+    ],
+  
+  template: new String(
+    '<strong>{ $T.source.name }</strong>'+
+    '<table>'+
+      '<thead>'+
+        '<tr>'+
+        '{#foreach $T.source.attributes as attribute}'+
+          '{#if $T.attribute.enabled}'+
+          '<th>{$T.attribute.display}</th>'+
+          '{#/if}'+
+        '{#/for}'+
+        '</tr>'+
+      '</thead>'+
+      '<tbody>'+
+        '{#foreach $T.results as result_array}'+
+          '<tr>'+
+          '{#foreach $T.result_array as result}'+
+              '<td>{$T.result}</td>'+
+          '{#/for}'+
+          '</tr>'+
+        '{#/for}'+
+      '</tbody>'+
+    '</table>'
+  )
 })

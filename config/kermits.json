@@ -6,20 +6,45 @@
   dataset_name:         'KERMITS',
   importables:
     [
+      { name: 'gene_symbol' },
       { name: 'escell_clone_name' }
     ],
   exportables:
     [
+      { name: 'gene_symbol' },
       { name: 'escell_clone_name' }
     ],
   filters:
     [
-      { name: 'escell_clone_name',  display: 'ES Cell Clone', enabled: true }
+      { name: 'sponsor',                    display: 'Sponsor',                             enabled: false },
+      { name: 'gene_symbol',                display: 'Gene Symbol',                         enabled: false },
+      
+      { name: 'escell_clone_name',          display: 'ES Cell Clone',                       enabled: true },
+      { name: 'escell_line_strain',         display: 'ES Cell Line Strain',                 enabled: false },
+      
+      { name: 'mi_centre',                  display: 'Microinjection Centre',               enabled: false },
+      { name: 'mi_date',                    display: 'Microinjection Date',                 enabled: false },
+      { name: 'blastocyst_strain',          display: 'Blastocyst Strain',                   enabled: false },
+      { name: 'num_blasts_transfer',        display: '# Blasts Transfer',                   enabled: false },
+      { name: 'num_pups_born',              display: '# Pups Born',                         enabled: false },
+      { name: 'num_chimeras',               display: '# Chimeras (Total)',                  enabled: false },
+      { name: 'num_male_chimeras',          display: '# Male Chimeras',                     enabled: false },
+      { name: 'num_female_chimeras',        display: '# Female Chimeras',                   enabled: false },
+      { name: 'num_male_ccc_lt_40_percent', display: '# Male Coat Colour Coverage <40%',    enabled: false },
+      { name: 'num_male_ccc_40-80_percent', display: '# Male Coat Colour Coverage 40-80%',  enabled: false },
+      { name: 'num_male_ccc_gt_80_percent', display: '# Male Coat Colour Coverage >80%',    enabled: false },
+      { name: 'num_male_ccc_100_percent',   display: '# Male Coat Colour Coverage 100%',    enabled: false },
+      { name: 'num_with_glt',               display: '# Chimeras With GLT',                 enabled: false }
     ],
   attributes:
     [
+      { name: 'sponsor',                    display: 'Sponsor',                             enabled: false },
+      { name: 'gene_symbol',                display: 'Gene Symbol',                         enabled: false },
+      
       { name: 'escell_clone_name',          display: 'ES Cell Clone Name',                  enabled: true },
-      { name: 'escell_line_strain',         display: 'ES Cell Line Strain',                 enabled: true },
+      { name: 'escell_line_strain',         display: 'ES Cell Line Strain',                 enabled: false },
+      { name: 'escell_description',         display: 'ES Cell Description',                 enabled: false },
+      
       { name: 'mi_centre',                  display: 'Microinjection Centre',               enabled: true },
       { name: 'attempt_number',             display: 'Attempt Number',                      enabled: true },
       { name: 'mi_date',                    display: 'Microinjection Date',                 enabled: true },
