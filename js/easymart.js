@@ -225,7 +225,7 @@ var easymart = {
       
     },
     
-    // search.build_results_cache - Function to build the results_cache object...
+    // search.build_results_cache - Function to build the results_cache object that contains the data to be displayed
     build_results_cache: function ( source, search_path, join_parent_on ) {
       
       log.info('[build_results_cache] - building cache for '+search_path.name);
@@ -367,6 +367,7 @@ var easymart = {
       
     },
     
+    // search.show_results - Helper function to reveal the full results for a dataset
     show_results: function ( id, dataset, level, join_on ) {
       
       if ( $(id+' > div.data').css('display') == 'none' ) {
