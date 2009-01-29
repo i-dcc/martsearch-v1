@@ -1,0 +1,87 @@
+({
+  url:                  '/htgtdev/biomart/martservice',
+  name:                 'Phenotyping',
+  description:          '',
+  datasetConfigVersion: 0.6,
+  dataset_name:         'PHENOTYPING',
+  
+  importables:
+    [
+      { name: 'escell_clone_name' }
+    ],
+  
+  exportables:
+    [
+      { name: 'escell_clone_name' }
+    ],
+  
+  filters:
+    [
+      { name: 'gene_symbol',            display: 'Gene Symbol',                         enabled: false },
+      { name: 'escell_clone_name',      display: 'ES Cell Clone Name',                  enabled: true },
+    ],
+  
+  attributes:
+    [
+      { name: 'gene_symbol',                display: 'Gene Symbol',                         enabled: false },
+      { name: 'escell_clone_name',          display: 'ES Cell Clone Name',                  enabled: true },
+      
+      { name: "number_of_hits",             display: "Number of Hits",                      enabled: true },
+      { name: "skin_screen",                display: "Skin Screen",                         enabled: true },
+      { name: "micronuclei_naive",          display: "Micronuclei (naive)",                 enabled: true },
+      { name: "homozygote_viability",       display: "Homozygote Viability",                enabled: true },
+      { name: "abr",                        display: "ABR",                                 enabled: true },
+      { name: "haematology",                display: "Haematology",                         enabled: true },
+      { name: "adult_expression",           display: "Adult Expression",                    enabled: true },
+      { name: "salmonella_challenge",       display: "Salmonella Challenge",                enabled: true },
+      { name: "core_temperature",           display: "Core Temperature",                    enabled: true },
+      { name: "dysmorphology",              display: "Dysmorphology",                       enabled: true },
+      { name: "heart_histology",            display: "Heart Histology",                     enabled: true },
+      { name: "embryo_expression",          display: "Embryo Expression",                   enabled: true },
+      { name: "ip_gtt",                     display: "IP-GTT",                              enabled: true },
+      { name: "growth",                     display: "Growth",                              enabled: true },
+      { name: "dexa",                       display: "DEXA",                                enabled: true },
+      { name: "modified_shirpa",            display: "Modified Shirpa",                     enabled: true },
+      { name: "micronuclei_irradiated",     display: "Micronuclei (irradiated)",            enabled: true },
+      { name: "heart_weights",              display: "Heart Weights",                       enabled: true },
+      { name: "insulin",                    display: "Insulin",                             enabled: true },
+      { name: "histology",                  display: "Histology",                           enabled: true },
+      { name: "blood_pressure",             display: "Blood Pressure",                      enabled: true },
+      { name: "open_field",                 display: "Open Field",                          enabled: true },
+      { name: "rotarod",                    display: "Rotarod",                             enabled: true },
+      { name: "grip_strength",              display: "Grip Strength",                       enabled: true },
+      { name: "fasted_clinical_chemsitry",  display: "Fasted Clinical Chemsitry",           enabled: true },
+      { name: "x_ray_imaging",              display: "X-Ray Imaging",                       enabled: true },
+      { name: "full_clinical_chemsitry",    display: "Full Clinical Chemsitry",             enabled: true },
+      { name: "calorimetry",                display: "Calorimetry",                         enabled: true },
+      { name: "fertility",                  display: "Fertility",                           enabled: true },
+      { name: "vision",                     display: "Vision",                              enabled: true },
+      { name: "citrobacter_challenge",      display: "Citrobacter Challenge",               enabled: true },
+      { name: "hot_plate",                  display: "Hot Plate",                           enabled: true },
+      
+    ],
+  
+  template: new String(
+    '<strong>{ $T.source.name }</strong>'+
+    '<table>'+
+      '<thead>'+
+        '<tr>'+
+        '{#foreach $T.source.attributes as attribute}'+
+          '{#if $T.attribute.enabled}'+
+          '<th>{$T.attribute.display}</th>'+
+          '{#/if}'+
+        '{#/for}'+
+        '</tr>'+
+      '</thead>'+
+      '<tbody>'+
+        '{#foreach $T.results as result_array}'+
+          '<tr>'+
+          '{#foreach $T.result_array as result}'+
+              '<td>{$T.result}</td>'+
+          '{#/for}'+
+          '</tr>'+
+        '{#/for}'+
+      '</tbody>'+
+    '</table>'
+  )
+})
