@@ -223,8 +223,10 @@ var easymart = {
                   };
                 });
                 
-                // Submit the child search
-                easymart.search.submit( child_source, search_path.children[i], $.keys(child_query_hash).join(","), search_path.children[i].join_on );
+                // Submit the child search if we have more than one result to join on...
+                if ( $.keys(child_query_hash).length > 0 ) {
+                  easymart.search.submit( child_source, search_path.children[i], $.keys(child_query_hash).join(","), search_path.children[i].join_on );
+                };
                 
               });
               
