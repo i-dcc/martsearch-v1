@@ -16,10 +16,11 @@ var easymart = {
   
   conf: {
     sources: {
-      ensembl:    '/config/ensembl.json',
-      htgt_targ:  '/config/htgt_targ.json',
-      htgt_trap:  '/config/htgt_trap.json',
-      kermits:    '/config/kermits.json'
+      ensembl:      '/config/ensembl.json',
+      htgt_targ:    '/config/htgt_targ.json',
+      htgt_trap:    '/config/htgt_trap.json',
+      kermits:      '/config/kermits.json',
+      phenotyping:  '/config/phenotyping.json',
     },
     search: [
       {
@@ -37,6 +38,12 @@ var easymart = {
               {
                 level:    2,
                 name:     'kermits',
+                join_on:  'escell_clone_name',
+                results:  ''
+              },
+              {
+                level:    2,
+                name:     'phenotyping',
                 join_on:  'escell_clone_name',
                 results:  ''
               }
