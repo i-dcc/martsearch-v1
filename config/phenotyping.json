@@ -107,7 +107,13 @@
 
           }
           else {
-            output += '<td class="pheno_result"></td>';
+            output += 
+              '<td class="pheno_result">'+
+                '<span>'+
+                  '<strong>'+display_name_cache[name]+'</strong>'+
+                  '<p>Test not carried out yet.</p>'+
+                '</span>'+
+              '</td>';
           };
         };
       });
