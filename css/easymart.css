@@ -193,6 +193,7 @@ table.pheno_data td.pheno_result:hover span {
    	background: #f0f0f0;
    	border: 1px solid #ccc;
    	-webkit-border-radius: 7px;
+   	-webkit-box-shadow: 3px 3px 3px #ccc;
 	-moz-border-radius: 7px;
 	opacity: 0.9;
 	margin: 5px;
