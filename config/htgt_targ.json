@@ -30,7 +30,7 @@
       
       { name: 'pcs_distribute',         display: 'Intermediate Vector Distribute',      enabled: false },
       { name: 'targvec_distribute',     display: 'Targeting Vector Distribute',         enabled: false },
-      { name: 'epd_distribute',         display: 'ES Cell Distribute',                  enabled: false,  default: '1' }
+      { name: 'epd_distribute',         display: 'ES Cell Distribute',                  enabled: false }
     ],
   
   attributes:
@@ -77,30 +77,35 @@
       { name: 'total_colonies',         display: 'Total Colonies',                      enabled: false },
       { name: 'epd_pass_level',         display: 'ES Cell QC',                          enabled: false },
       { name: 'epd_qctest_result_id',   display: 'ES Cell QC ID (link)',                enabled: false },
-      { name: 'epd_distribute',         display: 'ES Cell Distribute',                  enabled: false },
+      { name: 'epd_distribute',         display: 'ES Cell Distribute',                  enabled: false }
     ],
   
-  template: new String(
-    '<strong>{ $T.source.name }</strong>'+
-    '<table>'+
-      '<thead>'+
-        '<tr>'+
-        '{#foreach $T.source.attributes as attribute}'+
-          '{#if $T.attribute.enabled}'+
-          '<th>{$T.attribute.display}</th>'+
-          '{#/if}'+
-        '{#/for}'+
-        '</tr>'+
-      '</thead>'+
-      '<tbody>'+
-        '{#foreach $T.results as result_array}'+
+  template: function ( data ) {
+    var template = 
+      '<strong>{ $T.source.name }</strong>'+
+      '<table>'+
+        '<thead>'+
           '<tr>'+
-          '{#foreach $T.result_array as result}'+
-              '<td>{$T.result}</td>'+
+          '{#foreach $T.source.attributes as attribute}'+
+            '{#if $T.attribute.enabled}'+
+            '<th>{$T.attribute.display}</th>'+
+            '{#/if}'+
           '{#/for}'+
           '</tr>'+
-        '{#/for}'+
-      '</tbody>'+
-    '</table>'
-  )
+        '</thead>'+
+        '<tbody>'+
+          '{#foreach $T.results as result_array}'+
+            '<tr>'+
+            '{#foreach $T.result_array as result}'+
+                '<td>{$T.result}</td>'+
+            '{#/for}'+
+            '</tr>'+
+          '{#/for}'+
+        '</tbody>'+
+      '</table>';
+
+    $( data.dom_element ).setTemplate( template );
+    $( data.dom_element ).processTemplate({ source: data.source, results: data.results });
+  }
+  
 })

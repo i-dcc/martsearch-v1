@@ -61,27 +61,34 @@
       { name: 'num_with_glt',               display: '# Chimeras With GLT',                 enabled: true },
       { name: 'mi_comments',                display: 'Microinjection Comments',             enabled: true }
     ],
-  template: new String(
-    '<strong>{ $T.source.name }</strong>'+
-    '<table>'+
-      '<thead>'+
-        '<tr>'+
-        '{#foreach $T.source.attributes as attribute}'+
-          '{#if $T.attribute.enabled}'+
-          '<th>{$T.attribute.display}</th>'+
-          '{#/if}'+
-        '{#/for}'+
-        '</tr>'+
-      '</thead>'+
-      '<tbody>'+
-        '{#foreach $T.results as result_array}'+
+  
+  template: function ( data ) {
+    var template = new String(
+      '<strong>{ $T.source.name }</strong>'+
+      '<table>'+
+        '<thead>'+
           '<tr>'+
-          '{#foreach $T.result_array as result}'+
-              '<td>{$T.result}</td>'+
+          '{#foreach $T.source.attributes as attribute}'+
+            '{#if $T.attribute.enabled}'+
+            '<th>{$T.attribute.display}</th>'+
+            '{#/if}'+
           '{#/for}'+
           '</tr>'+
-        '{#/for}'+
-      '</tbody>'+
-    '</table>'
-  )
+        '</thead>'+
+        '<tbody>'+
+          '{#foreach $T.results as result_array}'+
+            '<tr>'+
+            '{#foreach $T.result_array as result}'+
+                '<td>{$T.result}</td>'+
+            '{#/for}'+
+            '</tr>'+
+          '{#/for}'+
+        '</tbody>'+
+      '</table>'
+    );
+
+    $( data.dom_element ).setTemplate( template );
+    $( data.dom_element ).processTemplate({ source: data.source, results: data.results });
+
+  }
 })

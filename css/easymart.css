@@ -1,4 +1,7 @@
-/* @override http://idcc.site/css/easymart.css */
+/* @override 
+	http://idcc.site/css/easymart.css
+	http://idcc.site/css/blueprint/plugins/fancy-type/screen.css
+*/
 
 /* Layout */
 
@@ -63,7 +66,7 @@ body {
 }
 
 #results div.result span.heading a {
-	border: 2px solid gray;
+	border: 2px solid #999;
 	-webkit-border-radius: 7px;
 	-moz-border-radius: 7px;
 	display: inline-block;
@@ -115,7 +118,7 @@ div#search_template .source_container.first {
 ul.source_list {
 	list-style-type: none; 
 	margin: 0;
-	border: 1px solid gray;
+	border: 1px solid #999;
 	-webkit-border-radius: 7px;
 	-moz-border-radius: 7px;
 	background: #ccc;
@@ -141,4 +144,71 @@ li.source {
 	display: inline-block;
 	float: left;
 }
+
+/* Pheno Data */
+
+table.pheno_data td {
+	padding: 3px;
+	padding-right: 10px;
+	text-align: right;
+}
+
+table.pheno_data td.pheno_result {
+	padding: 7px;
+	border: 1px solid #ccc;
+	background-color: #fff;
+}
+
+table.pheno_data td.pheno_result.sig_diff {
+	background-color: #fa1614;
+	border: 1px solid #cc0000;
+}
+
+table.pheno_data td.pheno_result.no_sig_diff {
+	background-color: #5aa5ce;
+	border: 1px solid #007cc0;
+}
+
+table.pheno_data td.pheno_result.not_applic {
+	background-color: #ccc;
+	border: 1px solid #999;
+}
+
+
+
+
+table.pheno_data td.pheno_result span {
+	display: none;
+	width: 250px;
+}
+
+table.pheno_data td.pheno_result:hover {
+	position: relative;
+}
+
+table.pheno_data td.pheno_result:hover span {
+   	position: absolute;
+   	display: block;
+   	z-index: 100;
+   	background: #f0f0f0;
+   	border: 1px solid #ccc;
+   	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	opacity: 0.9;
+	margin: 5px;
+	padding: 5px;
+	text-align: left;
+	font: 0.9em "Lucida Grande", Lucida, Verdana, sans-serif;
+}
+
+table.pheno_data td.pheno_result span p,
+table.pheno_data td.pheno_result span p+p {
+	margin-top: 5px !important;
+	margin-bottom: 5px !important;
+	text-indent: 0px;
+}
+
+
+
+
 

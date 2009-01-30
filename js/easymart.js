@@ -414,8 +414,13 @@ var easymart = {
       
       if ( $(id+' > div.data').css('display') == 'none' ) {
         
-        $(id+' > div.data').setTemplate( easymart.conf.sources[dataset].template );
-        $(id+' > div.data').processTemplate( { source: easymart.conf.sources[dataset], results: easymart.search.results_cache[ level ][ join_on ][ dataset ] } );
+        easymart.conf.sources[dataset].template(
+          {
+            dom_element: id+' > div.data',
+            source:      easymart.conf.sources[dataset],
+            results:     easymart.search.results_cache[ level ][ join_on ][ dataset ]
+          }
+        );
         
       };
       

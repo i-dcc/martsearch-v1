@@ -1,6 +1,6 @@
 ({
   url:                  '/htgtdev/biomart/martservice',
-  name:                 'Phenotyping',
+  name:                 'Phenotyping Data',
   description:          '',
   datasetConfigVersion: 0.6,
   dataset_name:         'PHENOTYPING',
@@ -26,7 +26,7 @@
       { name: 'gene_symbol',                display: 'Gene Symbol',                         enabled: false },
       { name: 'escell_clone_name',          display: 'ES Cell Clone Name',                  enabled: true },
       
-      { name: "number_of_hits",             display: "Number of Hits",                      enabled: true },
+      { name: "number_of_hits",             display: "Number of Hits",                      enabled: false },
       { name: "skin_screen",                display: "Skin Screen",                         enabled: true },
       { name: "micronuclei_naive",          display: "Micronuclei (naive)",                 enabled: true },
       { name: "homozygote_viability",       display: "Homozygote Viability",                enabled: true },
@@ -61,27 +61,62 @@
       
     ],
   
-  template: new String(
-    '<strong>{ $T.source.name }</strong>'+
-    '<table>'+
-      '<thead>'+
-        '<tr>'+
-        '{#foreach $T.source.attributes as attribute}'+
-          '{#if $T.attribute.enabled}'+
-          '<th>{$T.attribute.display}</th>'+
-          '{#/if}'+
-        '{#/for}'+
-        '</tr>'+
-      '</thead>'+
-      '<tbody>'+
-        '{#foreach $T.results as result_array}'+
-          '<tr>'+
-          '{#foreach $T.result_array as result}'+
-              '<td>{$T.result}</td>'+
-          '{#/for}'+
-          '</tr>'+
-        '{#/for}'+
-      '</tbody>'+
-    '</table>'
-  )
+  template: function ( data ) {
+    
+    var display_name_cache = {};
+    $.each( data.source.attributes, function() {
+      display_name_cache[this.name] = this.display;
+    });
+    
+    var output = '<table class="pheno_data">';
+    
+    $.each( data.results, function(index, result_array) {
+      output += '<tr>';
+      $.each( result_array, function(name, val) {
+        if ( name.match('gene_symbol') || name.match('escell_clone_name') || name.match('number_of_hits') ) {
+          output +='<td>'+val+'</td>';
+        } else {
+          if ( val.match('no_significant_difference') ) {
+            output += 
+              '<td class="pheno_result no_sig_diff">'+
+                '<span>'+
+                  '<strong>'+display_name_cache[name]+'</strong>'+
+                  '<p>No significant difference.</p>'+
+                '</span>'+
+              '</td>';
+          }
+          else if ( val.match('significant_difference') ) {
+            output += 
+              '<td class="pheno_result sig_diff">'+
+                '<span>'+
+                  '<strong>'+display_name_cache[name]+'</strong>'+
+                  '<p>95&#37; confidence that there is significant difference between the means of the wt vs mutant.</p>'+
+                  '<p>(Not taking into consideration multiple testing issued, therefore will certainly have false positives).</p>'+
+                '</span>'+
+              '</td>';
+
+          }
+          else if ( val.match('not_applicable') ) {
+            output += 
+              '<td class="pheno_result not_applic">'+
+                '<span>'+
+                  '<strong>'+display_name_cache[name]+'</strong>'+
+                  '<p>Not applicable <em>e.g.</em> no lacZ, therefore expression not possible.</p>'+
+                '</span>'+
+              '</td>';
+
+          }
+          else {
+            output += '<td class="pheno_result"></td>';
+          };
+        };
+      });
+      output += '</tr>';
+    });
+    
+    output += '</table>';
+    
+    $( data.dom_element ).html( output );
+    
+  }
 })
