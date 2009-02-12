@@ -1,5 +1,5 @@
 ({
-  url:                  '/htgt/biomart/martservice',
+  url:                  '/martsearch/htgtdev/biomart/martservice',
   name:                 'Microinjection Data (Kermits)',
   description:          '',
   datasetConfigVersion: 0.6,

@@ -1,5 +1,5 @@
 ({
-  url:                  '/htgtdev/biomart/martservice',
+  url:                  '/martsearch/htgtdev/biomart/martservice',
   name:                 'Phenotyping Data',
   description:          '',
   datasetConfigVersion: 0.6,

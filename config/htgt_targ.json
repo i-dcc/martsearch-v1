@@ -1,5 +1,5 @@
 ({
-  url:                  '/htgt/biomart/martservice',
+  url:                  '/martsearch/htgt/biomart/martservice',
   name:                 'Gene Targeting Constructs',
   description:          '',
   datasetConfigVersion: 0.6,

@@ -16,11 +16,11 @@ var easymart = {
   
   conf: {
     sources: {
-      ensembl:      '/config/ensembl.json',
-      htgt_targ:    '/config/htgt_targ.json',
-      htgt_trap:    '/config/htgt_trap.json',
-      kermits:      '/config/kermits.json',
-      phenotyping:  '/config/phenotyping.json',
+      ensembl:      '/martsearch/config/ensembl.json',
+      htgt_targ:    '/martsearch/config/htgt_targ.json',
+      htgt_trap:    '/martsearch/config/htgt_trap.json',
+      kermits:      '/martsearch/config/kermits.json',
+      phenotyping:  '/martsearch/config/phenotyping.json',
     },
     search: [
       {
