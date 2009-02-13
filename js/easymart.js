@@ -15,12 +15,13 @@ $.extend({
 var easymart = {
   
   conf: {
+    url_prefix: '',
     sources: {
-      ensembl:      '/martsearch/config/ensembl.json',
-      htgt_targ:    '/martsearch/config/htgt_targ.json',
-      htgt_trap:    '/martsearch/config/htgt_trap.json',
-      kermits:      '/martsearch/config/kermits.json',
-      phenotyping:  '/martsearch/config/phenotyping.json',
+      ensembl:      '/config/ensembl.json',
+      htgt_targ:    '/config/htgt_targ.json',
+      htgt_trap:    '/config/htgt_trap.json',
+      kermits:      '/config/kermits.json',
+      phenotyping:  '/config/phenotyping.json',
     },
     search: [
       {
@@ -110,7 +111,7 @@ var easymart = {
     load: function () {
       $.each( easymart.conf.sources, function (name, url) {
         $.ajax({
-          url:      url,
+          url:      easymart.conf.url_prefix + url,
           type:     'GET',
           dataType: 'json',
           async:    false,
@@ -202,7 +203,7 @@ var easymart = {
       log.profile('[search] easymart.search $.ajax request - ' + source.name);
       $.ajax({
         type:     "POST",
-        url:      source.url,
+        url:      easymart.conf.url_prefix + source.url,
         data:     { query: easymart.search.biomart_xml( source, queryStr, filter_override ) },
         success:  function (data) {
           if (data) {

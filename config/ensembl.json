@@ -1,5 +1,5 @@
 ({
-  url:                  '/martsearch/biomart/biomart/martservice',
+  url:                  '/biomart/biomart/martservice',
   name:                 'Ensembl',
   description:          '',
   datasetConfigVersion: 0.6,
