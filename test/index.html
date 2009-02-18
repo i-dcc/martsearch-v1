@@ -10,23 +10,22 @@
     <script type="text/javascript">
       $(document).ready( function() {
         
-        test("a basic test example ", function() {
-          ok( true, "this test is fine " );
-          var value = "hello ";
-          equals( "hello ", value, "We expect value to be hello " );
+        test("jQuery hash.keys extension", function() {
+          expect(3);
+          var hash = { "one":"foo", "two":"bar", "three":"baz" };
+          equals( 3, $.keys(hash).length, "should return 3 keys " );
+          equals( "bar", hash[$.keys(hash)[1]], "return the correct key/value ");
+          ok( true, "all pass " );
         });
         
-        module("Module A ");
+        module("easymart.conf");
         
         test("first test within module ", function() {
+          expect(1);
           ok( true, "all pass " );
         });
         
-        test("second test within module ", function() {
-          ok( true, "all pass " );
-        });
-        
-        module("Module B ");
+        module("easymart.config");
         
         test("some other test ", function() {
           expect(1);
@@ -40,6 +39,9 @@
     <h1>easymart Test Suite</h1>
     <h2 id="banner"></h2>
     <h2 id="userAgent"></h2>
+    <div style="margin: 1em;">
+      <button onclick="window.open('/test_coverage/jscoverage.html');">Coverage report</button>
+    </div>
     <ol id="tests"></ol>
     <div id="main"></div>
   </body>
