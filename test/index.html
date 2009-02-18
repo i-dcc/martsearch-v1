@@ -17,13 +17,21 @@
     <script type="text/javascript" src="unit/config.js" charset="utf-8"></script>
     <script type="text/javascript" src="unit/search.js" charset="utf-8"></script>
     
+    <script type="text/javascript" charset="utf-8">
+      $(document).ready( function() {
+        $('#coverage_report').click( function () {
+          window.open( easymart.conf.url_prefix + '/test_coverage/jscoverage.html?url=test' );
+        });
+      });
+    </script>
+    
   </head>
   <body>
     <h1>easymart Test Suite</h1>
     <h2 id="banner"></h2>
     <h2 id="userAgent"></h2>
     <div style="margin: 1em;">
-      <button onclick="window.open('/test_coverage/jscoverage.html?url=test');">coverage report</button>
+      <button id="coverage_report">coverage report</button>
     </div>
     <ol id="tests"></ol>
     <div id="main"></div>
