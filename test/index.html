@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <title>easymart Test Suite</title>
+    
+    <!-- QUnit - http://docs.jquery.com/QUnit -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.1/jquery.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="testrunner.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="testsuite.css" type="text/css" media="screen, projection" />
+    
+    <!-- easymart library -->
+    <script type="text/javascript" src="../js/easymart.js" charset="utf-8"></script>
+    
+    <!-- Load the tests -->
+    <script type="text/javascript" src="unit/misc.js" charset="utf-8"></script>
+    <script type="text/javascript" src="unit/config.js" charset="utf-8"></script>
+    <script type="text/javascript" src="unit/search.js" charset="utf-8"></script>
+    
+  </head>
+  <body>
+    <h1>easymart Test Suite</h1>
+    <h2 id="banner"></h2>
+    <h2 id="userAgent"></h2>
+    <div style="margin: 1em;">
+      <button onclick="window.open('/test_coverage/jscoverage.html?url=test');">coverage report</button>
+    </div>
+    <ol id="tests"></ol>
+    <div id="main"></div>
+  </body>
+</html>
