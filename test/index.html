@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <title>easymart Test Suite</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.1/jquery.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="testrunner.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/easymart.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="testsuite.css" type="text/css" media="screen, projection" />
+    <script type="text/javascript">
+      $(document).ready( function() {
+        
+        test("a basic test example ", function() {
+          ok( true, "this test is fine " );
+          var value = "hello ";
+          equals( "hello ", value, "We expect value to be hello " );
+        });
+        
+        module("Module A ");
+        
+        test("first test within module ", function() {
+          ok( true, "all pass " );
+        });
+        
+        test("second test within module ", function() {
+          ok( true, "all pass " );
+        });
+        
+        module("Module B ");
+        
+        test("some other test ", function() {
+          expect(1);
+          ok( true, "well " );
+        });
+        
+      });
+      </script>
+  </head>
+  <body>
+    <h1>easymart Test Suite</h1>
+    <h2 id="banner"></h2>
+    <h2 id="userAgent"></h2>
+    <ol id="tests"></ol>
+    <div id="main"></div>
+  </body>
+</html>
