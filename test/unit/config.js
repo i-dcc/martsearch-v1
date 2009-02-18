@@ -19,4 +19,3 @@ test("easymart.config.load()", function() {
     ok( easymart.conf.sources[sources[index]]['dataset_name'], "config file '"+ sources[index] +"' loaded correctly ");
   });
 });
-
