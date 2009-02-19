@@ -73,13 +73,8 @@ var easymart = {
   init: function() {
     
     // Load in the configuration files and configure the interface
-    log.profile('[config] easymart.config.load()');
     easymart.config.load();
-    log.profile('[config] easymart.config.load()');
-    
-    log.profile('[config] easymart.config.build()');
-    easymart.config.build();
-    log.profile('[config] easymart.config.build()');
+    easymart.config.build_configuration_ui();
     
     // Focus the input on the search bar
     $('#query').focus();
@@ -123,8 +118,8 @@ var easymart = {
       });
     },
     
-    // config.build - Function to build the configuration page.
-    build: function () {
+    // config.build_configuration_ui - Function to build the configuration page.
+    build_configuration_ui: function () {
       // Draw the default search to screen...
       $.each( easymart.conf.search, function ( row_index ) {
         easymart.config.build_deafult_search( this, row_index );
