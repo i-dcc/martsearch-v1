@@ -76,31 +76,6 @@ var easymart = {
     easymart.config.load();
     easymart.config.build_configuration_ui();
     
-    // Now connect to the client side storage and confiure the required tables
-    log.profile('[init] building ActiveRecord storage');
-    ActiveRecord.connect();
-    
-    var HTGT_Targ = ActiveRecord.define(
-      'htgt_targs',
-      {
-        is_eucomm: { type: 'BOOLEAN' },
-        is_komp_csd: { type: 'BOOLEAN' },
-        is_mgp: { type: 'BOOLEAN' }
-      }
-    );
-    
-    var test = HTGT_Targ.create(
-      {
-        is_eucomm: false,
-        is_komp_csd: true,
-        is_mgp: false
-      }
-    );
-    
-    test.save();
-    
-    log.profile('[init] building ActiveRecord storage');
-    
     // Focus the input on the search bar
     $('#query').focus();
     
