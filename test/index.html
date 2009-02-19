@@ -9,24 +9,36 @@
     <script type="text/javascript" src="testrunner.js" charset="utf-8"></script>
     <link rel="stylesheet" href="testsuite.css" type="text/css" media="screen, projection" />
     
-    <!-- easymart library -->
-    <script type="text/javascript" src="../js/easymart.js" charset="utf-8"></script>
+    <!-- Insert the i-dcc app -->
+    <script src="../js/utils/active_record/active_record.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/utils/jamal_packed.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/app_model.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/app_view.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/app_controller.js" charset="utf-8"></script>
+    
+    <script src="../js/models/generic_model.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/models/gene_model.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script src="../js/views/search_view.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script src="../js/controllers/config_controller.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/controllers/search_controller.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/controllers/test_controller.js" type="text/javascript" charset="utf-8"></script>
     
     <!-- Load the tests -->
-    <script type="text/javascript" src="unit/misc.js" charset="utf-8"></script>
-    <script type="text/javascript" src="unit/config.js" charset="utf-8"></script>
-    <script type="text/javascript" src="unit/search.js" charset="utf-8"></script>
+    <script src="unit/model.js" type="text/javascript" charset="utf-8"></script>
+    <script src="unit/controller.js" type="text/javascript" charset="utf-8"></script>
     
     <!-- Activate the link to the coverage report -->
     <script type="text/javascript" charset="utf-8">
       $(document).ready( function() {
         $('#coverage_report').click( function () {
-          window.open( easymart.conf.url_prefix + '/test_coverage/jscoverage.html?url=test' );
+          window.open( '/test_coverage/jscoverage.html?url=test' );
         });
       });
     </script>
   </head>
-  <body>
+  <body class="jamal {controller:'Test',action:'index'}">
     <h1>easymart Test Suite</h1>
     <h2 id="banner"></h2>
     <h2 id="userAgent"></h2>
@@ -34,6 +46,32 @@
       <button id="coverage_report">coverage report</button>
     </div>
     <ol id="tests"></ol>
-    <div id="main"></div>
+    <div id="main">
+      
+      <!-- main div for the searches -->
+      <div id="search" style="display:none;">
+        <!-- search form -->
+        <div class="container">
+          <div class="center">
+            <form id="mart_search" action="index_submit" method="get" accept-charset="utf-8">
+              <input type="text" name="query" value="" id="query" size="50" /> 
+              <input type="submit" value="search" /> 
+            </form>
+          </div>
+          <hr class="space" />
+          <div id="loading" class="center" style="display:none;"><span>searching...</span></div>
+        </div>
+
+        <!-- messages/status to the user -->
+        <div id="messages" class="container">
+          <div id="msg" class="span-16 prepend-4 append-4"></div>
+        </div>
+
+        <!-- results section -->
+        <hr class="space" />
+        <div id="results" class="container"></div>
+      </div>
+      
+    </div>
   </body>
 </html>

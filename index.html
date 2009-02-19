@@ -17,20 +17,36 @@
     
     <!-- jQuery JavaScript from http://jquery.com/ -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.1/jquery.min.js" charset="utf-8"></script>
-    <script src="js/jquery-ui-personalized-1.6rc5.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="js/jquery-jtemplates.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/jquery/jquery-ui-personalized-1.6rc5.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/jquery/jquery-jtemplates.js" type="text/javascript" charset="utf-8"></script>
     
     <!-- ActiveRecord.js - http://activerecordjs.org/ -->
-    <script src="js/active_record/active_record.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/utils/active_record/active_record.js" type="text/javascript" charset="utf-8"></script>
     
     <!-- easymart JS -->
+    <!--
     <script src="js/easymart.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" charset="utf-8">
       $(document).ready(function() { easymart.init(); });
     </script>
+    -->
+    
+    <script src="js/utils/jamal_packed.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="js/app_model.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/app_view.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/app_controller.js" charset="utf-8"></script>
+    
+    <script src="js/models/generic_model.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/models/gene_model.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script src="js/views/search_view.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script src="js/controllers/config_controller.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/controllers/search_controller.js" type="text/javascript" charset="utf-8"></script>
+    
     
     <!-- Blackbird - javascript logging/profiling tool (comment out for production) -->
-    <script src="js/blackbirdjs/blackbird.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/utils/blackbirdjs/blackbird.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" charset="utf-8">
       $(document).ready(function() {
         $('#bbird_controls').show();
@@ -38,7 +54,7 @@
         $('#bbird_move').click( function () { log.move(); });
       });
     </script>
-    <link type="text/css" rel="Stylesheet" href="js/blackbirdjs/blackbird.css" />
+    <link type="text/css" rel="Stylesheet" href="js/utils/blackbirdjs/blackbird.css" />
     
     <!-- Firebug Lite - for debugging js problesms outside of firefox (comment out for production) -->
     <!--
@@ -46,7 +62,7 @@
       <script type="text/javascript">firebug.env.height = 500;</script>
     -->
   </head>
-  <body>
+  <body class="jamal {controller:'Search',action:'index'}">
     
     <!-- header and navigation -->
     <div id="header" class="container">
@@ -87,7 +103,7 @@
       <!-- search form -->
       <div class="container">
         <div class="center">
-          <form id="easymart_search" action="index_submit" method="get" accept-charset="utf-8">
+          <form id="mart_search" action="index_submit" method="get" accept-charset="utf-8">
             <input type="text" name="query" value="" id="query" size="50" /> 
             <input type="submit" value="search" /> 
           </form>
