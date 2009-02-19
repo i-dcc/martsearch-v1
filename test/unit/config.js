@@ -16,6 +16,6 @@ test("easymart.config.load()", function() {
   start();
   
   $.each( sources, function(index) {
-    ok( easymart.conf.sources[sources[index]]['dataset_name'], "config file "+ easymart.conf.sources[sources[index]]['dataset_name'] +" loaded correctly ");
+    ok( easymart.conf.sources[sources[index]]['dataset_name'], "config file '"+ sources[index] +"' loaded correctly ");
   });
 });
