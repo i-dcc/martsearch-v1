@@ -25,13 +25,14 @@ $j.m.Gene = $.extend( $j.m.Generic,
           }
         }
       );
+      this._model = Gene;
       return Gene;
     },
     
     _marts: {
       
       dcc: {
-        url:                    "",
+        url:                    "/htgtdev/biomart/martservice",
         dataset_name:           "dcc",
         name:                   "knockoutmouse.org",
         datasetConfigVersion:   "0.6",
@@ -62,7 +63,8 @@ $j.m.Gene = $.extend( $j.m.Generic,
           {"display":"Chromosome","name":"chromosome","enabled":true},
           {"display":"Start Position","name":"start_position","enabled":true},
           {"display":"End Position","name":"end_position","enabled":true},
-          {"display":"Strand","name":"strand","enabled":true},
+          {"display":"Strand","name":"strand","enabled":true}
+          /*,
           {"display":"Vector Design ID (Ordering Info Link)","name":"komp_csd_project_id","enabled":true},
           {"display":"Status","name":"komp_csd_status","enabled":true},
           {"display":"Date Status Assigned","name":"komp_csd_date_status_asigned","enabled":true},
@@ -77,7 +79,18 @@ $j.m.Gene = $.extend( $j.m.Generic,
           {"display":"# Trapped Mutations (MGI)","name":"mgi_trapped_mutations_count","enabled":true},
           {"display":"# Targeted Mutations (MGI)","name":"mgi_targeted_mutations_count","enabled":true},
           {"display":"# Other Mutations (MGI)","name":"mgi_other_mutations_count","enabled":true}
-        ]
+          */
+        ],
+        map_to_storage: function ( data ) {
+          return {
+            mgi_id:       data.mgi_accession_id,
+            symbol:       data.gene_symbol,
+            chromosome:   data.chromosome,
+            coord_start:  data.start_position,
+            coord_end:    data.end_position,
+            strand:       data.strand
+          };
+        }
       }
       
     }
