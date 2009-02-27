@@ -6,6 +6,10 @@ $j.c({
       try {
         
         ActiveRecord.connect();
+        
+        // Initialise tables...
+        $j.m.Gene.init();
+        
         return true;
         
       } catch ( error ) {

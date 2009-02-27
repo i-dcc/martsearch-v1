@@ -1,14 +1,14 @@
-ActiveRecord.connect();
-
 module("model");
+
+ActiveRecord.logging = true;
 
 test( "Gene model - general functions", function () {
   equals( $j.m.Gene._table_name, "genes", "the table has the correct name " );
-  ok( $j.m.Gene.obj(), "got a gene model object " );
+  ok( $j.m.Gene.model, "got a gene model object " );
   ok( $j.m.Gene._drop(), "dropped the gene storage table " );
   ok( $j.m.Gene._define(), "re-created the gene storage table " );
   
-  var Gene = $j.m.Gene.obj();
+  var Gene = $j.m.Gene.model;
   var g = Gene.create({ mgi_id: "MGI:105369", symbol: "Cbx1", chromosome: "11" });
   var g2 = Gene.build({ mgi_id: "MGI:105369", symbol: "Cbx1", chromosome: "11" });
   g2.save();
@@ -36,22 +36,31 @@ test( "Gene model - xml construction", function () {
 test( "Gene model - 'dcc' search example", function () {
   ok( $j.m.Gene._drop(), "dropped the gene storage table " );
   ok( $j.m.Gene._define(), "re-created the gene storage table " );
+  var Gene = $j.m.Gene.model;
   
   var mart = $j.m.Gene._marts.dcc;
   var raw_results = $j.m.Gene._biomart_search( 'Cbx1', mart );
   var preprocessed_results = $j.m.Gene._biomart_tsv2json_ah( raw_results, mart );
   var processed_results = $j.m.Gene._biomart_prep_storage( preprocessed_results, mart );
-  var [ entry, errors ] = $j.m.Gene._save_entry(processed_results[0]);
-  var [ entry2, errors2 ] = $j.m.Gene._save_entry(processed_results[0]);
   
-  equals( 'dcc', mart['dataset_name'], "got correct dataset name " );
-  ok( raw_results.length > 0, "got some results from the biomart " );
-  ok( preprocessed_results.length > 0, "pre-processing results ok " );
-  ok( processed_results.length > 0, "process results for storage ok " );
-  equals( entry.mgi_id, "MGI:105369", "got the correct MGI accession for gene " );
-  ok( errors.length == 0, "no errors recieved from storage " );
-  equals( entry2.mgi_id, "MGI:105369", "got the correct MGI accession for second gene entry " );
-  ok( errors2.length > 0, "caught error for unique MGI accession id " );
+  var [ status, errors ] = $j.m.Gene._save( processed_results );
+  var cbx1 = Gene.find({ first: true, where: { symbol: 'Cbx1' } });
+  var [ status2, errors2 ] = $j.m.Gene._save( processed_results );
+  var cbx1_list = Gene.find({ where: { symbol: 'Cbx1' } });
   
-  ok( $j.m.Gene.search('Art4'), "search pipe for Art4 ok " );
+  equals( 'dcc', mart['dataset_name'], "_marts() - got correct dataset name " );
+  ok( raw_results.length > 0, "_biomart_search() - got some results from the biomart " );
+  ok( preprocessed_results.length > 0, "_biomart_tsv2json_ah() - pre-processing results ok " );
+  ok( processed_results.length > 0, "_biomart_prep_storage() - process results for storage ok " );
+  ok( status, "_save() - gene was stored ok " );
+  ok( errors.length == 0, "_save() - no errors recieved from storage " );
+  equals( cbx1.mgi_id, "MGI:105369", "_save() - got the correct MGI accession for gene " );
+  
+  ok( status2, "_save() - duplicate gene was handled appropriately " );
+  ok( errors2.length == 0, "_save() - no errors fired for duplicate gene (it should be handled internally by the model) " );
+  ok( cbx1_list.length == 1, "_save() - still only one entry for Cbx1 " );
+  
+  ok( $j.m.Gene.search('Art4'), "search() - search pipe for Art4 ok " );
 });
+
+ActiveRecord.logging = false;

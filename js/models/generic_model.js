@@ -12,13 +12,13 @@ $j.m({
     /*
     *
     */
-    obj: function () {
-      if ( this._model ) {
-        return this._model;
+    init: function () {
+      if ( this.model ) {
+        return this.model;
       } else {
         this._drop();
         this._define();
-        return this._model;
+        return this.model;
       }
     },
     
@@ -30,13 +30,13 @@ $j.m({
     /*
     *
     */
-    _model: false,
+    model: false,
     
     /*
     *
     */
     _define: function () {
-      return this._model;
+      return this.model;
     },
     
     /*
@@ -44,19 +44,35 @@ $j.m({
     */
     _drop: function () {
       ActiveRecord.execute('DROP TABLE IF EXISTS ' + this._table_name );
-      this._model = false;
+      this.model = false;
       return true;
     },
     
     /*
     *
     */
-    _save_entry: function ( data ) {
-      var model = this._model;
-      var entry = model.build(data);
-      entry.save();
-      return [ entry, entry.getErrors() ];
+    _save: function ( data ) {
+      var model = this.model;
+      var errors = [];
+      if ( $.isArray(data) ) {
+        $.each( data, function (index) {
+          var entry = model.build(this);
+          entry.save();
+          var tmp_errors = entry.getErrors();
+          if ( tmp_errors.length > 0 ) { errors.push( tmp_errors ); };
+        });
+      } else {
+        var entry = model.build(data);
+        entry.save();
+        var tmp_errors = entry.getErrors();
+        if ( tmp_errors.length > 0 ) { errors.push( tmp_errors ); };
+      };
+      
+      var status = true;
+      if ( errors.length > 0 ) { status = false };
+      return [ status, errors ];
     },
+    
     
     // Dataset (mart) associated functions...
     
@@ -85,20 +101,14 @@ $j.m({
         // Now into a series of objects suitable for storage
         var processed_results = model._biomart_prep_storage( preprocessed_results, mart );
         
-        // Finally... store them!
-        $.each( processed_results, function (index) {
-          
-          var [ entry, errors ] = model._save_entry(this);
-          if ( errors.length > 0 ) {
-            $.each( errors, function (index) { storage_errors.push(this); });
-          }
-          
-        });
+        // Save the data to storage
+        var [ storage_status, errors ] = model._save( processed_results );
+        if ( errors.length ) { storage_errors.push(errors); };
         
         log.debug("finished loading '" + model._table_name + "' from " + mart.dataset_name + " query for " + query);
       });
       
-      if ( storage_errors.length > 0 ) { return false }
+      if ( storage_errors.length > 0 ) { $.each( storage_errors, function(i) { log.error(this); }); return false; }
       else                             { return true; };
     },
     
@@ -210,7 +220,8 @@ $j.m({
     _biomart_prep_storage: function ( data, mart ) {
       var processed_data = [];
       $.each( data, function (index) {
-        processed_data.push( mart.map_to_storage(this) );
+        var tmp = mart.map_to_storage(this);
+        processed_data.push(tmp);
       });
       return processed_data;
     }

@@ -2,7 +2,9 @@ $j.c({
   
   Test: {
     index: function () {
-      // do nothing...
+      
+      $j.c.Config.init();
+      
     }
   }
   
