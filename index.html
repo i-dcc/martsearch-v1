@@ -2,35 +2,20 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>i-DCC</title>
+    <title>IKMC MartSearch</title>
     
-    <!-- Blueprint CSS from http://www.blueprintcss.org/ -->
-    <link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection" />
-    <link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print" />
-    <!--[if IE]>
-      <link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection">
-    <![endif]-->
-    <link rel="stylesheet" href="css/blueprint/plugins/fancy-type/screen.css" type="text/css" media="screen, projection">
+    <!-- jQuery (http://jquery.com) & jQuery UI (http://jqueryui.com) -->
+    <link type="text/css" href="js/utils/jquery-ui/theme/ui.all.css" rel="Stylesheet" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/utils/jquery-ui/jquery-ui-personalized-1.6rc6.min.js" charset="utf-8"></script>
     
-    <!-- easymart CSS -->
-    <link rel="stylesheet" href="css/easymart.css" type="text/css" media="screen, projection">
-    
-    <!-- jQuery JavaScript from http://jquery.com/ -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js" charset="utf-8"></script>
-    <script src="js/jquery/jquery-ui-personalized-1.6rc5.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="js/jquery/jquery-jtemplates.js" type="text/javascript" charset="utf-8"></script>
-    
-    <!-- ActiveRecord.js - http://activerecordjs.org/ -->
+    <!-- ActiveRecord.js (http://activerecordjs.org) -->
     <script src="js/utils/active_record/active_record.js" type="text/javascript" charset="utf-8"></script>
     
-    <!-- easymart JS -->
-    <!--
-    <script src="js/easymart.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript" charset="utf-8">
-      $(document).ready(function() { easymart.init(); });
-    </script>
-    -->
+    <script src="js/utils/ejs_production.js" type="text/javascript" charset="utf-8"></script>
     
+    <!-- easymart -->
+    <link type="text/css" href="css/easymart.css" rel="Stylesheet" />
     <script src="js/support.js" type="text/javascript" charset="utf-8"></script>
     
     <script src="js/utils/jamal_packed.js" type="text/javascript" charset="utf-8"></script>
@@ -46,8 +31,7 @@
     <script src="js/controllers/config_controller.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/controllers/search_controller.js" type="text/javascript" charset="utf-8"></script>
     
-    
-    <!-- Blackbird - javascript logging/profiling tool (comment out for production) -->
+    <!-- Blackbird (http://www.gscottolson.com/blackbirdjs) - comment out for production -->
     <script src="js/utils/blackbirdjs/blackbird.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" charset="utf-8">
       $(document).ready(function() {
@@ -58,87 +42,67 @@
     </script>
     <link type="text/css" rel="Stylesheet" href="js/utils/blackbirdjs/blackbird.css" />
     
-    <!-- Firebug Lite - for debugging js problesms outside of firefox (comment out for production) -->
+    <!-- Firebug Lite (http://getfirebug.com/lite.html) - comment out for production -->
     <!--
       <script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>
       <script type="text/javascript">firebug.env.height = 500;</script>
     -->
   </head>
   <body class="jamal {controller:'Search',action:'index'}">
-    
-    <!-- header and navigation -->
-    <div id="header" class="container">
+    <div id="content">
       
-      <div class="span-6">
-        <h1>i-DCC</h1>
+      <div id="header">
+        <h1>IKMC MartSearch</h1>
       </div>
       
-      <div id="navigation" class="span-17 append-1 last right">
+      <div id="tabs">
+        
         <ul>
-          <li><a id="config_toggle">Configuration</a></li>
+          <li><a href="#search">Search</a></li>
+          <li><a href="#configure">Configure</a></li>
+          <li><a href="#help">Help</a></li>
         </ul>
+        
+        <!-- searches -->
+        <div id="search">
+          
+          <!-- user messages -->
+          <div id="messages" class="ui-widget"></div>
+          
+          <!-- search form -->
+          <div class="center ui-widget">
+            <form id="mart_search" action="index_submit" method="get" accept-charset="utf-8">
+              <input type="text" name="query" value="" id="query" size="50" /> 
+              <input class="ui-button ui-state-default ui-corner-all" type="submit" value="Search" /> <br />
+              <small>Enter gene symbols, gene IDs or genome location e.g., Adam19, Pax, ENSMUSG00000020681, Chr13:22210730-22311689</small>
+            </form>
+          </div>
+          
+          <!-- progress bar -->
+          <div id="progressbar" style="display:none;"></div>
+          
+          <!-- temporary loading marker -->
+          <div id="loading" class="center" style="display:none;"><span>searching...</span></div>
+          
+          <!-- results section -->
+          <div id="results">
+            <ul id="result_list" style="list-style: none; padding: 0;"></ul>
+          </div>
+          
+        </div>
+        
+        <!-- configuration -->
+        <div id="configure"></div>
+        
+        <!-- help -->
+        <div id="help"></div>
+        
       </div>
       
-      <hr />
     </div>
     
-    <!-- configuration -->
-    <div id="config" class="container" style="display:none;">
-      <h2>Search Configuration</h2>
-      <p>Need some blerb to explain the search mech here...</p>
-      <hr class="space" />
-      <h3>Current Search</h3>
-      <div id="search_template">
-        <div id="search_row_0" class="search_row">
-          <span class="source_container first"><ul id="search-level-0-0" class="source_list"></ul></span>
-          <span class="source_container"><ul id="search-level-0-1" class="source_list"></ul></span>
-          <span class="source_container"><ul id="search-level-0-2" class="source_list"></ul></span>
-        </div>
-      </div>
-      <hr class="space" />
-      <h3>Other Available Data Sources</h3>
-      <ul id="other_sources" class="source_list"></ul>
-    </div>
-    
-    <!-- main div for the searches -->
-    <div id="search">
-      <!-- search form -->
-      <div class="container">
-        <div class="center">
-          <form id="mart_search" action="index_submit" method="get" accept-charset="utf-8">
-            <input type="text" name="query" value="" id="query" size="50" /> 
-            <input type="submit" value="search" /> 
-          </form>
-        </div>
-        <hr class="space" />
-        <div id="loading" class="center" style="display:none;"><span>searching...</span></div>
-      </div>
-
-      <!-- messages/status to the user -->
-      <div id="messages" class="container">
-        <div id="msg" class="span-16 prepend-4 append-4"></div>
-      </div>
-
-      <!-- results section -->
-      <hr class="space" />
-      <div id="results" class="container"></div>
-    </div>
-    
-    <!-- footer -->
-    <div id="footer" class="container">
-      <hr />
-      <div class="span-12">
-        &copy; 2009, I-DCC project.
-      </div>
-      <div class="span-11 append-1 last right">
-        powered by <strong><em>easymart</em></strong>
-        <div id="bbird_controls" style="display: none;">
-          Blackbird: 
-          &nbsp;<a id="bbird_toggle">show/hide</a> 
-          &nbsp;<a id="bbird_move">move</a>
-        </div>
-      </div>
-    </div>
-    
+    <!-- jQuery UI theme switcher -->
+    <script type="text/javascript" src="http://ui.jquery.com/applications/themeroller/themeswitchertool/"></script>
+    <script type="text/javascript">$(function(){ $('<div style="position: absolute; right: 20px;" />').insertBefore('#header').themeswitcher({height: 150}); });</script>
   </body>
 </html>
