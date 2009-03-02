@@ -17,7 +17,6 @@ $.extend( $j.m.Gene,
       var Gene = ActiveRecord.define(
         this._table_name,
         {
-          mgi_id:       '',
           symbol:       '',
           chromosome:   '',
           coord_start:  '',
@@ -27,8 +26,8 @@ $.extend( $j.m.Gene,
         },
         {
           valid: function () {
-            if ( Gene.findByMgiId( this.mgi_id ) ) {
-              this.addError( 'This MGI ID: ' + this.mgi_id + ' has already been defined.' );
+            if ( Gene.findBySymbol( this.symbol ) ) {
+              this.addError( 'This gene symbol: ' + this.symbol + ' has already been defined.' );
             }
           }
         }
@@ -84,7 +83,7 @@ $.extend( $j.m.Gene,
         var data_entry = data[index];
         
         // Find or create our gene entry
-        var gene = model.find({ first: true, where: { mgi_id: data_entry.mgi_id } });
+        var gene = model.find({ first: true, where: { symbol: data_entry.symbol } });
         if ( gene.id ) {
           // There is already an entry, extend it with any additional info we have...
           // TODO: finish this extension
@@ -92,7 +91,6 @@ $.extend( $j.m.Gene,
           log.debug('Creating new gene entry for ' + data_entry.symbol);
           // No entry - create one...
           gene = model.build({
-            mgi_id:       data_entry.mgi_id,
             symbol:       data_entry.symbol,
             chromosome:   data_entry.chromosome,
             coord_start:  data_entry.coord_start,
@@ -179,7 +177,6 @@ $.extend( $j.m.Gene,
         map_to_storage: function ( data ) {
           // Sort the gene information...
           var gene_data = {
-            mgi_id:       data.mgi_accession_id,
             symbol:       data.gene_symbol,
             chromosome:   data.chromosome,
             coord_start:  data.start_position,
@@ -190,11 +187,12 @@ $.extend( $j.m.Gene,
           };
           
           // Now the external gene identifiers
-          if ( data.ensembl_gene_id !== "" ) { gene_data.ext_gene_ids.push({ source: 'ensembl', value: data.ensembl_gene_id }); };
-          if ( data.vega_gene_id !== "" )    { gene_data.ext_gene_ids.push({ source: 'vega', value: data.vega_gene_id }); };
-          if ( data.entrez_gene_id !== "" )  { gene_data.ext_gene_ids.push({ source: 'entrez', value: data.entrez_gene_id }); };
-          if ( data.ccds_id !== "" )         { gene_data.ext_gene_ids.push({ source: 'ccds', value: data.ccds_id }); };
-          if ( data.omim_id !== "" )         { gene_data.ext_gene_ids.push({ source: 'omim', value: data.omim_id }); };
+          if ( data.mgi_accession_id !== "" ) { gene_data.ext_gene_ids.push({ source: 'mgi', value: data.mgi_accession_id }); };
+          if ( data.ensembl_gene_id !== "" )  { gene_data.ext_gene_ids.push({ source: 'ensembl', value: data.ensembl_gene_id }); };
+          if ( data.vega_gene_id !== "" )     { gene_data.ext_gene_ids.push({ source: 'vega', value: data.vega_gene_id }); };
+          if ( data.entrez_gene_id !== "" )   { gene_data.ext_gene_ids.push({ source: 'entrez', value: data.entrez_gene_id }); };
+          if ( data.ccds_id !== "" )          { gene_data.ext_gene_ids.push({ source: 'ccds', value: data.ccds_id }); };
+          if ( data.omim_id !== "" )          { gene_data.ext_gene_ids.push({ source: 'omim', value: data.omim_id }); };
           
           return gene_data;
         }

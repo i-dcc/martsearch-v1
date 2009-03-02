@@ -4,8 +4,15 @@
   <head>
     <title>I-DCC Test Suite</title>
     
-    <!-- QUnit - http://docs.jquery.com/QUnit -->
+    <!-- jQuery (http://jquery.com) & jQuery UI (http://jqueryui.com) -->
+    <link type="text/css" href="../js/utils/jquery-ui/theme/ui.all.css" rel="Stylesheet" />
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/utils/jquery-ui/jquery-ui-personalized-1.6rc6.min.js" charset="utf-8"></script>
+    
+    <!-- ActiveRecord.js (http://activerecordjs.org) -->
+    <script src="../js/utils/active_record/active_record.js" type="text/javascript" charset="utf-8"></script>
+    
+    <!-- QUnit (http://docs.jquery.com/QUnit) -->
     <script type="text/javascript" src="testrunner.js" charset="utf-8"></script>
     <script type="text/javascript" charset="utf-8">
       /* Add FireUnit logging - http://fireunit.org */
@@ -32,11 +39,11 @@
     
     <script src="../js/controllers/config_controller.js" type="text/javascript" charset="utf-8"></script>
     <script src="../js/controllers/search_controller.js" type="text/javascript" charset="utf-8"></script>
-    <script src="../js/controllers/test_controller.js" type="text/javascript" charset="utf-8"></script>
     
     <!-- Load the tests -->
     <script src="unit/support.js" type="text/javascript" charset="utf-8"></script>
     <script src="unit/model.js" type="text/javascript" charset="utf-8"></script>
+    <script src="unit/view.js" type="text/javascript" charset="utf-8"></script>
     <script src="unit/controller.js" type="text/javascript" charset="utf-8"></script>
     
     <!-- Activate the link to the coverage report -->
@@ -48,22 +55,24 @@
       });
     </script>
     
-    <!-- Blackbird - javascript logging/profiling tool (comment out for production) -->
-    <script src="../js/utils/blackbirdjs/blackbird.js" type="text/javascript" charset="utf-8"></script>
-    <link type="text/css" rel="Stylesheet" href="../js/utils/blackbirdjs/blackbird.css" />
+    <!-- Blackbird (http://www.gscottolson.com/blackbirdjs) - comment out for production -->
+    <script src="js/utils/blackbirdjs/blackbird.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" charset="utf-8">
-      $(document).ready( function() {
-        $('#toggle_blackbird').click( function () { log.toggle(); });
+      $(document).ready(function() {
+        $('#bbird_controls').show();
+        $('#bbird_toggle').click( function () { log.toggle(); });
+        $('#bbird_move').click( function () { log.move(); });
       });
     </script>
+    <link type="text/css" rel="Stylesheet" href="js/utils/blackbirdjs/blackbird.css" />
     
-    <!-- Firebug Lite - for debugging js problesms outside of firefox (comment out for production) -->
+    <!-- Firebug Lite (http://getfirebug.com/lite.html) - comment out for production -->
     <!--
       <script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>
       <script type="text/javascript">firebug.env.height = 500;</script>
     -->
   </head>
-  <body class="jamal {controller:'Test',action:'index'}">
+  <body class="jamal {controller:'Search',action:'index'}">
     <h1>I-DCC Test Suite</h1>
     <h2 id="banner"></h2>
     <h2 id="userAgent"></h2>
@@ -74,28 +83,46 @@
     <ol id="tests"></ol>
     <div id="main">
       
-      <!-- main div for the searches -->
-      <div id="search" style="display:none;">
-        <!-- search form -->
-        <div class="container">
-          <div class="center">
+      <div id="tabs" style="display:none;">
+
+        <ul>
+          <li><a href="#search">Search</a></li>
+          <li><a href="#configure">Configure</a></li>
+          <li><a href="#help">Help</a></li>
+        </ul>
+
+        <!-- searches -->
+        <div id="search">
+
+          <!-- user messages -->
+          <div id="messages" class="ui-widget"></div>
+
+          <!-- search form -->
+          <div class="center ui-widget">
             <form id="mart_search" action="index_submit" method="get" accept-charset="utf-8">
               <input type="text" name="query" value="" id="query" size="50" /> 
-              <input type="submit" value="search" /> 
+              <input class="ui-button ui-state-default ui-corner-all" type="submit" value="Search" /> <br />
+              <small>Enter gene symbols, gene IDs or genome location e.g., Adam19, Pax, ENSMUSG00000020681, Chr13:22210730-22311689</small>
             </form>
           </div>
-          <hr class="space" />
+
+          <!-- progress bar -->
+          <div id="progressbar" style="display:none;"></div>
+
+          <!-- temporary loading marker -->
           <div id="loading" class="center" style="display:none;"><span>searching...</span></div>
+
+          <!-- results section -->
+          <div id="results"></div>
+
         </div>
 
-        <!-- messages/status to the user -->
-        <div id="messages" class="container">
-          <div id="msg" class="span-16 prepend-4 append-4"></div>
-        </div>
+        <!-- configuration -->
+        <div id="configure"></div>
 
-        <!-- results section -->
-        <hr class="space" />
-        <div id="results" class="container"></div>
+        <!-- help -->
+        <div id="help"></div>
+
       </div>
       
     </div>

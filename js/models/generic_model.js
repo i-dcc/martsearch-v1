@@ -87,29 +87,41 @@ $j.m({
     */
     search: function ( query ) {
       
-      var model = this;
-      var storage_errors = [];
-      log.info("running '" + model._table_name + "' searches for " + query );
+      // Do not submit queries with a blank search string - this causes mart to return EVERYTHING!
+      if ( query == "" ) {
+        
+        return false;
+        
+      } else {
+        
+        var model = this;
+        var storage_errors = [];
+        log.info("running '" + model._table_name + "' searches for " + query );
+
+        $.each( model._marts, function ( index, mart ) {
+          // Submit a POST query for each mart configured in the model.
+          var raw_results = model._biomart_search( query, mart );
+
+          // Convert the results to a JSON array of objects
+          var preprocessed_results = model._biomart_tsv2json_ah( raw_results, mart );
+
+          // Now into a series of objects suitable for storage
+          var processed_results = model._biomart_prep_storage( preprocessed_results, mart );
+
+          // Save the data to storage
+          var save_status = model._save( processed_results );
+          var storage_status = save_status[0];
+          var errors = save_status[1];
+          if ( errors.length ) { storage_errors.push(errors); };
+
+          log.debug("finished loading '" + model._table_name + "' from " + mart.dataset_name + " query for " + query);
+        });
+
+        if ( storage_errors.length > 0 ) { $.each( storage_errors, function(i) { log.error(this); }); return false; }
+        else                             { return true; };
+        
+      };
       
-      $.each( model._marts, function ( index, mart ) {
-        // Submit a POST query for each mart configured in the model.
-        var raw_results = model._biomart_search( query, mart );
-        
-        // Convert the results to a JSON array of objects
-        var preprocessed_results = model._biomart_tsv2json_ah( raw_results, mart );
-        
-        // Now into a series of objects suitable for storage
-        var processed_results = model._biomart_prep_storage( preprocessed_results, mart );
-        
-        // Save the data to storage
-        var [ storage_status, errors ] = model._save( processed_results );
-        if ( errors.length ) { storage_errors.push(errors); };
-        
-        log.debug("finished loading '" + model._table_name + "' from " + mart.dataset_name + " query for " + query);
-      });
-      
-      if ( storage_errors.length > 0 ) { $.each( storage_errors, function(i) { log.error(this); }); return false; }
-      else                             { return true; };
     },
     
     /*

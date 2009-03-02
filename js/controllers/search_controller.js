@@ -11,8 +11,8 @@ $j.c({
     
     run: function ( query ) {
       
-      // Clear the page...
-      $j.v.Search.clear();
+      $j.m.Gene.search( query );
+      $j.v.Search.genes();
       
       return true;
       
