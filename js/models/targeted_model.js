@@ -36,6 +36,38 @@ $.extend( $j.m.TargetedConstruct,
       return TargetedConstruct;
     },
     
+    _save: function ( data ) {
+      var model = this.model;
+      var errors = [];
+      
+      $.each( data, function (index) {
+        
+        // Find or create a construct entry
+        var construct = model.find({ first: true, where: { project_id: this.project_id } });
+        if ( construct.id ) {
+          // There is already an entry, extend it with any additional info we have...
+          // TODO: finish this extension
+        } else {
+          log.debug('Creating new targeted_construct entry');
+          // No entry - create one...
+          construct = model.build({
+            gene_id:    this.gene_id,
+            project:    this.project,
+            status:     this.status,
+            project_id: this.project_id
+          });
+          construct.save();
+          var tmp_errors = construct.getErrors();
+          if ( tmp_errors.length > 0 ) { errors.push( tmp_errors ); };
+        };
+        
+      });
+      
+      var status = true;
+      if ( errors.length > 0 ) { status = false };
+      return [ status, errors ];
+    },
+    
     _marts: {
       
       htgt_targ: {
@@ -51,7 +83,7 @@ $.extend( $j.m.TargetedConstruct,
           { name: 'vega_gene_id',           enabled: false },
           { name: 'entrez_gene_id',         enabled: false },
                                             
-		  { name: 'is_latest_for_gene',     enabled: true,		default: '1' },
+		      { name: 'is_latest_for_gene',     enabled: true,		default: '1' },
                                             
           { name: 'pcs_distribute',         enabled: false },
           { name: 'targvec_distribute',     enabled: false },
@@ -72,7 +104,7 @@ $.extend( $j.m.TargetedConstruct,
           { name: 'entrez_gene_id',         enabled: false },
                                             
           { name: 'status',                 enabled: true },
-		  { name: 'htgt_project_id',        enabled: true },
+		      { name: 'htgt_project_id',        enabled: true },
           { name: 'is_latest_for_gene',     enabled: false },
                                             
           { name: 'design_plate_name',      enabled: false },
@@ -104,33 +136,23 @@ $.extend( $j.m.TargetedConstruct,
           { name: 'epd_distribute',         enabled: false }
         ],
         map_to_storage: function ( data ) {
+          // Look up the parent gene
+          var Gene = $j.m.Gene.model;
+          var gene = Gene.find({ first: true, where: { symbol: data.marker_symbol } });
           
-          var data_to_return = [];
+          // Figure out which project this belongs to
+          var ko_project = '';
+          if      ( data.is_eucomm == 1 )   { ko_project = 'EUCOMM' }
+          else if ( data.is_komp_csd == 1 ) { ko_project = 'KOMP' }
+          else if ( data.is_norcomm == 1 )  { ko_project = 'NorCOMM' };
           
-          $.each( data, function (index) {
-            
-            // Look up the parent gene
-            var Gene = $j.m.Gene.model;
-            var gene = Gene.find({ first: true, where: { symbol: this.marker_symbol } });
-            
-            // Figure out which project this belongs to
-            var ko_project = '';
-            if      ( this.is_eucomm == 1 )   { ko_project = 'EUCOMM' }
-            else if ( this.is_komp_csd == 1 ) { ko_project = 'KOMP' }
-            else if ( this.is_norcomm == 1 )  { ko_project = 'NorCOMM' };
-            
-            // Save the data...
-            data_to_return.push({
-              gene_id:    gene.id,
-              project:    ko_project,
-              status:     this.status,
-              project_id: this.htgt_project_id
-            });
-            
-          });
-          
-          return data_to_return;
-          
+          // return the data...
+          return {
+            gene_id:    gene.id,
+            project:    ko_project,
+            status:     data.status,
+            project_id: data.htgt_project_id
+          };
         }
       }
       

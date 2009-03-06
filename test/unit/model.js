@@ -15,7 +15,7 @@ test( "Gene model - general functions", function () {
   
   ok( Gene, "got a gene model object " );
   ok( g, "created a test gene entry " );
-  equals( g.get('symbol'), "Cbx1", "got correct symbol name " );
+  equals( g.get("symbol"), "Cbx1", "got correct symbol name " );
   ok( g2.getErrors().length > 0, "caught error when trying to insert duplicate genes " );
 });
 
@@ -34,29 +34,35 @@ test( "Gene model - xml construction", function () {
 });
 
 test( "Gene model - 'dcc' search example", function () {
-  ok( $j.m.Gene._drop(), "dropped the gene storage table " );
-  ok( $j.m.Gene._define(), "re-created the gene storage table " );
+  ok( $j.m.Gene._drop(), "dropped the storage table " );
+  ok( $j.m.Gene._define(), "re-created the storage table " );
   var Gene = $j.m.Gene.model;
   
   var mart = $j.m.Gene._marts.dcc;
+  equals( mart['dataset_name'], 'dcc', "_marts() - got correct dataset name " );
+  
   var raw_results = $j.m.Gene._biomart_search( 'Cbx1', mart );
-  var preprocessed_results = $j.m.Gene._biomart_tsv2json_ah( raw_results, mart );
-  var processed_results = $j.m.Gene._biomart_prep_storage( preprocessed_results, mart );
-  
-  var [ status, errors ] = $j.m.Gene._save( processed_results );
-  var cbx1 = Gene.find({ first: true, where: { symbol: 'Cbx1' } });
-  var [ status2, errors2 ] = $j.m.Gene._save( processed_results );
-  var cbx1_list = Gene.find({ where: { symbol: 'Cbx1' } });
-  
-  equals( 'dcc', mart['dataset_name'], "_marts() - got correct dataset name " );
   ok( raw_results.length > 0, "_biomart_search() - got some results from the biomart " );
+  
+  var preprocessed_results = $j.m.Gene._biomart_tsv2json_ah( raw_results, mart );
   ok( preprocessed_results.length > 0, "_biomart_tsv2json_ah() - pre-processing results ok " );
+  
+  var processed_results = $j.m.Gene._biomart_prep_storage( preprocessed_results, mart );
   ok( processed_results.length > 0, "_biomart_prep_storage() - process results for storage ok " );
+  
+  var save_status = $j.m.Gene._save( processed_results );
+  var status = save_status[0];
+  var errors = save_status[1];
   ok( status, "_save() - gene was stored ok " );
   ok( errors.length == 0, "_save() - no errors recieved from storage " );
   
+  var save_status2 = $j.m.Gene._save( processed_results );
+  var status2 = save_status2[0];
+  var errors2 = save_status2[1];
   ok( status2, "_save() - duplicate gene was handled appropriately " );
   ok( errors2.length == 0, "_save() - no errors fired for duplicate gene (it should be handled internally by the model) " );
+  
+  var cbx1_list = Gene.find({ where: { symbol: 'Cbx1' } });
   ok( cbx1_list.length == 1, "_save() - still only one entry for Cbx1 " );
   
   ok( $j.m.Gene.search('Art4'), "search() - search pipe for Art4 ok " );
@@ -76,9 +82,62 @@ test( "TargetedConstruct model - general functions", function () {
   tc2.save();
 
   ok( TargetedConstruct, "got a model object " );
-  ok( tc, "created a test entry " );
+  ok( tc.id != undefined, "created a test entry " );
   equals( tc.getGene().symbol, "Cbx1", "got correct parent symbol name " );
   ok( tc2.getErrors().length > 0, "caught error when trying to insert duplicate genes " );
+});
+
+test( "TargetedConstruct model - xml construction", function () {
+  $.each( $j.m.TargetedConstruct._marts, function ( index, mart ) {
+    var no_expected_filters = 0;
+    var no_expected_attributes = 0;
+    $(mart.filters).each( function(i) { if ( this.enabled ) { no_expected_filters += 1; }; });
+    $(mart.attributes).each( function(i) { if ( this.enabled ) { no_expected_attributes = no_expected_attributes + 1; }; });
+
+    var mart_xml = $j.m.Gene._biomart_xml( 'Foo', mart );
+    ok( mart_xml, "got a returned object from " + mart.dataset_name + " " );
+    equals( $(mart_xml).find("Filter").length, no_expected_filters, "got the expected no. of filters from " + mart.dataset_name + " " );
+    equals( $(mart_xml).find("Attribute").length, no_expected_attributes, "got the expected no. of attributes from " + mart.dataset_name + " " );
+  });
+});
+
+test( "TargetedConstruct model - 'htgt_targ' search example", function () {
+  ok( $j.m.TargetedConstruct._drop(), "dropped the storage table " );
+  ok( $j.m.TargetedConstruct._define(), "re-created the storage table " );
+  var TargetedConstruct = $j.m.TargetedConstruct.model;
+  
+  var mart = $j.m.TargetedConstruct._marts.htgt_targ;
+  equals( mart['dataset_name'], 'htgt_targ', "_marts() - got correct dataset name " );
+  
+  var raw_results = $j.m.TargetedConstruct._biomart_search( 'Cbx1', mart );
+  console.log(raw_results);
+  ok( raw_results.length > 0, "_biomart_search() - got some results from the biomart " );
+  
+  var preprocessed_results = $j.m.TargetedConstruct._biomart_tsv2json_ah( raw_results, mart );
+  console.log(preprocessed_results);
+  ok( preprocessed_results.length > 0, "_biomart_tsv2json_ah() - pre-processing results ok " );
+  
+  var processed_results = $j.m.TargetedConstruct._biomart_prep_storage( preprocessed_results, mart );
+  console.log(processed_results);
+  ok( processed_results.length > 0, "_biomart_prep_storage() - process results for storage ok " );
+  
+  var save_status = $j.m.TargetedConstruct._save( processed_results );
+  var status = save_status[0];
+  var errors = save_status[1];
+  ok( status, "_save() - construct stored ok " );
+  ok( errors.length == 0, "_save() - no errors recieved from storage " );
+  
+  var save_status2 = $j.m.TargetedConstruct._save( processed_results );
+  var status2 = save_status2[0];
+  var errors2 = save_status2[1];
+  ok( status2, "_save() - duplicate entry was handled appropriately " );
+  ok( errors2.length == 0, "_save() - no errors fired for duplicate entry (it should be handled internally by the model) " );
+  
+  var Gene = $j.m.Gene.model;
+  var cbx1 = Gene.find({ first: true, where: { symbol: 'Cbx1' } });
+  equals( cbx1.getTargetedConstructCount(), 1, "_save() - should only have one project for Cbx1 " );
+  
+  ok( $j.m.Gene.search('Art4'), "search() - search pipe for Art4 ok " );
 });
 
 ActiveRecord.logging = false;
