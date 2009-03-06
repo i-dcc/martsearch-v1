@@ -4,9 +4,9 @@ ActiveRecord.logging = true;
 
 test( "Gene model - general functions", function () {
   equals( $j.m.Gene._table_name, "genes", "the table has the correct name " );
-  ok( $j.m.Gene.model, "got a gene model object " );
-  ok( $j.m.Gene._drop(), "dropped the gene storage table " );
-  ok( $j.m.Gene._define(), "re-created the gene storage table " );
+  ok( $j.m.Gene.model, "got a model object " );
+  ok( $j.m.Gene._drop(), "dropped the storage table " );
+  ok( $j.m.Gene._define(), "re-created the storage table " );
   
   var Gene = $j.m.Gene.model;
   var g = Gene.create({ symbol: "Cbx1", chromosome: "11" });
@@ -60,6 +60,25 @@ test( "Gene model - 'dcc' search example", function () {
   ok( cbx1_list.length == 1, "_save() - still only one entry for Cbx1 " );
   
   ok( $j.m.Gene.search('Art4'), "search() - search pipe for Art4 ok " );
+});
+
+test( "TargetedConstruct model - general functions", function () {
+  equals( $j.m.TargetedConstruct._table_name, "targeted_constructs", "the table has the correct name " );
+  ok( $j.m.TargetedConstruct.model, "got a model object " );
+  ok( $j.m.TargetedConstruct._drop(), "dropped the storage table " );
+  ok( $j.m.TargetedConstruct._define(), "re-created the storage table " );
+
+  var Gene = $j.m.Gene.model;
+  var cbx1 = Gene.find({ first: true, where: { symbol: 'Cbx1' } });
+  var TargetedConstruct = $j.m.TargetedConstruct.model;
+  var tc = TargetedConstruct.create({ gene_id: cbx1.id, project: "EUCOMM", status: "ES Cells - Targeting Confirmed", project_id: "35505" });
+  var tc2 = TargetedConstruct.build({ gene_id: cbx1.id, project: "EUCOMM", status: "ES Cells - Targeting Confirmed", project_id: "35505" });
+  tc2.save();
+
+  ok( TargetedConstruct, "got a model object " );
+  ok( tc, "created a test entry " );
+  equals( tc.getGene().symbol, "Cbx1", "got correct parent symbol name " );
+  ok( tc2.getErrors().length > 0, "caught error when trying to insert duplicate genes " );
 });
 
 ActiveRecord.logging = false;

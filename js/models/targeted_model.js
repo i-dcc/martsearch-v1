@@ -28,9 +28,9 @@ $.extend( $j.m.TargetedConstruct,
         }
       );
       
-      //var Gene = $j.m.Gene.model;
-      //Gene.hasMany('targeted_constructs');
-      //TargetedConstruct.belongsTo('genes');
+      var Gene = $j.m.Gene.model;
+      Gene.hasMany('targeted_constructs');
+      TargetedConstruct.belongsTo('genes');
       
       this.model = TargetedConstruct;
       return TargetedConstruct;
