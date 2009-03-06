@@ -9,8 +9,8 @@ test( "Gene model - general functions", function () {
   ok( $j.m.Gene._define(), "re-created the gene storage table " );
   
   var Gene = $j.m.Gene.model;
-  var g = Gene.create({ mgi_id: "MGI:105369", symbol: "Cbx1", chromosome: "11" });
-  var g2 = Gene.build({ mgi_id: "MGI:105369", symbol: "Cbx1", chromosome: "11" });
+  var g = Gene.create({ symbol: "Cbx1", chromosome: "11" });
+  var g2 = Gene.build({ symbol: "Cbx1", chromosome: "11" });
   g2.save();
   
   ok( Gene, "got a gene model object " );
@@ -54,7 +54,6 @@ test( "Gene model - 'dcc' search example", function () {
   ok( processed_results.length > 0, "_biomart_prep_storage() - process results for storage ok " );
   ok( status, "_save() - gene was stored ok " );
   ok( errors.length == 0, "_save() - no errors recieved from storage " );
-  equals( cbx1.mgi_id, "MGI:105369", "_save() - got the correct MGI accession for gene " );
   
   ok( status2, "_save() - duplicate gene was handled appropriately " );
   ok( errors2.length == 0, "_save() - no errors fired for duplicate gene (it should be handled internally by the model) " );
