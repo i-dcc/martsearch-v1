@@ -51,24 +51,8 @@
     <script src="unit/view.js" type="text/javascript" charset="utf-8"></script>
     <script src="unit/controller.js" type="text/javascript" charset="utf-8"></script>
     
-    <!-- Activate the link to the coverage report -->
-    <script type="text/javascript" charset="utf-8">
-      $(document).ready( function() {
-        $('#coverage_report').click( function () {
-          window.open( '/test_coverage/jscoverage.html?url=test' );
-        });
-      });
-    </script>
-    
     <!-- Blackbird (http://www.gscottolson.com/blackbirdjs) - comment out for production -->
     <script src="../js/utils/blackbirdjs/blackbird.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-        $('#bbird_controls').show();
-        $('#bbird_toggle').click( function () { log.toggle(); });
-        $('#bbird_move').click( function () { log.move(); });
-      });
-    </script>
     <link type="text/css" rel="Stylesheet" href="../js/utils/blackbirdjs/blackbird.css" />
     
     <!-- Firebug Lite (http://getfirebug.com/lite.html) - comment out for production -->
@@ -76,6 +60,14 @@
       <script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>
       <script type="text/javascript">firebug.env.height = 500;</script>
     -->
+    
+    <!-- Activate the buttons for the coverage report and blackbird -->
+    <script type="text/javascript" charset="utf-8">
+      $(document).ready( function() {
+        $('#coverage_report').click( function () { window.open( '/test_coverage/jscoverage.html?url=test' ); });
+        $('#toggle_blackbird').click( function () { log.toggle(); });
+      });
+    </script>
   </head>
   <body class="jamal {controller:'Search',action:'index'}">
     <h1>I-DCC Test Suite</h1>
