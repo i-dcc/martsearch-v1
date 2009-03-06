@@ -34,6 +34,22 @@
     <script src="js/controllers/config_controller.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/controllers/search_controller.js" type="text/javascript" charset="utf-8"></script>
     
+    <!-- Blackbird (http://www.gscottolson.com/blackbirdjs) - comment out for production -->
+    <script src="js/utils/blackbirdjs/blackbird.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+      $(document).ready(function() {
+        $('#bbird_controls').show();
+        $('#bbird_toggle').click( function () { log.toggle(); });
+        $('#bbird_move').click( function () { log.move(); });
+      });
+    </script>
+    <link type="text/css" rel="Stylesheet" href="js/utils/blackbirdjs/blackbird.css" />
+
+    <!-- Firebug Lite (http://getfirebug.com/lite.html) - comment out for production -->
+    <!--
+      <script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>
+      <script type="text/javascript">firebug.env.height = 500;</script>
+    -->
   </head>
   <body class="jamal {controller:'Search',action:'index'}">
     <div id="content">
@@ -86,26 +102,9 @@
         
       </div>
       
-    </div>    
+    </div>
+    <!-- jQuery UI theme switcher -->
+    <script type="text/javascript" src="http://ui.jquery.com/applications/themeroller/themeswitchertool/"></script>
+    <script type="text/javascript">$(function(){ $('<div style="position: absolute; right: 20px;" />').insertBefore('#header').themeswitcher({height: 150}); });</script>
   </body>
-  <!-- jQuery UI theme switcher -->
-  <script type="text/javascript" src="http://ui.jquery.com/applications/themeroller/themeswitchertool/"></script>
-  <script type="text/javascript">$(function(){ $('<div style="position: absolute; right: 20px;" />').insertBefore('#header').themeswitcher({height: 150}); });</script>
-  
-  <!-- Blackbird (http://www.gscottolson.com/blackbirdjs) - comment out for production -->
-  <script src="js/utils/blackbirdjs/blackbird.js" type="text/javascript" charset="utf-8"></script>
-  <script type="text/javascript" charset="utf-8">
-    $(document).ready(function() {
-      $('#bbird_controls').show();
-      $('#bbird_toggle').click( function () { log.toggle(); });
-      $('#bbird_move').click( function () { log.move(); });
-    });
-  </script>
-  <link type="text/css" rel="Stylesheet" href="js/utils/blackbirdjs/blackbird.css" />
-  
-  <!-- Firebug Lite (http://getfirebug.com/lite.html) - comment out for production -->
-  <!--
-    <script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>
-    <script type="text/javascript">firebug.env.height = 500;</script>
-  -->
 </html>
