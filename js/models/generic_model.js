@@ -166,7 +166,11 @@ $j.m({
       
       for (var i=0; i < mart.filters.length; i++) {
         if ( mart.filters[i].enabled ) {
-          params.push('<Filter name="' + mart.filters[i].name + '" value="'+ query +'"/>');
+			if ( mart.filters[i].default ) {
+				params.push('<Filter name="' + mart.filters[i].name + '" value="'+ mart.filters[i].default +'"/>');
+			} else {
+				params.push('<Filter name="' + mart.filters[i].name + '" value="'+ query +'"/>');
+			};
         };
       };
       
