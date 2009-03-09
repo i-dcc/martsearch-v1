@@ -1,0 +1,63 @@
+<table style="width: 100%;">
+  <tr>
+    <th>MGI IDs</th>
+    <td>
+      <%
+        var mgi_ids = {
+          list:       getExtGeneIdList({ where: { source: 'mgi' } }),
+          url_start:  'http://www.informatics.jax.org/searches/accession_report.cgi?id=',
+          url_end:    ''
+        }
+      %>
+      <%= this.partial({ url: '/templates/search_results/ext_gene_id_link.ejs' }, mgi_ids ) %>
+    </td>
+    <th>Vega IDs</th>
+    <td>
+      <%
+        var vega_ids = {
+          list:       getExtGeneIdList({ where: { source: 'vega' } }),
+          url_start:  'http://vega.sanger.ac.uk/Mus_musculus/geneview?gene=',
+          url_end:    '&amp;db=core'
+        }
+      %>
+      <%= this.partial({ url: '/templates/search_results/ext_gene_id_link.ejs' }, vega_ids ) %>
+    </td>
+    <th>Ensembl IDs</th>
+    <td>
+      <%
+        var ensembl_ids = {
+          list:       getExtGeneIdList({ where: { source: 'ensembl' } }),
+          url_start:  'http://www.ensembl.org/Mus_musculus/contigview?gene=',
+          url_end:    ''
+        }
+      %>
+      <%= this.partial({ url: '/templates/search_results/ext_gene_id_link.ejs' }, ensembl_ids ) %>
+    </td>
+  </tr>
+  <tr>
+    <th>Entrez IDs</th>
+    <td>
+      <%
+        var entrez_ids = {
+          list:       getExtGeneIdList({ where: { source: 'entrez' } }),
+          url_start:  'http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&amp;cmd=Retrieve&amp;dopt=Graphics&amp;list_uids=',
+          url_end:    ''
+        }
+      %>
+      <%= this.partial({ url: '/templates/search_results/ext_gene_id_link.ejs' }, entrez_ids ) %>
+    </td>
+    <th>CCDS IDs</th>
+    <td>
+      <%
+        var ccds_ids = {
+          list:       getExtGeneIdList({ where: { source: 'ccds' } }),
+          url_start:  'http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&amp;DATA=',
+          url_end:    ''
+        }
+      %>
+      <%= this.partial({ url: '/templates/search_results/ext_gene_id_link.ejs' }, ccds_ids ) %>
+    </td>
+    <th></th>
+    <td></td>
+  </tr>
+</table>

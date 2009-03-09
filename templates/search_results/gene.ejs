@@ -1,4 +1,4 @@
-<li class="ui-widget-content ui-corner-all" style="padding: 0.7em; margin-bottom: 10px;">
+<li id="<%= symbol %>" class="ui-widget-content ui-corner-all" style="padding: 0.7em; margin-bottom: 10px;">
   <table style="width: 100%;">
     <tr>
       <td>
@@ -12,57 +12,16 @@
     </tr>
   </table>
   <div class="accordion">
-    <div>
+    <div id="<%= symbol %>_ext_gene_ids">
       <h4><a href="#">Other Gene IDs</a></h4>
       <div>
-        <table style="width: 100%;">
-          <tr>
-            <th>MGI IDs</th>
-            <td>
-              <% var mgi_ids = this.getExtGeneIdList({ where: { source: 'mgi' } }) %>
-              <% for ( var i=0; i<mgi_ids.length; i++ ) { %>
-                <a href="http://www.informatics.jax.org/searches/accession_report.cgi?id=<%= mgi_ids[i].value %>"><%= mgi_ids[i].value %></a>
-                <% if ( i !== mgi_ids.length-1 ) { %>,<% } %>
-              <% } %>
-            </td>
-            <th>Vega IDs</th>
-            <td>
-              <% var vega_ids = this.getExtGeneIdList({ where: { source: 'vega' } }) %>
-              <% for ( var i=0; i<vega_ids.length; i++ ) { %>
-                <a href="http://vega.sanger.ac.uk/Mus_musculus/geneview?gene=<%= vega_ids[i].value %>&amp;db=core"><%= vega_ids[i].value %></a>
-                <% if ( i !== vega_ids.length-1 ) { %>,<% } %>
-              <% } %>
-            </td>
-            <th>Ensembl IDs</th>
-            <td>
-              <% var ensembl_ids = this.getExtGeneIdList({ where: { source: 'ensembl' } }) %>
-              <% for ( var i=0; i<ensembl_ids.length; i++ ) { %>
-                <a href="http://www.ensembl.org/Mus_musculus/contigview?gene=<%= ensembl_ids[i].value %>"><%= ensembl_ids[i].value %></a>
-                <% if ( i !== ensembl_ids.length-1 ) { %>,<% } %>
-              <% } %>
-            </td>
-          </tr>
-          <tr>
-            <th>Entrez IDs</th>
-            <td>
-              <% var entrez_ids = this.getExtGeneIdList({ where: { source: 'entrez' } }) %>
-              <% for ( var i=0; i<entrez_ids.length; i++ ) { %>
-                <a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&amp;cmd=Retrieve&amp;dopt=Graphics&amp;list_uids=<%= entrez_ids[i].value %>"><%= entrez_ids[i].value %></a>
-                <% if ( i !== entrez_ids.length-1 ) { %>,<% } %>
-              <% } %>
-            </td>
-            <th>CCDS IDs</th>
-            <td>
-              <% var ccds_ids = this.getExtGeneIdList({ where: { source: 'ccds' } }) %>
-              <% for ( var i=0; i<ccds_ids.length; i++ ) { %>
-                <a href="http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&amp;DATA=<%= ccds_ids[i].value %>"><%= ccds_ids[i].value %></a>
-                <% if ( i !== ccds_ids.length-1 ) { %>,<% } %>
-              <% } %>
-            </td>
-            <th></th>
-            <td></td>
-          </tr>
-        </table>
+        <%= this.partial({ url: '/templates/search_results/ext_gene_ids.ejs' }) %>
+      </div>
+    </div>
+    <div id="<%= symbol %>_targeted_constructs">
+      <h4><a href="#">Targeted Constructs</a></h4>
+      <div>
+        <%= this.partial({ url: '/templates/search_results/targeted_constructs.ejs' }) %>
       </div>
     </div>
   </div>

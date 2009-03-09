@@ -51,7 +51,7 @@ $j.v({
       var Gene = $j.m.Gene.model;
       var genes = Gene.find({});
       $.each( genes, function (index) {
-        var html = new EJS({ url: '/templates/search_results/gene.ejs' }).render( this );
+        var html = new EJS({ url: '/templates/search_results/gene.ejs' }).render( genes[index] );
         $('#result_list').append( html );
       });
       
