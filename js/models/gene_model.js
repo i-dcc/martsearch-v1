@@ -48,12 +48,21 @@ $.extend( $j.m.Gene,
               first: true,
               where: { gene_id: this.gene_id, value: this.value, source: this.source }
             });
-            if ( entry.length > 0 ) {
+            if ( entry ) {
               this.addError( 'This external id: ('+entry.gene_id+':'+entry.value+':'+entry.source+') has already been defined.' );
             }
           }
         }
       );
+      
+      // Add some event logging
+      Gene.afterCreate( function (entry) {
+        log.debug('[Gene] new entry for ' + entry.symbol);
+      });
+      
+      ExtGeneId.afterCreate( function (entry) {
+        log.debug('[ExtGeneId] new entry for '+ entry.getGene().symbol +': '+ entry.value +' ('+ entry.source  +')');
+      });
       
       // Define the relations
       Gene.hasMany('ext_gene_ids');
@@ -89,7 +98,6 @@ $.extend( $j.m.Gene,
           // There is already an entry, extend it with any additional info we have...
           // TODO: finish this extension
         } else {
-          log.debug('Creating new gene entry for ' + data_entry.symbol);
           // No entry - create one...
           gene = model.build({
             symbol:       data_entry.symbol,
@@ -108,7 +116,6 @@ $.extend( $j.m.Gene,
         // Now save any external identifiers we have
         $.each( data_entry.ext_gene_ids, function(index) {
           var ext_id_entry = data_entry.ext_gene_ids[index];
-          log.debug('Creating new ext_gene_id entry for ' + data_entry.symbol + ' - ' + ext_id_entry.value);
           gene.createExtGeneId({
             source:   ext_id_entry.source,
             value:    ext_id_entry.value

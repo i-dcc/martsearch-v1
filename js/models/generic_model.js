@@ -96,7 +96,7 @@ $j.m({
         
         var model = this;
         var storage_errors = [];
-        log.info("running '" + model._table_name + "' searches for " + query );
+        log.info("[Search] running '" + model._table_name + "' searches for " + query );
 
         $.each( model._marts, function ( index, mart ) {
           // Submit a POST query for each mart configured in the model.
@@ -114,7 +114,7 @@ $j.m({
           var errors = save_status[1];
           if ( errors.length ) { storage_errors.push(errors); };
 
-          log.debug("finished loading '" + model._table_name + "' from " + mart.dataset_name + " query for " + query);
+          log.info("[Search] finished '" + mart.dataset_name + "' query for " + query);
         });
 
         if ( storage_errors.length > 0 ) { $.each( storage_errors, function(i) { log.error(this); }); return false; }

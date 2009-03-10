@@ -28,9 +28,15 @@ $.extend( $j.m.OtherMutation,
         }
       );
       
+      // Define relationships
       var Gene = $j.m.Gene.model;
       Gene.hasMany(this._table_name);
       OtherMutation.belongsTo('genes');
+      
+      // Add some event logging
+      OtherMutation.afterCreate( function (entry) {
+        log.debug('[OtherMutation] new entry for '+ entry.getGene().symbol +': '+ entry.source +' ('+ entry.count + ')');
+      });
       
       this.model = OtherMutation;
       return OtherMutation;
@@ -64,8 +70,6 @@ $.extend( $j.m.OtherMutation,
         // There is already an entry, extend it with any additional info we have...
         // TODO: finish this extension
       } else {
-        log.debug('Creating new other_mutation entry');
-        log.debug(data.source + ': ' + data.count);
         // No entry - create one...
         entry = model.build({
           gene_id:    data.gene_id,

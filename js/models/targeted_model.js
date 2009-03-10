@@ -28,9 +28,15 @@ $.extend( $j.m.TargetedConstruct,
         }
       );
       
+      // Define relationships
       var Gene = $j.m.Gene.model;
       Gene.hasMany(this._table_name);
       TargetedConstruct.belongsTo('genes');
+      
+      // Add some event logging
+      TargetedConstruct.afterCreate( function (entry) {
+        log.debug('[TargetedConstruct] new entry for '+ entry.getGene().symbol +': '+ entry.project +' ('+ entry.status + ')');
+      });
       
       this.model = TargetedConstruct;
       return TargetedConstruct;
@@ -48,7 +54,6 @@ $.extend( $j.m.TargetedConstruct,
           // There is already an entry, extend it with any additional info we have...
           // TODO: finish this extension
         } else {
-          log.debug('Creating new targeted_construct entry');
           // No entry - create one...
           construct = model.build({
             gene_id:    this.gene_id,
