@@ -12,7 +12,7 @@ $.extend( $j.m.TargetedConstruct,
     
     _define: function () {
       var TargetedConstruct = ActiveRecord.define(
-        'targeted_constructs',
+        this._table_name,
         {
           gene_id:    '',
           project:    '',
@@ -29,7 +29,7 @@ $.extend( $j.m.TargetedConstruct,
       );
       
       var Gene = $j.m.Gene.model;
-      Gene.hasMany('targeted_constructs');
+      Gene.hasMany(this._table_name);
       TargetedConstruct.belongsTo('genes');
       
       this.model = TargetedConstruct;
