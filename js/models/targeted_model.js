@@ -82,17 +82,7 @@ $.extend( $j.m.TargetedConstruct,
         datasetConfigVersion:   "0.6",
         filters: [
           { name: 'marker_symbol',          enabled: true },
-          { name: 'marker_name',            enabled: false },
-          { name: 'mgi_accession_id',       enabled: false },
-          { name: 'ensembl_gene_id',        enabled: false },
-          { name: 'vega_gene_id',           enabled: false },
-          { name: 'entrez_gene_id',         enabled: false },
-                                            
-		      { name: 'is_latest_for_gene',     enabled: true,		default: '1' },
-                                            
-          { name: 'pcs_distribute',         enabled: false },
-          { name: 'targvec_distribute',     enabled: false },
-          { name: 'epd_distribute',         enabled: false }
+          { name: 'is_latest_for_gene',     enabled: true,		default: '1' },
         ],
         attributes: [
           { name: 'is_eucomm',              enabled: true },
@@ -102,11 +92,6 @@ $.extend( $j.m.TargetedConstruct,
           { name: 'is_komp_regeneron',      enabled: false },
                                             
           { name: 'marker_symbol',          enabled: true },
-          { name: 'marker_name',            enabled: false },
-          { name: 'mgi_accession_id',       enabled: false },
-          { name: 'ensembl_gene_id',        enabled: false },
-          { name: 'vega_gene_id',           enabled: false },
-          { name: 'entrez_gene_id',         enabled: false },
                                             
           { name: 'status',                 enabled: true },
 		      { name: 'htgt_project_id',        enabled: true },
@@ -158,6 +143,35 @@ $.extend( $j.m.TargetedConstruct,
             status:     data.status,
             project_id: data.htgt_project_id
           };
+        }
+      },
+      dcc: {
+        url:                    "/htgtdev/biomart/martservice",
+        dataset_name:           "dcc",
+        name:                   "knockoutmouse.org",
+        datasetConfigVersion:   "0.6",
+        filters: [
+          { name: "marker_symbol", enabled: true },
+        ],
+        attributes: [
+          { name: "marker_symbol", enabled: true },
+          { name: "komp_regeneron_status", enabled: true },
+          { name: "velocigene_id", enabled: true }
+        ],
+        map_to_storage: function ( data ) {
+          // Look up the parent gene
+          var Gene = $j.m.Gene.model;
+          var gene = Gene.find({ first: true, where: { symbol: data.marker_symbol } });
+          
+          var project_id = data.velocigene_id.substring(2);
+          
+          // Return the data...
+          return {
+            gene_id:    gene.id,
+            project:    'Regeneron',
+            status:     data.komp_regeneron_status,
+            project_id: project_id
+          };      
         }
       }
       
