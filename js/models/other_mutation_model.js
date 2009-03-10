@@ -82,7 +82,7 @@ $.extend( $j.m.OtherMutation,
     
     _marts: {
       
-      htgt_targ: {
+      htgt_trap: {
         url:                    "/htgtdev/biomart/martservice",
         dataset_name:           "htgt_trap",
         name:                   "EUCOMM Gene Trap Constructs",
