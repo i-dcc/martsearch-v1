@@ -50,12 +50,14 @@ test( "Gene model - 'dcc' search example", function () {
   var processed_results = $j.m.Gene._biomart_prep_storage( preprocessed_results, mart );
   ok( processed_results.length > 0, "_biomart_prep_storage() - process results for storage ok " );
   
+  // Save a gene entry
   var save_status = $j.m.Gene._save( processed_results );
   var status = save_status[0];
   var errors = save_status[1];
   ok( status, "_save() - gene was stored ok " );
   ok( errors.length == 0, "_save() - no errors recieved from storage " );
   
+  // Try to save a duplicate gene entry
   var save_status2 = $j.m.Gene._save( processed_results );
   var status2 = save_status2[0];
   var errors2 = save_status2[1];
@@ -64,6 +66,17 @@ test( "Gene model - 'dcc' search example", function () {
   
   var cbx1_list = Gene.find({ where: { symbol: 'Cbx1' } });
   ok( cbx1_list.length == 1, "_save() - still only one entry for Cbx1 " );
+  
+  // Now test the ExtGeneIds model
+  var cbx1 = cbx1_list[0];
+  
+  var mgi_acc_ids = cbx1.getExtGeneIdList({ where: { source: 'mgi' } });
+  equals( mgi_acc_ids.length, 1, "ExtGeneIds - should only have one MGI Acc for Cbx1 ");
+  equals( mgi_acc_ids[0].value, 'MGI:105369', "ExtGeneIds - got correct MGI Acc for Cbx1 ");
+  
+  var ensembl_ids = cbx1.getExtGeneIdList({ where: { source: 'ensembl' } });
+  equals( ensembl_ids.length, 1, "ExtGeneIds - should only have one Ensembl Gene ID for Cbx1 ");
+  equals( ensembl_ids[0].value, 'ENSMUSG00000018666', "ExtGeneIds - got correct Ensembl Gene ID for Cbx1 ");
   
   ok( $j.m.Gene.search('Art4'), "search() - search pipe for Art4 ok " );
 });
