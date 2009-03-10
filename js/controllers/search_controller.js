@@ -13,6 +13,7 @@ $j.c({
       
       $j.m.Gene.search( query );
       $j.m.TargetedConstruct.search( query );
+      $j.m.OtherMutation.search( query );
 
       $j.v.Search.genes();
       

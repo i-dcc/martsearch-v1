@@ -19,9 +19,15 @@
       </div>
     </div>
     <div id="<%= symbol %>_targeted_constructs">
-      <h4><a href="#">Targeted Constructs</a></h4>
+      <h4><a href="#">Knockout Attempts</a></h4>
       <div>
         <%= this.partial({ url: '/templates/search_results/targeted_constructs.ejs' }) %>
+      </div>
+    </div>
+    <div id="<%= symbol %>_trapped_constructs">
+      <h4><a href="#">Other Mutants/Resources</a></h4>
+      <div>
+        <%= this.partial({ url: '/templates/search_results/other_mutations.ejs' }) %>
       </div>
     </div>
   </div>

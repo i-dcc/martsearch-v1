@@ -1,0 +1,26 @@
+<%
+  var mutants = getOtherMutationList();
+  var mgi_accession_id = getExtGeneIdList({ first: true, where: { source: 'mgi' } }).value;
+%>
+<table>
+  <% for ( var i=0; i<mutants.length; i++ ) { %>
+    <tr>
+      <td><strong><%= mutants[i].source %>:</strong></td>
+      <td>
+        <%
+          //TODO: Need to get the rest of the link URLs for other mutants
+          var link_url = {
+            "EUCOMM Gene Traps": "http://www.eucomm.org/htgt/report/gene_report?project_id=" + mutants[i].source_id,
+            "International Mouse Strain Resource (IMSR)": "http://www.informatics.jax.org/imsr/fetch?page=imsrSummary&op%3Aname=contains&state=LM&state=OV&state=EM&state=SP&state=ES&type=&op%3Aga_symname=%3D&ga_symname="+ symbol +"&ga_symnameBreadth=CM&mutationType=chromosomal+aberration&mutationType=chemically+induced+mutation&mutationType=deletion&mutationType=duplication&mutationType=gene+trap&mutationType=insertion&mutationType=inversion&mutationType=other&mutationType=radiation+induced+mutation&mutationType=robertsonian+translocation&mutationType=spontaneous+mutation&mutationType=reciprocal+translocation&mutationType=targeted+mutation&mutationType=transposition&noLimit=",
+            "International Gene Trap Consortium (IGTC)": "http://www.genetrap.org/cgi-bin/annotation.py?mgi=" + mgi_accession_id,
+            "Trapped Mutations (TIGM)": "",
+            "Trapped Mutations Reported in MGI": "http://www.informatics.jax.org/searches/allele_report.cgi?markerID="+ mgi_accession_id +"&alleleCategory=not%20targeted%20(all)",
+            "Targeted Mutations Reported in MGI": "http://www.informatics.jax.org/searches/allele_report.cgi?markerID="+ mgi_accession_id +"&alleleCategory=targAll",
+            "Other Mutations Reported in MGI": "http://www.informatics.jax.org/searches/allele_report.cgi?markerID="+ mgi_accession_id +"&alleleCategory=not%20targeted%20(all)"
+          }
+        %>
+        <a href="<%= link_url[ mutants[i].source ] %>"><%= mutants[i].count %></a>
+      </td>
+    </tr>
+  <% } %>
+</table>

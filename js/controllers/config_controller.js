@@ -9,7 +9,8 @@ $j.c({
         
         // Initialise tables...
         $j.m.Gene.init();
-		$j.m.TargetedConstruct.init();
+        $j.m.TargetedConstruct.init();
+        $j.m.OtherMutation.init();
         
         return true;
         
