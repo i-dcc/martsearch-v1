@@ -18,6 +18,7 @@ $.extend( $j.m.Gene,
         this._table_name,
         {
           symbol:       '',
+          name:         '',
           chromosome:   '',
           coord_start:  '',
           coord_end:    '',
@@ -92,6 +93,7 @@ $.extend( $j.m.Gene,
           // No entry - create one...
           gene = model.build({
             symbol:       data_entry.symbol,
+            name:         data_entry.name,
             chromosome:   data_entry.chromosome,
             coord_start:  data_entry.coord_start,
             coord_end:    data_entry.coord_end,
@@ -130,54 +132,29 @@ $.extend( $j.m.Gene,
         name:                   "knockoutmouse.org",
         datasetConfigVersion:   "0.6",
         filters: [
-          {"display":"Gene Symbol","name":"gene_symbol","enabled":true},
-          {"display":"MGI Accession ID","name":"mgi_accession_id","enabled":false},
-          {"display":"Ensembl Gene ID","name":"ensembl_gene_id","enabled":false},
-          {"display":"Vega Gene ID","name":"vega_gene_id","enabled":false},
-          {"display":"Entrez Gene ID","name":"entrez_gene_id","enabled":false},
-          {"display":"Chromosome","name":"chromosome","enabled":false},
-          {"display":"Start Position (==)","name":"start_position_eq","enabled":false},
-          {"display":"Start Position (>=)","name":"start_position_gt","enabled":false},
-          {"display":"Start Position (<=)","name":"start_position_lt","enabled":false},
-          {"display":"End Position (<=)","name":"end_position_lt","enabled":false},
-          {"display":"End Position (>=)","name":"end_position_gt","enabled":false},
-          {"display":"End Position (==)","name":"end_position_eq","enabled":false},
-          {"display":"Strand","name":"strand","enabled":false}
+          { name: "marker_symbol", enabled: true },
         ],
         attributes: [
-          {"display":"Gene Symbol","name":"gene_symbol","enabled":true},
-          {"display":"MGI Accession ID","name":"mgi_accession_id","enabled":true},
-          {"display":"Chromosome","name":"chromosome","enabled":true},
-          {"display":"Start Position","name":"start_position","enabled":true},
-          {"display":"End Position","name":"end_position","enabled":true},
-          {"display":"Strand","name":"strand","enabled":true},
-          {"display":"Gene Type","name":"gene_type","enabled":true},
-          {"display":"Ensembl Gene ID","name":"ensembl_gene_id","enabled":true},
-          {"display":"Vega Gene ID","name":"vega_gene_id","enabled":true},
-          {"display":"Entrez Gene ID","name":"entrez_gene_id","enabled":true},
-          {"display":"CCDS ID","name":"ccds_id","enabled":true},
-          {"display":"OMIM ID","name":"omim_id","enabled":true}
-          /*,
-          {"display":"Vector Design ID (Ordering Info Link)","name":"komp_csd_project_id","enabled":true},
-          {"display":"Status","name":"komp_csd_status","enabled":true},
-          {"display":"Date Status Assigned","name":"komp_csd_date_status_asigned","enabled":true},
-          {"display":"Vector Design ID (Ordering Info Link)","name":"komp_regeneron_velocigene_id","enabled":true},
-          {"display":"Status","name":"komp_regeneron_status","enabled":true},
-          {"display":"Date Status Assigned","name":"komp_regeneron_data_status_assigned","enabled":true},
-          {"display":"Status","name":"eucomm_status","enabled":true},
-          {"display":"Status","name":"norcomm_status","enabled":true},
-          {"display":"# International Mouse Strain Resource (IMSR)","name":"imsr_count","enabled":true},
-          {"display":"# International Gene Trap Consortium (IGTC)","name":"igtc_count","enabled":true},
-          {"display":"# Trapped Mutations (TIGM)","name":"tigm_trapped_count","enabled":true},
-          {"display":"# Trapped Mutations (MGI)","name":"mgi_trapped_mutations_count","enabled":true},
-          {"display":"# Targeted Mutations (MGI)","name":"mgi_targeted_mutations_count","enabled":true},
-          {"display":"# Other Mutations (MGI)","name":"mgi_other_mutations_count","enabled":true}
-          */
+          { name: "marker_symbol", enabled: true },
+          { name: "marker_name", enabled: true },
+          { name: "mgi_accession_id", enabled: true },
+          { name: "chromosome", enabled: true },
+          { name: "start_position", enabled: true },
+          { name: "end_position", enabled: true },
+          { name: "strand", enabled: true },
+          { name: "gene_type", enabled: true },
+          { name: "gene_synonym", enabled: true },
+          { name: "ensembl_gene_id", enabled: true },
+          { name: "vega_gene_id", enabled: true },
+          { name: "entrez_gene_id", enabled: true },
+          { name: "ccds_id", enabled: true },
+          { name: "omim_id", enabled: true }
         ],
         map_to_storage: function ( data ) {
           // Sort the gene information...
           var gene_data = {
-            symbol:       data.gene_symbol,
+            symbol:       data.marker_symbol,
+            name:         data.marker_name,
             chromosome:   data.chromosome,
             coord_start:  data.start_position,
             coord_end:    data.end_position,
@@ -188,6 +165,7 @@ $.extend( $j.m.Gene,
           
           // Now the external gene identifiers
           if ( data.mgi_accession_id !== "" ) { gene_data.ext_gene_ids.push({ source: 'mgi', value: data.mgi_accession_id }); };
+          if ( data.gene_synonym !== "" )     { gene_data.ext_gene_ids.push({ source: 'synonym', value: data.gene_synonym }); };
           if ( data.ensembl_gene_id !== "" )  { gene_data.ext_gene_ids.push({ source: 'ensembl', value: data.ensembl_gene_id }); };
           if ( data.vega_gene_id !== "" )     { gene_data.ext_gene_ids.push({ source: 'vega', value: data.vega_gene_id }); };
           if ( data.entrez_gene_id !== "" )   { gene_data.ext_gene_ids.push({ source: 'entrez', value: data.entrez_gene_id }); };

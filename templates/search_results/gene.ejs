@@ -2,8 +2,13 @@
   <table style="width: 100%;">
     <tr>
       <td>
-        <span class="gene_symbol"><%= symbol %></span> <small><em>need the full gene name in the mart!</em></small> <br />
-        <strong>Synonyms</strong>: <small><em>these need to be put in the mart!</em></small> <br />
+        <span class="gene_symbol"><%= symbol %></span> <small><em><%= name %></em></small> <br />
+        <%
+          var syn_list = getExtGeneIdList({ where: { source: 'synonym' } });
+          var synonyms = [];
+          for ( var i=0; i<syn_list.length; i++ ) { synonyms.push( syn_list[i].value ); }
+        %>
+        <strong>Synonyms</strong>: <small><em><%= synonyms.join(', ') %></em></small> <br />
         <strong>Gene Location</strong>: Chr<%= chromosome %>:<%= coord_start %>-<%= coord_end %>(<%= strand %>)
       </td>
       <td style="text-align: right;">

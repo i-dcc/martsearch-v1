@@ -128,10 +128,10 @@ $.extend( $j.m.OtherMutation,
         name:                   "knockoutmouse.org",
         datasetConfigVersion:   "0.6",
         filters: [
-          { name: "gene_symbol", enabled: true },
+          { name: "marker_symbol", enabled: true },
         ],
         attributes: [
-          { name: "gene_symbol", enabled: true },
+          { name: "marker_symbol", enabled: true },
           { name: "imsr_count", enabled: true },
           { name: "igtc_count", enabled: true },
           { name: "tigm_trapped_count", enabled: true },
@@ -142,7 +142,7 @@ $.extend( $j.m.OtherMutation,
         map_to_storage: function ( data ) {
           // Look up the parent gene
           var Gene = $j.m.Gene.model;
-          var gene = Gene.find({ first: true, where: { symbol: data.gene_symbol } });
+          var gene = Gene.find({ first: true, where: { symbol: data.marker_symbol } });
           
           var mutants = [];
           
