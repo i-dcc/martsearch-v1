@@ -139,7 +139,7 @@ $.extend( $j.m.Gene,
         name:                   "knockoutmouse.org",
         datasetConfigVersion:   "0.6",
         filters: [
-          { name: "marker_symbol", enabled: true },
+          { name: "marker_symbol", enabled: true }
         ],
         attributes: [
           { name: "marker_symbol", enabled: true },

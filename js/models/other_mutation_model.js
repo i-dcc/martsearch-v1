@@ -14,7 +14,7 @@ $.extend( $j.m.OtherMutation,
       var OtherMutation = ActiveRecord.define(
         this._table_name,
         {
-          gene_id:    '',
+          gene_id:   '',
           source:    '',
           count:     '',
           source_id: ''
@@ -98,8 +98,7 @@ $.extend( $j.m.OtherMutation,
           { name: 'ensembl_gene_id', enabled: false },
           { name: 'vega_gene_id', enabled: false },
           { name: 'entrez_gene_id', enabled: false },
-          
-          { name: 'is_trapped', enabled: true, default: '1' }
+          { name: 'is_trapped', enabled: true, 'default': '1' }
         ],
         attributes: [
           { name: 'marker_symbol', enabled: true },
@@ -108,7 +107,6 @@ $.extend( $j.m.OtherMutation,
           { name: 'ensembl_gene_id', enabled: false },
           { name: 'vega_gene_id', enabled: false },
           { name: 'entrez_gene_id', enabled: false },
-          
           { name: 'htgt_project_id', enabled: true },
           { name: 'project_gene_trap_well_count', enabled: true }
         ],
@@ -132,7 +130,7 @@ $.extend( $j.m.OtherMutation,
         name:                   "knockoutmouse.org",
         datasetConfigVersion:   "0.6",
         filters: [
-          { name: "marker_symbol", enabled: true },
+          { name: "marker_symbol", enabled: true }
         ],
         attributes: [
           { name: "marker_symbol", enabled: true },

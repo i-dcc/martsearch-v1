@@ -82,7 +82,7 @@ $.extend( $j.m.TargetedConstruct,
         datasetConfigVersion:   "0.6",
         filters: [
           { name: 'marker_symbol',          enabled: true },
-          { name: 'is_latest_for_gene',     enabled: true,		default: '1' },
+          { name: 'is_latest_for_gene',     enabled: true,		'default': '1' }
         ],
         attributes: [
           { name: 'is_eucomm',              enabled: true },
@@ -151,7 +151,7 @@ $.extend( $j.m.TargetedConstruct,
         name:                   "knockoutmouse.org",
         datasetConfigVersion:   "0.6",
         filters: [
-          { name: "marker_symbol", enabled: true },
+          { name: "marker_symbol", enabled: true }
         ],
         attributes: [
           { name: "marker_symbol", enabled: true },
