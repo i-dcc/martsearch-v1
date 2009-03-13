@@ -150,7 +150,7 @@ $.extend( $j.m.Gene,
           { name: "end_position", enabled: true },
           { name: "strand", enabled: true },
           { name: "gene_type", enabled: true },
-          { name: "gene_synonym", enabled: true },
+          { name: "synonym", enabled: true },
           { name: "ensembl_gene_id", enabled: true },
           { name: "vega_gene_id", enabled: true },
           { name: "entrez_gene_id", enabled: true },
@@ -172,7 +172,7 @@ $.extend( $j.m.Gene,
           
           // Now the external gene identifiers
           if ( data.mgi_accession_id !== "" ) { gene_data.ext_gene_ids.push({ source: 'mgi', value: data.mgi_accession_id }); };
-          if ( data.gene_synonym !== "" )     { gene_data.ext_gene_ids.push({ source: 'synonym', value: data.gene_synonym }); };
+          if ( data.synonym !== "" )          { gene_data.ext_gene_ids.push({ source: 'synonym', value: data.synonym }); };
           if ( data.ensembl_gene_id !== "" )  { gene_data.ext_gene_ids.push({ source: 'ensembl', value: data.ensembl_gene_id }); };
           if ( data.vega_gene_id !== "" )     { gene_data.ext_gene_ids.push({ source: 'vega', value: data.vega_gene_id }); };
           if ( data.entrez_gene_id !== "" )   { gene_data.ext_gene_ids.push({ source: 'entrez', value: data.entrez_gene_id }); };
