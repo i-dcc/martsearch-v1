@@ -212,10 +212,6 @@ test( "OtherMutation model - 'htgt_trap' search example", function () {
   ok( status2, "_save() - duplicate entry was handled appropriately " );
   ok( errors2.length == 0, "_save() - no errors fired for duplicate entry (it should be handled internally by the model) " );
   
-  var Gene = $j.m.Gene.model;
-  var cbx1 = Gene.find({ first: true, where: { symbol: 'Cbx1' } });
-  equals( cbx1.getOtherMutationCount(), 2, "_save() - should only have one entry for Cbx1 " );
-  
   ok( $j.m.Gene.search('Art4'), "search() - search pipe for Art4 ok " );
 });
 
