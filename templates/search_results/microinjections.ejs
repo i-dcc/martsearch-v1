@@ -1,0 +1,25 @@
+<% var microinjections = getMicroinjectionList() %>
+<table style="width: 100%;">
+  <tr>
+    <th>Project</th>
+    <th>ES Cell Clone</th>
+    <th>ES Cell Line</th>
+    <th>Centre</th>
+    <th>Date</th>
+    <th>Status</th>
+  </tr>
+  <% for ( var i=0; i<microinjections.length; i++ ) { %>
+    <tr>
+      <td><%= microinjections[i].project %></td>
+      <td><%= microinjections[i].escell_clone_name %></td>
+      <td><%= microinjections[i].escell_line_strain %></td>
+      <td><%= microinjections[i].mi_centre %></td>
+      <% if ( microinjections[i].mi_date.match('00:00:00') ) { %>
+        <td><%= microinjections[i].mi_date.substr(0,10) %></td>
+      <% } else { %>
+        <td><%= microinjections[i].mi_date %></td>
+      <% } %>
+      <td><%= microinjections[i].status %></td>
+    </tr>
+  <% } %>
+</table>

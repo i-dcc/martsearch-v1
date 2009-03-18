@@ -14,6 +14,7 @@ $j.c({
         $j.m.Gene.init();
         $j.m.TargetedConstruct.init();
         $j.m.OtherMutation.init();
+        $j.m.Microinjection.init();
         
         return true;
         
@@ -34,6 +35,7 @@ $j.c({
         $j.m.Gene.re_init();
         $j.m.TargetedConstruct.re_init();
         $j.m.OtherMutation.re_init();
+        $j.m.Microinjection.re_init();
         
       } catch ( error ) {
         log.error('[ $j.c.Config.clear_all() ] ' + error.description );

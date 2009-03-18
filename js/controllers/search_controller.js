@@ -15,15 +15,15 @@ $j.c({
       
       $('#loading').fadeIn("fast");
       
-      $j.v.Search.clear_results();
       $j.c.Config.clear_results();
       
       // Cope with pagination...
       var solr_start = 0;
       if ( page ) { solr_start = page * $j.c.Config.items_per_page; };
       
-      var mart_query_array = [];
-      var num_results = 0;
+      var marker_symbols = [];
+      var escell_clones  = []
+      var num_results    = 0;
       
       // Fire a query to the lucene (Solr) index...
       $.ajax({
@@ -40,12 +40,34 @@ $j.c({
           rows:       $j.c.Config.items_per_page
         },
         success: function ( json ) {
+          //console.log(json);
+          
           $.each( json.response.docs, function ( index, gene ) {
-            mart_query_array.push( gene.marker_symbol );
+            
+            marker_symbols.push( gene.marker_symbol );
+            
+            if ( gene.escell && gene.escell.length > 0 ) {
+              $.each( gene.escell, function (index) {
+                escell_clones.push( gene.escell[index] );
+              });
+            };
+            
           });
+          
           num_results = json.response.numFound;
         }
       });
+      
+      // Now fire the mart searches with the return from solr
+      var marker_symbol_query_str = marker_symbols.join(",");
+      var escell_clones_query_str = escell_clones.join(",");
+      
+      $j.m.Gene.search( marker_symbol_query_str );
+      $j.m.TargetedConstruct.search( marker_symbol_query_str );
+      $j.m.OtherMutation.search( marker_symbol_query_str );
+      $j.m.Microinjection.search( escell_clones_query_str );
+      
+      $j.v.Search.clear_results();
       
       // See if we need to paginate results
       if ( num_results > $j.c.Config.items_per_page ) {
@@ -57,13 +79,6 @@ $j.c({
           callback:             $j.c.Search.handle_paging
         });
       };
-      
-      // Now fire the mart searches with the return from solr
-      var mart_query_str = mart_query_array.join(",");
-      
-      $j.m.Gene.search( mart_query_str );
-      $j.m.TargetedConstruct.search( mart_query_str );
-      $j.m.OtherMutation.search( mart_query_str );
       
       $j.v.Search.genes();
       

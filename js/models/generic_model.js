@@ -243,7 +243,7 @@ $j.m({
       var processed_data = [];
       $.each( data, function (index) {
         var tmp = mart.map_to_storage(this);
-        processed_data.push(tmp);
+        if ( tmp ) { processed_data.push(tmp); };
       });
       return processed_data;
     }
