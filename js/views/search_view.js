@@ -9,6 +9,11 @@ $j.v({
       // Make the page tabbed
       $('#tabs').tabs({ fx: { opacity: 'toggle' } });
       
+      $('#about_link').click(function() {
+          $('#tabs').tabs('select', 4); // switch to about (5th) tab
+          return false;
+      });
+      
       // Make form buttons respond to mouse interaction
       $(".ui-button:not(.ui-state-disabled)")
         .hover(
