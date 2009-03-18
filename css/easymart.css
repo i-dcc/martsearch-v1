@@ -8,7 +8,40 @@
   display: inline-block;
 }
 
+.result_list {
+  list-style: none;
+  padding: 0;
+  clear:both;
+}
 
+/* Lists for browsing the data */
+
+ul.browse_list  {
+	list-style-type: none;
+	font-size: 80%;
+}
+
+ul.browse_list li {
+	float: none;
+	padding: .4em 1em !important;
+	display: inline-block;
+	margin-right: 0px;
+	margin-bottom: 5px;
+}
+
+/* Pagination */
+
+.pagination {
+  font-size: 80%;
+}
+
+.pagination a, .pagination span {
+  	display: block;
+  	float: left;
+  	padding: .4em 1em;
+  	margin-right: 2px;
+	margin-bottom: 5px;
+}
 
 
 /* jQuery UI */

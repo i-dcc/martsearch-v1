@@ -32,15 +32,26 @@ $j.v({
       
       // Attach ajax listeners to the 'loading' div (don't you just love jQuery?!?!?)
       // TODO: Change this to a full jQuery UI progress bar
-      $("#loading").ajaxStart(function(){ $(this).show(); });
-      $("#loading").ajaxStop(function(){ $(this).hide(); });
+      //$("#loading").ajaxStart(function(){ $(this).show(); });
+      //$("#loading").ajaxStop(function(){ $(this).hide(); });
       
       // Override the submit function on the form
       $('#mart_search').submit( function(){
-        $j.c.Search.run( $('#query').val() );
+        $j.c.Search.run( $('#query').val(), 0 );
         return false;
       });
       
+      // Focus the users input
+      $('#query').focus();
+      
+    },
+    
+    /*
+    *
+    */
+    clear_results: function () {
+      $('#results_pager').html("");
+      $('#result_list').html("");
     },
     
     /*

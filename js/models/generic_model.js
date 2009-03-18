@@ -22,6 +22,12 @@ $j.m({
       }
     },
     
+    re_init: function () {
+      this._drop();
+      this._define();
+      return this.model;
+    },
+    
     /*
     *
     */
@@ -134,7 +140,7 @@ $j.m({
     * @return {String} tab separated results from a biomart search
     */
     _biomart_search: function ( query, mart ) {
-      log.profile("mart query: " + mart.dataset_name + " for " + query);
+      //log.profile("mart query: " + mart.dataset_name + " for " + query);
       var results = '';
       $.ajax({
         type: "POST",
@@ -143,7 +149,7 @@ $j.m({
         data: { "query": this._biomart_xml( query, mart ) },
         success: function ( data ) { results = data; }
       });
-      log.profile("mart query: " + mart.dataset_name + " for " + query);
+      //log.profile("mart query: " + mart.dataset_name + " for " + query);
       return results;
     },
     

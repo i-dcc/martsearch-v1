@@ -1,6 +1,9 @@
 $j.c({
   Config: {
     
+    index_url: '/solr/select',
+    items_per_page: 10,
+    
     init: function () {
       
       try {
@@ -20,6 +23,24 @@ $j.c({
         return false;
         
       }
+      
+    },
+    
+    clear_results: function () {
+      
+      try {
+        
+        // Re-initialise tables...
+        $j.m.Gene.re_init();
+        $j.m.TargetedConstruct.re_init();
+        $j.m.OtherMutation.re_init();
+        
+      } catch ( error ) {
+        log.error('[ $j.c.Config.clear_all() ] ' + error.description );
+        return false;
+      }
+      
+      return true;
       
     }
     
