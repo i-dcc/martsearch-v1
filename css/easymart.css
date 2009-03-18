@@ -1,11 +1,11 @@
 /* @override http://easymart.site/css/easymart.css */
 
-#loading span {
+#loading {
   background: #fff url(../images/loading.gif) no-repeat left center;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 35px;
-  display: inline-block;
+  min-width: 32px;
+  min-height: 32px;
+  float: left;
+  margin-top: -65px;
 }
 
 .result_list {

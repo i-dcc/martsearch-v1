@@ -13,7 +13,7 @@ $j.c({
       
       log.profile("[Search] Search pipe for '" + query + "'");
       
-      $('#loading').slideDown("fast");
+      $('#loading').fadeIn("fast");
       
       $j.v.Search.clear_results();
       $j.c.Config.clear_results();
@@ -67,7 +67,7 @@ $j.c({
       
       $j.v.Search.genes();
       
-      $('#loading').slideUp("fast");
+      $('#loading').fadeOut("fast");
       
       log.profile("[Search] Search pipe for '" + query + "'");
       
