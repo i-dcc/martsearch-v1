@@ -35,7 +35,7 @@ $.extend( $j.m.TargetedConstruct,
       
       // Add some event logging
       TargetedConstruct.afterCreate( function (entry) {
-        log.debug('[TargetedConstruct] new entry for '+ entry.getGene().symbol +': '+ entry.project +' ('+ entry.status + ')');
+        //log.debug('[TargetedConstruct] new entry for '+ entry.getGene().symbol +': '+ entry.project +' ('+ entry.status + ')');
       });
       
       this.model = TargetedConstruct;
@@ -81,7 +81,7 @@ $.extend( $j.m.TargetedConstruct,
         name:                   "Gene Targeting Constructs",
         datasetConfigVersion:   "0.6",
         filters: [
-          { name: 'marker_symbol',          enabled: true },
+          { name: 'marker_symbol',       enabled: true },
           { name: 'is_latest_for_gene',     enabled: true,		'default': '1' }
         ],
         attributes: [

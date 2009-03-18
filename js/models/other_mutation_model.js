@@ -35,7 +35,7 @@ $.extend( $j.m.OtherMutation,
       
       // Add some event logging
       OtherMutation.afterCreate( function (entry) {
-        log.debug('[OtherMutation] new entry for '+ entry.getGene().symbol +': '+ entry.source +' ('+ entry.count + ')');
+        //log.debug('[OtherMutation] new entry for '+ entry.getGene().symbol +': '+ entry.source +' ('+ entry.count + ')');
       });
       
       this.model = OtherMutation;
@@ -93,11 +93,6 @@ $.extend( $j.m.OtherMutation,
         datasetConfigVersion:   "0.6",
         filters: [
           { name: 'marker_symbol', enabled: true },
-          { name: 'marker_name', enabled: false },
-          { name: 'mgi_accession_id', enabled: false },
-          { name: 'ensembl_gene_id', enabled: false },
-          { name: 'vega_gene_id', enabled: false },
-          { name: 'entrez_gene_id', enabled: false },
           { name: 'is_trapped', enabled: true, 'default': '1' }
         ],
         attributes: [

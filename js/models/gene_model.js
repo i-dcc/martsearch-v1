@@ -57,11 +57,11 @@ $.extend( $j.m.Gene,
       
       // Add some event logging
       Gene.afterCreate( function (entry) {
-        log.debug('[Gene] new entry for ' + entry.symbol);
+        //log.debug('[Gene] new entry for ' + entry.symbol);
       });
       
       ExtGeneId.afterCreate( function (entry) {
-        log.debug('[ExtGeneId] new entry for '+ entry.getGene().symbol +': '+ entry.value +' ('+ entry.source  +')');
+        //log.debug('[ExtGeneId] new entry for '+ entry.getGene().symbol +': '+ entry.value +' ('+ entry.source  +')');
       });
       
       // Define the relations
