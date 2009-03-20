@@ -5,6 +5,9 @@ $j.c({
       
       $j.c.Config.init();
       $j.v.Search.init();
+      
+      $j.c.Search.load_product_counts();
+      
       return true;
       
     },
@@ -80,6 +83,8 @@ $j.c({
         });
       };
       
+      $('#product_counts').fadeOut("fast");
+      
       $j.v.Search.genes();
       
       $('#loading').fadeOut("fast");
@@ -93,6 +98,76 @@ $j.c({
     handle_paging: function (new_page_index, pagination_container) {
       $j.c.Search.run( $('#query').val(), new_page_index );
       return false;
+    },
+    
+    /*
+    * Function to run on initial page load (post index) to import and display
+    * project counts to screen.
+    */
+    load_product_counts: function () {
+      
+      var filters = {
+        "In Progress": {
+          "Eucomm": { is_eucomm:   "1", is_latest_for_gene: "1", status: "Vector Construction in Progress" },
+          "KOMP-CSD": { is_komp_csd: "1", is_latest_for_gene: "1", status: "Vector Construction in Progress" },
+          "KOMP-Regeneron": { is_komp_regeneron: "1", is_latest_for_gene: "1", status: "Vector Construction in Progress" },
+          "NorCOMM": { is_norcomm: "1", is_latest_for_gene: "1", status: "Vector Construction in Progress" }
+        },
+        "Vectors Available": {
+          "Eucomm":   { is_eucomm:   "1", is_latest_for_gene: "1", status: "Vector Complete" },
+          "KOMP-CSD": { is_komp_csd: "1", is_latest_for_gene: "1", status: "Vector Complete" },
+          "KOMP-Regeneron": { is_komp_regeneron: "1", is_latest_for_gene: "1", status: "Vector Complete" },
+          "NorCOMM": { is_norcomm: "1", is_latest_for_gene: "1", status: "Vector Complete" }
+        },
+        "ES Cells Available": {
+          "Eucomm":   { is_eucomm:   "1", is_latest_for_gene: "1", status: "ES Cells - Targeting Confirmed" },
+          "KOMP-CSD": { is_komp_csd: "1", is_latest_for_gene: "1", status: "ES Cells - Targeting Confirmed" },
+          "KOMP-Regeneron": { is_komp_regeneron: "1", is_latest_for_gene: "1", status: "ES Cells - Targeting Confirmed" },
+          "NorCOMM": { is_norcomm: "1", is_latest_for_gene: "1", status: "ES Cells - Targeting Confirmed" }
+        },
+        "Mice Available": {
+          "Eucomm":   { is_eucomm:   "1", is_latest_for_gene: "1", status: "Mice Available" },
+          "KOMP-CSD": { is_komp_csd: "1", is_latest_for_gene: "1", status: "Mice Available" },
+          "KOMP-Regeneron": { is_komp_regeneron: "1", is_latest_for_gene: "1", status: "Mice Available" },
+          "NorCOMM": { is_norcomm: "1", is_latest_for_gene: "1", status: "Mice Available" }
+        }
+      }
+      
+      new EJS({ url: '/templates/product_counts.ejs' }).update( 'product_counts_table', { data: filters } );
+      
+      $.each( filters, function ( product_type, projects ) {
+        $.each( projects, function ( project, mart_filters ) {
+          var dom_id = '#' + product_type.replace(/ /ig, "_") + '_' + project;
+          $j.c.Search._product_count_search( dom_id, mart_filters );
+        });
+      });
+      
+      return true;
+    },
+    
+    _product_count_search: function ( dom_element, filters) {
+      // Build the XML file
+      var xml = '';
+      xml += '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE Query>';
+      xml += '<Query  virtualSchemaName="default" formatter="TSV" header="0" uniqueRows="1" count="1" datasetConfigVersion="0.6" >';
+      xml += '<Dataset name="htgt_targ" interface="default" >';
+      
+      $.each( filters, function ( filter, value ) {
+        xml += '<Filter name="' + filter + '" value="'+ value +'"/>'
+      });
+      
+      xml += '</Dataset>';
+      xml += '</Query>';
+      
+      // Fire the mart search and update the table cell
+      $.ajax({
+        type: "POST",
+        url: "/htgtdev/biomart/martservice",
+        async: true,
+        data: { "query": xml },
+        success: function ( data ) { $(dom_element).html(data); }
+      });
+      
     }
     
   }

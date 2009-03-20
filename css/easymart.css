@@ -43,6 +43,28 @@ ul.browse_list li {
 	margin-bottom: 5px;
 }
 
+/* Product Counts */
+
+#product_counts {
+	margin-top: 25px;
+	margin-bottom: 25px;
+	width: 75%;
+}
+
+#product_counts_table table {
+	border-collapse: collapse;
+}
+
+#product_counts_table td, #product_counts_table th {
+	border: 1px solid #e2e2e2;
+	text-align: left;
+	padding: 5px;
+}
+
+#product_counts_table th {
+	border: 1px solid #e2e2e2;
+	background-color: #e2e2e2;
+}
 
 /* jQuery UI */
 

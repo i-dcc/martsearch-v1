@@ -83,8 +83,9 @@
           <!-- search form -->
           <div class="center ui-widget">
             <form id="mart_search" action="index_submit" method="get" accept-charset="utf-8">
-              <input type="text" name="query" value="" id="query" size="50" /> 
-              <input class="ui-button ui-state-default ui-corner-all" type="submit" value="Search" /> <br />
+              <input type="text" name="query" value="" id="query" size="50" />&nbsp;
+              <input class="ui-button ui-state-default ui-corner-all" type="submit" value="Search" />
+              <input class="ui-button ui-state-default ui-corner-all" type="reset" value="Clear" /><br />
               <small>Enter gene symbols, gene or product identifiers or any other search term described in the <a id="about_link" href="#about">about</a> section.</small>
             </form>
           </div>
@@ -99,6 +100,12 @@
           <div id="results">
             <div id="results_pager" class="pagination"></div>
             <ul id="result_list" class="result_list"></ul>
+          </div>
+          
+          <!-- IKMC product counts -->
+          <div id="product_counts" class="center">
+            <h2>Available Products</h2>
+            <div id="product_counts_table" class="center"></div>
           </div>
           
         </div>
