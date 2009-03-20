@@ -9,7 +9,7 @@
   </tr>
   <% $.each( data, function ( product_type, projects ) { %>
     <tr>
-      <td><%= product_type %></td>
+      <td><strong><%= product_type %></strong></td>
       <% $.each( projects, function ( project, count ) { %>
         <td id='<%= product_type.replace(/ /ig, "_") %>_<%= project %>'></td>
       <% }); %>
