@@ -113,6 +113,7 @@ table.ikmc-info th {
 	background-color: #e2e2e2;
 }
 
+<<<<<<< HEAD:css/easymart.css
 /* Pagination */
 
 .pagination {
@@ -125,6 +126,26 @@ table.ikmc-info th {
 	padding: .4em 1em;
 	margin-right: 2px;
 	margin-bottom: 5px;
+}
+
+/* Footer */
+
+#footer {
+	color: #333;
+	margin: 5px 10px;
+}
+
+#footer #powered {
+	text-align: right;
+	margin-top: -10px;
+}
+
+#footer #powered img {
+	border: none;
+}
+
+#footer #powered a {
+	opacity: .25;
 }
 
 /* jQuery UI Buttons */
