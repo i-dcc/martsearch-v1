@@ -1,6 +1,7 @@
 $j.c({
   Config: {
     
+    base_url: '',
     index_url: '/solr/select',
     items_per_page: 10,
     

@@ -144,7 +144,7 @@ $j.m({
       var results = '';
       $.ajax({
         type: "POST",
-        url:  mart.url,
+        url:  $j.c.Config.base_url + mart.url,
         async: false,
         data: { "query": this._biomart_xml( query, mart ) },
         success: function ( data ) { results = data; }

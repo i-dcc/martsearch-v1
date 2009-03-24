@@ -31,7 +31,7 @@ $j.c({
       // Fire a query to the lucene (Solr) index...
       $.ajax({
         type: "POST",
-        url:  $j.c.Config.index_url,
+        url:  $j.c.Config.base_url + $j.c.Config.index_url,
         async: false,
         dataType: "json",
         data: {
@@ -162,7 +162,7 @@ $j.c({
       // Fire the mart search and update the table cell
       $.ajax({
         type: "POST",
-        url: "/htgtdev/biomart/martservice",
+        url: $j.c.Config.base_url + "/htgtdev/biomart/martservice",
         async: true,
         data: { "query": xml },
         success: function ( data ) { $(dom_element).html(data); }

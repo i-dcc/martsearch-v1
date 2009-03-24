@@ -24,11 +24,11 @@ $j.v({
       $('#query').focus();
       
       // Fill the other tabs...
-      new EJS({ url: '/templates/browse_by_symbol.ejs' }).update( 'browse_by_symbol', {} );
-      new EJS({ url: '/templates/browse_by_chr.ejs' }).update( 'browse_by_chr', {} );
-      new EJS({ url: '/templates/configure.ejs' }).update( 'configure', {} );
-      new EJS({ url: '/templates/help.ejs' }).update( 'help', {} );
-      new EJS({ url: '/templates/about.ejs' }).update( 'about', {} );
+      new EJS({ url: $j.c.Config.base_url + '/templates/browse_by_symbol.ejs' }).update( 'browse_by_symbol', {} );
+      new EJS({ url: $j.c.Config.base_url + '/templates/browse_by_chr.ejs' }).update( 'browse_by_chr', {} );
+      new EJS({ url: $j.c.Config.base_url + '/templates/configure.ejs' }).update( 'configure', {} );
+      new EJS({ url: $j.c.Config.base_url + '/templates/help.ejs' }).update( 'help', {} );
+      new EJS({ url: $j.c.Config.base_url + '/templates/about.ejs' }).update( 'about', {} );
       
       // Make form buttons respond to mouse interaction
       $(".ui-button:not(.ui-state-disabled)")
@@ -68,7 +68,7 @@ $j.v({
       var Gene = $j.m.Gene.model;
       var genes = Gene.find({});
       $.each( genes, function (index) {
-        var html = new EJS({ url: '/templates/search_results/gene.ejs' }).render( genes[index] );
+        var html = new EJS({ url: $j.c.Config.base_url + '/templates/search_results/gene.ejs' }).render( genes[index] );
         $('#result_list').append( html );
       });
       
