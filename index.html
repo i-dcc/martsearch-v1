@@ -68,9 +68,10 @@
         
         <ul>
           <li><a href="#search">Search</a></li>
-          <li><a href="#browse_by_gene">Browse By Gene Symbol</a></li>
+          <li><a href="#browse_by_symbol">Browse By Gene Symbol</a></li>
           <li><a href="#browse_by_chr">Browse By Chromosome</a></li>
           <li><a href="#configure">Configure</a></li>
+          <li><a href="#help">Help</a></li>
           <li><a href="#about">About</a></li>
         </ul>
         
@@ -86,12 +87,12 @@
               <input type="text" name="query" value="" id="query" size="50" />&nbsp;
               <input class="ui-button ui-state-default ui-corner-all" type="submit" value="Search" />
               <input class="ui-button ui-state-default ui-corner-all" type="reset" value="Clear" /><br />
-              <small>Enter gene symbols, gene or product identifiers or any other search term described in the <a id="about_link" href="#about">about</a> section.</small>
+              <small>Enter gene symbols, gene or product identifiers or any other search term described in the <a id="help_link" href="#help">help</a> section.</small>
             </form>
           </div>
           
           <!-- progress bar -->
-          <div id="progressbar" style="display:none;"></div>
+          <div id="progressbar" style="display: none;"></div>
           
           <!-- temporary loading marker -->
           <span id="loading" style="display: none;"><img src="images/loading.gif" alt="searching..." /></span>
@@ -110,76 +111,17 @@
           
         </div>
         
-        <!-- browse by gene -->
-        <div id="browse_by_gene">
-          <div class="center">
-            <ul id="browse_by_gene_list" class="browse_list">
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">A</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">B</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">C</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">D</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">E</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">F</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">G</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">H</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">I</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">J</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">K</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">L</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">M</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">N</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">O</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">P</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">Q</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">R</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">S</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">T</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">U</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">V</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">W</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">X</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">Y</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">Z</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">0-9</a></li>
-            </ul>
-          </div>
-          <div id="browse_by_gene_pager" class="pagination"></div>
-          <div id="browse_by_gene_pager" class="result_list"></div>
-        </div>
+        <!-- browse by gene symbol -->
+        <div id="browse_by_symbol"></div>
         
         <!-- browse by gene -->
-        <div id="browse_by_chr">
-          <div class="center">
-            <ul id="browse_by_chr_list" class="browse_list">
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">1</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">2</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">3</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">4</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">5</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">6</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">7</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">8</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">9</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">10</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">11</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">12</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">13</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">14</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">15</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">16</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">17</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">18</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">19</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">X</a></li>
-              <li class="ui-button ui-state-default ui-corner-all"><a href="#">Y</a></li>
-            </ul>
-          </div>
-          <div id="browse_by_chr_pager" class="pagination"></div>
-          <div id="browse_by_chr_pager" class="result_list"></div>
-        </div>
+        <div id="browse_by_chr"></div>
         
         <!-- configure -->
         <div id="configure"></div>
+        
+        <!-- help -->
+        <div id="help"></div>
         
         <!-- about -->
         <div id="about"></div>

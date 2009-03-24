@@ -1,0 +1,158 @@
+<h2>Advanced Searching</h2>
+<p>
+   IKMC MartSearch supports several advanced operators, which are query words that have 
+   special meaning to us. These operators modify the search in some way, or even 
+   tell us to do a totally different type of search. For instance, &quot;marker_symbol:&quot; 
+   is a special operator, and the query <strong>[marker_symbol:Cbx1]</strong> doesn't do a 
+   normal search but instead finds only the genes with the marker symbol 'Cbx1'.
+   
+   <!--
+   Several of the more common operators use punctuation instead of words, or do not 
+   require a colon. Among these operators are OR, "" (the quote operator), - (the minus 
+   operator), and + (the plus operator). More information on these types of operators 
+   is available on the Basics of Search page. Many of these special operators are 
+   accessible from the Advanced Search page, but some are not. Below is a list of all 
+   the special operators Google supports.
+   -->
+   
+   <h3>Query Modifiers</h3>
+   <p>
+    Using the following query modifiers will allow you to restrict the results of your 
+    searches in a controlled way.
+   </p>
+   <table class="ikmc-info">
+    <tr>
+      <th>marker_symbol:</th>
+      <td>
+        <p>
+          i.e. <strong>[marker_symbol:cbx1]</strong> would return the gene record for 'Cbx1'.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>marker_name:</th>
+      <td>
+        <p>
+          i.e. <strong>[marker_name:chromobox*]</strong> would return all genes with a marker 
+          name starting with 'chromobox'.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>chromosome:</th>
+      <td>
+        <p>
+          i.e. <strong>[chromosome:X]</strong> would return all gene records for the X chromosome.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>mgi_accession_id:</th>
+      <td>
+        <p>
+          i.e. <strong>[mgi_accession_id:MGI105369]</strong> would return the gene record for 'Cbx1'.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>ensembl_gene_id:</th>
+      <td>
+        <p>
+          i.e. <strong>[ensembl_gene_id:ENSMUSG00000018666]</strong> would return the gene record for 'Cbx1'.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>vega_gene_id:</th>
+      <td>
+        <p>
+          i.e. <strong>[vega_gene_id:OTTMUSG00000001636]</strong> would return the gene record for 'Cbx1'.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>entrez_gene_id:</th>
+      <td>
+        <p>
+          i.e. <strong>[entrez_gene_id:12412]</strong> would return the gene record for 'Cbx1'.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>ccds_id:</th>
+      <td>
+        <p>
+          i.e. <strong>[ccds_id:CCDS25303.1]</strong> would return the gene record for 'Cbx1'.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>omim_id:</th>
+      <td>
+        <p>
+          i.e. <strong>[omim_id:113705]</strong> would return the gene record for 'Brca1'.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>targeting_design:</th>
+      <td>
+        <p>
+          This will restrict your results to entries with the corresponding 
+          <a href="http://www.komp.org">KOMP</a>/<a href="http://www.eucomm.org">EUCOMM</a> 
+          targeting design plate/well identifier.
+        </p>
+        <p>
+          i.e. <strong>[targeting_design:19_B11]</strong> would return the gene record for 'Cbx1' 
+          (as this is the target for this design), whereas <strong>[targeting_design:19*]</strong> 
+          would return a list of all genes targeted on design plate 19.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>intermediate_vector:</th>
+      <td>
+        <p>
+          This will restrict your results to entries with the corresponding 
+          <a href="http://www.komp.org">KOMP</a>/<a href="http://www.eucomm.org">EUCOMM</a> 
+          intermediate vector plate/well identifier.
+        </p>
+        <p>
+          i.e. <strong>[intermediate_vector:PCS00019_A_B11]</strong> would return the gene record for 'Cbx1', 
+          (as this is the target for this vector), whereas <strong>[intermediate_vector:PCS00019_A*]</strong> 
+          would return a list of all genes with vectors on plate PCS00019_A.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>targeting_vector:</th>
+      <td>
+        <p>
+          This will restrict your results to entries with the corresponding 
+          <a href="http://www.komp.org">KOMP</a>/<a href="http://www.eucomm.org">EUCOMM</a> 
+          targeting vector plate/well identifier.
+        </p>
+        <p>
+          i.e. <strong>[targeting_vector:PGS00019_A_B11]</strong> would return the gene record for 'Cbx1', 
+          (as this is the target for this vector), whereas <strong>[targeting_vector:PGS00019_A*]</strong> 
+          would return a list of all genes with vectors on plate PGS00019_A.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>escell:</th>
+      <td>
+        <p>
+          This will restrict your results to entries with the corresponding 
+          <a href="http://www.komp.org">KOMP</a>/<a href="http://www.eucomm.org">EUCOMM</a> 
+          escell clone identifier.
+        </p>
+        <p>
+          i.e. <strong>[escell:EPD0027_2_A01]</strong> would return the gene record for 'Cbx1', 
+          (as this is the targeted gene in this cell), whereas <strong>[escell:EPD0027_2*]</strong> 
+          would return a list of all genes with targeted cells on plate EPD0027_2.
+        </p>
+      </td>
+    </tr>
+   </table>
+</p>

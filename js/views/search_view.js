@@ -14,6 +14,22 @@ $j.v({
           return false;
       });
       
+      // Override the submit function on the form
+      $('#mart_search').submit( function(){
+        $j.c.Search.run( $('#query').val(), 0 );
+        return false;
+      });
+      
+      // Focus the users input
+      $('#query').focus();
+      
+      // Fill the other tabs...
+      new EJS({ url: '/templates/browse_by_symbol.ejs' }).update( 'browse_by_symbol', {} );
+      new EJS({ url: '/templates/browse_by_chr.ejs' }).update( 'browse_by_chr', {} );
+      new EJS({ url: '/templates/configure.ejs' }).update( 'configure', {} );
+      new EJS({ url: '/templates/help.ejs' }).update( 'help', {} );
+      new EJS({ url: '/templates/about.ejs' }).update( 'about', {} );
+      
       // Make form buttons respond to mouse interaction
       $(".ui-button:not(.ui-state-disabled)")
         .hover(
@@ -34,21 +50,6 @@ $j.v({
             $(this).removeClass("ui-state-active");
           }
         });
-      
-      // Attach ajax listeners to the 'loading' div (don't you just love jQuery?!?!?)
-      // TODO: Change this to a full jQuery UI progress bar
-      //$("#loading").ajaxStart(function(){ $(this).show(); });
-      //$("#loading").ajaxStop(function(){ $(this).hide(); });
-      
-      // Override the submit function on the form
-      $('#mart_search').submit( function(){
-        $j.c.Search.run( $('#query').val(), 0 );
-        return false;
-      });
-      
-      // Focus the users input
-      $('#query').focus();
-      
     },
     
     /*
