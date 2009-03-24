@@ -57,7 +57,16 @@
       %>
       <%= this.partial({ url: '/templates/search_results/ext_gene_id_link.ejs' }, ccds_ids ) %>
     </td>
-    <th></th>
-    <td></td>
+    <th>OMIM IDs</th>
+    <td>
+      <%
+        var omim_ids = {
+          list:       getExtGeneIdList({ where: { source: 'omim' } }),
+          url_start:  '',
+          url_end:    ''
+        }
+      %>
+      <%= this.partial({ url: '/templates/search_results/ext_gene_id_link.ejs' }, omim_ids ) %>
+    </td>
   </tr>
 </table>

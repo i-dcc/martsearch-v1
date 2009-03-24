@@ -1,20 +1,79 @@
 /* @override http://easymart.site/css/easymart.css */
 
+body{
+	font: 62.5% "Trebuchet MS", sans-serif;
+	margin: 50px;
+}
+
+.center {
+	margin: 0 auto;
+	text-align: center;
+}
+
+/* Headings */
+
+h1 span.subhead {
+	font-size: small;
+	color: #fa1614;
+	vertical-align: super;
+}
+
+/* Status Indicators */
+
 #loading {
-  background: #fff url(../images/loading.gif) no-repeat left center;
-  min-width: 32px;
-  min-height: 32px;
-  float: left;
-  margin-top: -65px;
+	background: #fff url(../images/loading.gif) no-repeat left center;
+	min-width: 32px;
+	min-height: 32px;
+	float: left;
+	margin-top: -65px;
+}
+
+#progressbar {
+	width: 50%;
+	margin: 0 auto;
+	margin-top: 20px;
+	margin-bottom: 15px;
+}
+
+#messages {
+	margin: 15px;
+}
+
+/* jQuery UI Dialogs */
+
+#dialog_link {
+	padding: .4em 1em .4em 20px;
+	text-decoration: none;
+	position: relative;
+}
+
+#dialog_link span.ui-icon {
+	margin: 0 5px 0 0;
+	position: absolute;
+	left: .2em;
+	top: 50%;
+	margin-top: -8px;
+}
+
+/* Search and results */
+
+#mart_search, #results {
+	margin-bottom: 15px;
+	margin-top: 15px;
+}
+
+.gene_symbol {
+	font-weight: bold;
+	font-size: 1.3em;
 }
 
 .result_list {
-  list-style: none;
-  padding: 0;
-  clear:both;
+	list-style: none;
+	padding: 0;
+	clear:both;
 }
 
-/* Lists for browsing the data */
+/* Lists for browsing the data - (browse by gene / chromosome) */
 
 ul.browse_list  {
 	list-style-type: none;
@@ -29,20 +88,6 @@ ul.browse_list li {
 	margin-bottom: 5px;
 }
 
-/* Pagination */
-
-.pagination {
-  font-size: 80%;
-}
-
-.pagination a, .pagination span {
-  	display: block;
-  	float: left;
-  	padding: .4em 1em;
-  	margin-right: 2px;
-	margin-bottom: 5px;
-}
-
 /* Product Counts */
 
 #product_counts {
@@ -51,37 +96,52 @@ ul.browse_list li {
 	width: 75%;
 }
 
-#product_counts_table table {
+/* Info Tables */
+
+table.ikmc-info {
 	border-collapse: collapse;
 }
 
-#product_counts_table td, #product_counts_table th {
+table.ikmc-info td, table.ikmc-info th {
 	border: 1px solid #e2e2e2;
 	text-align: left;
 	padding: 5px;
 }
 
-#product_counts_table th {
+table.ikmc-info th {
 	border: 1px solid #e2e2e2;
 	background-color: #e2e2e2;
 }
 
-/* jQuery UI */
+/* Pagination */
+
+.pagination {
+	font-size: 80%;
+}
+
+.pagination a, .pagination span {
+	display: block;
+	float: left;
+	padding: .4em 1em;
+	margin-right: 2px;
+	margin-bottom: 5px;
+}
+
+/* jQuery UI Buttons */
 
 .ui-button { outline: 0; margin:0 4px 0 0; padding: .4em 1em; text-decoration:none !important; cursor:pointer; position: relative; text-align: center; zoom: 1; }
 .ui-button .ui-icon { position: absolute; top: 50%; margin-top: -8px; left: 50%; margin-left: -8px; }
 
 a.ui-button { float:left; }
 
-/* remove extra button width in IE */
-button.ui-button { width:auto; overflow:visible; }
+button.ui-button { width:auto; overflow:visible; } /* remove extra button width in IE */
 
 .ui-button-icon-left { padding-left: 2.1em; }
 .ui-button-icon-right { padding-right: 2.1em; }
 .ui-button-icon-left .ui-icon { right: auto; left: .2em; margin-left: 0; }
 .ui-button-icon-right .ui-icon { left: auto; right: .2em; margin-left: 0; }
 
-.ui-button-icon-solo { display:block; width:8px; text-indent: -9999px; }	 /* solo icon buttons must have block properties for the text-indent to work */	
+.ui-button-icon-solo { display:block; width:8px; text-indent: -9999px; } /* solo icon buttons must have block properties for the text-indent to work */
 
 .ui-buttonset { float:left; }
 .ui-buttonset .ui-button { float: left; }
@@ -91,18 +151,3 @@ button.ui-button { width:auto; overflow:visible; }
 .ui-toolbar { padding: .5em; margin: 0;  }
 .ui-toolbar .ui-buttonset { margin-right:1.5em; padding-left: 1px; }
 .ui-toolbar .ui-button { font-size: 1em;  }
-
-/*demo page css*/
-body{ font: 62.5% "Trebuchet MS", sans-serif; margin: 50px;}
-.demoHeaders { margin-top: 2em; }
-#dialog_link {padding: .4em 1em .4em 20px;text-decoration: none;position: relative;}
-#dialog_link span.ui-icon {margin: 0 5px 0 0;position: absolute;left: .2em;top: 50%;margin-top: -8px;}
-ul#icons {margin: 0; padding: 0;}
-ul#icons li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left;  list-style: none;}
-ul#icons span.ui-icon {float: left; margin: 0 4px;}
-
-#messages { margin: 15px; }
-#mart_search, #results { margin-bottom: 15px; margin-top: 15px; }
-.center { margin: 0 auto; text-align: center; }
-#progressbar { width: 50%; margin: 0 auto; margin-top: 20px; margin-bottom: 15px;}
-.gene_symbol { font-weight: bold; font-size: 1.3em; }
