@@ -1,44 +1,44 @@
-<li id="<%= symbol %>" class="ui-widget-content ui-corner-all" style="padding: 0.7em; margin-bottom: 10px;">
+<li id="<%= gene.symbol %>" class="ui-widget-content ui-corner-all" style="padding: 0.7em; margin-bottom: 10px;">
   <table style="width: 100%;">
     <tr>
       <td>
-        <span class="gene_symbol"><%= symbol %></span> <small><em><%= name %></em></small> <br />
+        <span class="gene_symbol"><%= gene.symbol %></span> <small><em><%= gene.name %></em></small> <br />
         <%
-          var syn_list = getExtGeneIdList({ where: { source: 'synonym' } });
+          var syn_list = gene.getExtGeneIdList({ where: { source: 'synonym' } });
           var synonyms = [];
           for ( var i=0; i<syn_list.length; i++ ) { synonyms.push( syn_list[i].value ); }
         %>
         <strong>Synonyms</strong>: <small><em><%= synonyms.join(', ') %></em></small> <br />
-        <strong>Gene Location</strong>: Chr<%= chromosome %>:<%= coord_start %>-<%= coord_end %>(<%= strand %>)
+        <strong>Gene Location</strong>: Chr<%= gene.chromosome %>:<%= gene.coord_start %>-<%= gene.coord_end %>(<%= gene.strand %>)
       </td>
       <td style="text-align: right;">
-        <img src="http://gbrowse.informatics.jax.org/cgi-bin/gbrowse_img/thumbs_current/?abs=1;options=Everything;width=200;name=<%= chromosome %>%3A<%= coord_start %>-<%= coord_end %>" alt="" />
+        <img src="http://gbrowse.informatics.jax.org/cgi-bin/gbrowse_img/thumbs_current/?abs=1;options=Everything;width=200;name=<%= gene.chromosome %>%3A<%= gene.coord_start %>-<%= gene.coord_end %>" alt="" />
       </td>
     </tr>
   </table>
   <div class="accordion">
-    <div id="<%= symbol %>_ext_gene_ids">
+    <div id="<%= gene.symbol %>_ext_gene_ids">
       <h4><a href="#">Other Gene IDs</a></h4>
       <div>
-        <%= this.partial({ url: '/templates/search_results/ext_gene_ids.ejs' }) %>
+        <%= this.partial({ url: base_url + '/templates/search_results/ext_gene_ids.ejs' }) %>
       </div>
     </div>
-    <div id="<%= symbol %>_microinjections">
+    <div id="<%= gene.symbol %>_microinjections">
       <h4><a href="#">IKMC Mice</a></h4>
       <div>
-        <%= this.partial({ url: '/templates/search_results/microinjections.ejs' }) %>
+        <%= this.partial({ url: base_url + '/templates/search_results/microinjections.ejs' }) %>
       </div>
     </div>
-    <div id="<%= symbol %>_targeted_constructs">
+    <div id="<%= gene.symbol %>_targeted_constructs">
       <h4><a href="#">IKMC Targeted Alleles</a></h4>
       <div>
-        <%= this.partial({ url: '/templates/search_results/targeted_constructs.ejs' }) %>
+        <%= this.partial({ url: base_url + '/templates/search_results/targeted_constructs.ejs' }) %>
       </div>
     </div>
-    <div id="<%= symbol %>_other_mutations">
+    <div id="<%= gene.symbol %>_other_mutations">
       <h4><a href="#">Other Mutant Resources</a></h4>
       <div>
-        <%= this.partial({ url: '/templates/search_results/other_mutations.ejs' }) %>
+        <%= this.partial({ url: base_url + '/templates/search_results/other_mutations.ejs' }) %>
       </div>
     </div>
   </div>
