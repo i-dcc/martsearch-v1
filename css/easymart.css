@@ -1,13 +1,17 @@
 /* @override http://easymart.site/css/easymart.css */
 
 body{
-	font: 62.5% "Trebuchet MS", sans-serif;
 	margin: 50px;
+	font: 62.5% "Trebuchet MS", sans-serif;
 }
 
 .center {
 	margin: 0 auto;
 	text-align: center;
+}
+
+.clear {
+	height: 25px;
 }
 
 /* Headings */
@@ -88,12 +92,13 @@ ul.browse_list li {
 	margin-bottom: 5px;
 }
 
-/* Product Counts */
+/* Intro text */
 
-#product_counts {
+#intro_text {
 	margin-top: 25px;
 	margin-bottom: 25px;
 	width: 75%;
+	text-align: left;
 }
 
 /* Info Tables */
@@ -135,17 +140,21 @@ table.ikmc-info th {
 }
 
 #footer #powered {
-	text-align: right;
-	margin-top: -10px;
+	float: right;
 }
 
 #footer #powered img {
 	border: none;
 }
 
-#footer #powered a {
+#footer #powered a img {
 	opacity: .25;
 }
+
+#footer #powered a:hover img {
+	opacity: .5;
+}
+
 
 /* jQuery UI Buttons */
 

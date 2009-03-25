@@ -4,9 +4,10 @@ $j.c({
     index: function () {
       
       $j.c.Config.init();
-      $j.v.Search.init();
       
       $j.c.Search.load_product_counts();
+      
+      $j.v.Search.init();
       
       return true;
       
@@ -83,7 +84,8 @@ $j.c({
         });
       };
       
-      $('#product_counts').fadeOut("fast");
+      // Clear the introductory text
+      $('#intro_text').fadeOut("fast");
       
       $j.v.Search.genes();
       
@@ -107,17 +109,11 @@ $j.c({
     load_product_counts: function () {
       
       var filters = {
-        "In Progress": {
-          "Eucomm": { is_eucomm:   "1", is_latest_for_gene: "1", status: "Vector Construction in Progress" },
-          "KOMP-CSD": { is_komp_csd: "1", is_latest_for_gene: "1", status: "Vector Construction in Progress" },
-          "KOMP-Regeneron": { is_komp_regeneron: "1", is_latest_for_gene: "1", status: "Vector Construction in Progress" },
-          "NorCOMM": { is_norcomm: "1", is_latest_for_gene: "1", status: "Vector Construction in Progress" }
-        },
-        "Vectors Available": {
-          "Eucomm":   { is_eucomm:   "1", is_latest_for_gene: "1", status: "Vector Complete" },
-          "KOMP-CSD": { is_komp_csd: "1", is_latest_for_gene: "1", status: "Vector Complete" },
-          "KOMP-Regeneron": { is_komp_regeneron: "1", is_latest_for_gene: "1", status: "Vector Complete" },
-          "NorCOMM": { is_norcomm: "1", is_latest_for_gene: "1", status: "Vector Complete" }
+        "Mice Available": {
+          "Eucomm":   { is_eucomm:   "1", is_latest_for_gene: "1", status: "Mice Available" },
+          "KOMP-CSD": { is_komp_csd: "1", is_latest_for_gene: "1", status: "Mice Available" },
+          "KOMP-Regeneron": { is_komp_regeneron: "1", is_latest_for_gene: "1", status: "Mice Available" },
+          "NorCOMM": { is_norcomm: "1", is_latest_for_gene: "1", status: "Mice Available" }
         },
         "ES Cells Available": {
           "Eucomm":   { is_eucomm:   "1", is_latest_for_gene: "1", status: "ES Cells - Targeting Confirmed" },
@@ -125,15 +121,21 @@ $j.c({
           "KOMP-Regeneron": { is_komp_regeneron: "1", is_latest_for_gene: "1", status: "ES Cells - Targeting Confirmed" },
           "NorCOMM": { is_norcomm: "1", is_latest_for_gene: "1", status: "ES Cells - Targeting Confirmed" }
         },
-        "Mice Available": {
-          "Eucomm":   { is_eucomm:   "1", is_latest_for_gene: "1", status: "Mice Available" },
-          "KOMP-CSD": { is_komp_csd: "1", is_latest_for_gene: "1", status: "Mice Available" },
-          "KOMP-Regeneron": { is_komp_regeneron: "1", is_latest_for_gene: "1", status: "Mice Available" },
-          "NorCOMM": { is_norcomm: "1", is_latest_for_gene: "1", status: "Mice Available" }
+        "Vectors Available": {
+          "Eucomm":   { is_eucomm:   "1", is_latest_for_gene: "1", status: "Vector Complete" },
+          "KOMP-CSD": { is_komp_csd: "1", is_latest_for_gene: "1", status: "Vector Complete" },
+          "KOMP-Regeneron": { is_komp_regeneron: "1", is_latest_for_gene: "1", status: "Vector Complete" },
+          "NorCOMM": { is_norcomm: "1", is_latest_for_gene: "1", status: "Vector Complete" }
+        },
+        "In Progress": {
+          "Eucomm": { is_eucomm:   "1", is_latest_for_gene: "1", status: "Vector Construction in Progress" },
+          "KOMP-CSD": { is_komp_csd: "1", is_latest_for_gene: "1", status: "Vector Construction in Progress" },
+          "KOMP-Regeneron": { is_komp_regeneron: "1", is_latest_for_gene: "1", status: "Vector Construction in Progress" },
+          "NorCOMM": { is_norcomm: "1", is_latest_for_gene: "1", status: "Vector Construction in Progress" }
         }
       }
       
-      new EJS({ url: '/templates/product_counts.ejs' }).update( 'product_counts_table', { data: filters } );
+      new EJS({ url: $j.c.Config.base_url + '/templates/product_counts.ejs' }).update( 'product_counts', { data: filters } );
       
       $.each( filters, function ( product_type, projects ) {
         $.each( projects, function ( project, mart_filters ) {

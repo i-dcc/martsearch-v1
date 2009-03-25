@@ -9,8 +9,13 @@ $j.v({
       // Make the page tabbed
       $('#tabs').tabs({ fx: { opacity: 'toggle' } });
       
-      $('#about_link').click(function() {
+      $('#help_link').click(function() {
           $('#tabs').tabs('select', 4); // switch to about (5th) tab
+          return false;
+      });
+      
+      $('#about_link').click(function() {
+          $('#tabs').tabs('select', 5); // switch to about (6th) tab
           return false;
       });
       
