@@ -11,23 +11,28 @@ class Biomart
   require "rubygems"
   require "builder"
   require "uri"
-  require "net/http"
   
-  attr_accessor :url, :proxy, :dataset, :filters, :attributes
+  # Net::HTTP or Net::HTTP::Proxy object
+  attr_accessor :http
+  # URL for the biomart server
+  attr_accessor :url
+  # Biomart dataset name
+  attr_accessor :dataset
+  # Dataset attributes that are retrieved on each query
+  attr_accessor :attributes
   
   # Define the basic details of the biomart dataset.
   def initialize(args)
     @url        = args[:url]
-    @proxy      = args[:proxy]
+    @http       = args[:http]
     @dataset    = args[:dataset]
-    @filters    = args[:filters]
     @attributes = args[:attributes]
   end
   
-  # Convenience method to prepare and perform a search against the dataset,
+  # Convenience method to prepare and perform a search against the dataset 
   # and return the results in an array of hashes.
   def search( filters, query )
-    xml     = self.xml( filters, query )
+    xml     = self.xml( filters, nil, query )
     #puts    "----\n#{xml}\n----"
     tsvdata = self.post_query( xml )
     #puts    "----\n#{tsvdata}\n----"
@@ -36,8 +41,25 @@ class Biomart
     return tsvarray
   end
   
+  # Returns all values in the biomart dataset for a given attribute.
+  def get_all_values_for_attribute( attribute )
+    xml = self.xml( nil, [ attribute ], nil )
+    #puts    "----\n#{xml}\n----"
+    tsvdata = self.post_query( xml )
+    #puts    "----\n#{tsvdata}\n----"
+    
+    values = []
+    data_by_line = tsvdata.split("\n")
+    data_by_line.each do |d|
+      data_by_item = d.split("\t")
+      values.push( data_by_item[0] )
+    end
+    
+    return values
+  end
+  
   # Generates the XML text to put into the post_query to be sent to biomart.
-  def xml( filters_to_use, query )
+  def xml( filters_to_use, attributes_to_use, query )
     biomart_xml = ""
     xml = Builder::XmlMarkup.new( :target => biomart_xml, :indent => 2 )
 
@@ -52,8 +74,14 @@ class Biomart
           end
         end
 
-        self.attributes.each do |a|
-          xml.Attribute( :name => a )
+        if attributes_to_use
+          attributes_to_use.each do |a|
+            xml.Attribute( :name => a )
+          end
+        else
+          self.attributes.each do |a|
+            xml.Attribute( :name => a )
+          end
         end
 
       }
@@ -64,15 +92,9 @@ class Biomart
   
   # Sends the generated xml query to biomart and retrieves tab-separated data back.
   def post_query( xml )
-    tsv_data = ''
-    proxy = Net::HTTP::Proxy( "localhost", 3128 )
     url = URI.parse( self.url )
-    proxy.start(url.host, 9002) { |http|
-      http.read_timeout=300
-      resp, data = http.post( url.path, "query="+xml )
-      tsv_data = data
-    }
-    return tsv_data
+    response = self.http.post_form( url, { "query" => xml } )
+    return response.body
   end
   
   # Transforms the tab-separated data retrieved from the post_query into a ruby 

@@ -7,6 +7,8 @@
 # Taken from "Why's (Poignant) Guide to Ruby" (http://poignantguide.net/ruby).
 
 class Array
+  
+  # Splits an array into an array-of-arrays of the defined length
   def chunk( len )
     a = []
     each_with_index do |x,i|
@@ -15,4 +17,5 @@ class Array
     end
     a
   end
+  
 end
