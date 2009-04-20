@@ -43,7 +43,7 @@ class Biomart
   
   # Returns all values in the biomart dataset for a given attribute.
   def get_all_values_for_attribute( attribute )
-    xml = self.xml( nil, [ attribute ], nil )
+    xml = self.xml( nil, attribute.to_a, nil )
     #puts    "----\n#{xml}\n----"
     tsvdata = self.post_query( xml )
     #puts    "----\n#{tsvdata}\n----"
@@ -51,8 +51,7 @@ class Biomart
     values = []
     data_by_line = tsvdata.split("\n")
     data_by_line.each do |d|
-      data_by_item = d.split("\t")
-      values.push( data_by_item[0] )
+      values.push( d )
     end
     
     return values
