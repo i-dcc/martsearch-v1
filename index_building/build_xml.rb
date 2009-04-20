@@ -3,8 +3,6 @@
 # Author::    Darren Oakley  (mailto:daz.oakley@gmail.com)
 # Copyright:: Copyright (c) 2009 Darren Oakley
 #
-# NOTE: THIS IS A TEMPORARY WORK-AROUND WHILE THE DCC MART IS FOOKED...
-#
 # This script is used to re-generate the XML files used to 
 # create the I-DCC Search index.
 #
@@ -13,6 +11,9 @@
 # the related marts being attached to their associated gene entries 
 # (therefore this is currently a gene-centric search index - this 
 # could quite easily change in the future!)
+#
+# NOTE: THERE IS A TEMPORARY HACK IN HERE TO USE A LOCAL FILE FOR THE 
+# DCC MART DATA AS THE DCC MART IS CURRENTLY OFFLINE.
 
 require "lib/array"
 require "lib/biomart"
@@ -65,7 +66,7 @@ def build_chromosome_xml( query, filename )
       "expired_vega_gene_ids",
       "expired_entrez_gene_ids",
       "expired_ccds_ids",
-      "expired_omim_ids",
+      "expired_omim_ids"
     ]
   )
   #dcc_data = dcc_mart.search( ["chromosome"], query )
@@ -258,7 +259,7 @@ dcc_mart = Biomart.new(
   :attributes => ["chromosome"],
   :http => @@http_agent
 )
-dcc_data = dcc_mart.search( ["chromosome"], "Y" )
+dcc_data = dcc_mart.search( ["chromosome"], "" )
 
 dcc_data.each { |chr|
   puts "Building XML for chromosome #{chr["chromosome"]}"
