@@ -18,7 +18,6 @@ $.extend( $j.m.Gene,
         this._table_name,
         {
           symbol:       '',
-          name:         '',
           chromosome:   '',
           coord_start:  '',
           coord_end:    '',
@@ -101,7 +100,6 @@ $.extend( $j.m.Gene,
           // No entry - create one...
           gene = model.build({
             symbol:       data_entry.symbol,
-            name:         data_entry.name,
             chromosome:   data_entry.chromosome,
             coord_start:  data_entry.coord_start,
             coord_end:    data_entry.coord_end,
@@ -143,41 +141,76 @@ $.extend( $j.m.Gene,
         ],
         attributes: [
           { name: "marker_symbol", enabled: true },
-          { name: "marker_name", enabled: true },
+          { name: "marker_names", enabled: true },
           { name: "mgi_accession_id", enabled: true },
           { name: "chromosome", enabled: true },
-          { name: "start_position", enabled: true },
-          { name: "end_position", enabled: true },
+          { name: "coord_start", enabled: true },
+          { name: "coord_end", enabled: true },
           { name: "strand", enabled: true },
-          { name: "gene_type", enabled: true },
-          { name: "synonym", enabled: true },
-          { name: "ensembl_gene_id", enabled: true },
-          { name: "vega_gene_id", enabled: true },
-          { name: "entrez_gene_id", enabled: true },
-          { name: "ccds_id", enabled: true },
-          { name: "omim_id", enabled: true }
+          { name: "marker_type", enabled: true },
+          { name: "synonyms", enabled: true },
+          { name: "ensembl_gene_ids", enabled: true },
+          { name: "vega_gene_ids", enabled: true },
+          { name: "entrez_gene_ids", enabled: true },
+          { name: "ccds_ids", enabled: true },
+          { name: "omim_ids", enabled: true }
         ],
         map_to_storage: function ( data ) {
           // Sort the gene information...
           var gene_data = {
             symbol:       data.marker_symbol,
-            name:         data.marker_name,
             chromosome:   data.chromosome,
-            coord_start:  data.start_position,
-            coord_end:    data.end_position,
+            coord_start:  data.coord_start,
+            coord_end:    data.coord_end,
             strand:       data.strand,
-            type:         data.type,
+            type:         data.marker_type,
             ext_gene_ids: []
           };
           
           // Now the external gene identifiers
-          if ( data.mgi_accession_id !== "" ) { gene_data.ext_gene_ids.push({ source: 'mgi', value: data.mgi_accession_id }); };
-          if ( data.synonym !== "" )          { gene_data.ext_gene_ids.push({ source: 'synonym', value: data.synonym }); };
-          if ( data.ensembl_gene_id !== "" )  { gene_data.ext_gene_ids.push({ source: 'ensembl', value: data.ensembl_gene_id }); };
-          if ( data.vega_gene_id !== "" )     { gene_data.ext_gene_ids.push({ source: 'vega', value: data.vega_gene_id }); };
-          if ( data.entrez_gene_id !== "" )   { gene_data.ext_gene_ids.push({ source: 'entrez', value: data.entrez_gene_id }); };
-          if ( data.ccds_id !== "" )          { gene_data.ext_gene_ids.push({ source: 'ccds', value: data.ccds_id }); };
-          if ( data.omim_id !== "" )          { gene_data.ext_gene_ids.push({ source: 'omim', value: data.omim_id }); };
+          if ( data.mgi_accession_id !== "" )  { gene_data.ext_gene_ids.push({ source: 'mgi', value: data.mgi_accession_id }); };
+          
+          if ( data.synonyms !== "" ) {
+            $.each( data.synonyms.split(", "), function ( index, val ) {
+              gene_data.ext_gene_ids.push({ source: 'synonym', value: val });
+            })
+          }
+          
+          if ( data.marker_names !== "" ) {
+            $.each( data.marker_names.split("; "), function ( index, val ) {
+              gene_data.ext_gene_ids.push({ source: 'name', value: val });
+            })
+          }
+          
+          if ( data.ensembl_gene_ids !== "" ) {
+            $.each( data.ensembl_gene_ids.split(","), function ( index, val ) {
+              gene_data.ext_gene_ids.push({ source: 'ensembl', value: val });
+            })
+          }
+          
+          if ( data.vega_gene_ids !== "" ) {
+            $.each( data.vega_gene_ids.split(","), function ( index, val ) {
+              gene_data.ext_gene_ids.push({ source: 'vega', value: val });
+            })
+          }
+          
+          if ( data.entrez_gene_ids !== "" ) {
+            $.each( data.entrez_gene_ids.split(","), function ( index, val ) {
+              gene_data.ext_gene_ids.push({ source: 'entrez', value: val });
+            })
+          }
+          
+          if ( data.ccds_ids !== "" ) {
+            $.each( data.ccds_ids.split(","), function ( index, val ) {
+              gene_data.ext_gene_ids.push({ source: 'ccds', value: val });
+            })
+          }
+          
+          if ( data.omim_ids !== "" ) {
+            $.each( data.omim_ids.split(","), function ( index, val ) {
+              gene_data.ext_gene_ids.push({ source: 'omim', value: val });
+            })
+          }
           
           return gene_data;
         }

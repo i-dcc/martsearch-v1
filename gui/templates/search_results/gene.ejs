@@ -2,7 +2,12 @@
   <table style="width: 100%;">
     <tr>
       <td>
-        <span class="gene_symbol"><%= gene.symbol %></span> <small><em><%= gene.name %></em></small> <br />
+        <%
+          var name_list = gene.getExtGeneIdList({ where: { source: 'name' } });
+          var names = [];
+          for ( var i=0; i<name_list.length; i++ ) { names.push( name_list[i].value ); }
+        %>
+        <span class="gene_symbol"><%= gene.symbol %></span> <small><em><%= names.join(' / ') %></em></small> <br />
         <%
           var syn_list = gene.getExtGeneIdList({ where: { source: 'synonym' } });
           var synonyms = [];
