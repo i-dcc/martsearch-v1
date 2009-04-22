@@ -1,4 +1,7 @@
-/* @override http://easymart.site/css/easymart.css */
+/* @override 
+	http://easymart.site/css/easymart.css
+	http://martsearch.site/css/easymart.css
+*/
 
 body{
 	margin: 50px;
@@ -21,6 +24,17 @@ h1 span.subhead {
 	color: #fa1614;
 	vertical-align: super;
 }
+
+h4 {
+	
+}
+
+h4 span.subheading_counts {
+	font-size: x-small;
+	color: gray;
+	font-style: italic;
+}
+
 
 /* Status Indicators */
 

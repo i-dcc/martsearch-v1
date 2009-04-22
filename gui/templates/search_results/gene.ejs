@@ -23,25 +23,58 @@
   </table>
   <div class="accordion">
     <div id="<%= gene.symbol %>_ext_gene_ids">
-      <h4><a href="#">Other Gene IDs</a></h4>
+      <h4>
+        <a href="#">
+          Other Gene IDs
+          <span class="subheading_counts">
+            <%
+              var ext_id_count = gene.getExtGeneIdCount();
+              ext_id_count = ext_id_count - name_list.length;
+              ext_id_count = ext_id_count - syn_list.length;
+            %>
+            ( <%= ext_id_count %> result )
+          </span>
+        </a>
+      </h4>
       <div>
         <%= this.partial({ url: base_url + '/templates/search_results/ext_gene_ids.ejs' }) %>
       </div>
     </div>
     <div id="<%= gene.symbol %>_microinjections">
-      <h4><a href="#">IKMC Mice</a></h4>
+      <h4>
+        <a href="#">
+          IKMC Mice
+          <span class="subheading_counts">
+            ( <%= gene.getMicroinjectionCount() %> result )
+          </span>
+        </a>
+      </h4>
       <div>
         <%= this.partial({ url: base_url + '/templates/search_results/microinjections.ejs' }) %>
       </div>
     </div>
     <div id="<%= gene.symbol %>_targeted_constructs">
-      <h4><a href="#">IKMC Targeted Alleles</a></h4>
+      <h4>
+        <a href="#">
+          IKMC Targeted Alleles
+          <span class="subheading_counts">
+            ( <%= gene.getTargetedConstructCount() %> result )
+          </span>
+        </a>
+      </h4>
       <div>
         <%= this.partial({ url: base_url + '/templates/search_results/targeted_constructs.ejs' }) %>
       </div>
     </div>
     <div id="<%= gene.symbol %>_other_mutations">
-      <h4><a href="#">Other Mutant Resources</a></h4>
+      <h4>
+        <a href="#">
+          Other Mutant Resources
+          <span class="subheading_counts">
+            ( <%= gene.getOtherMutationCount() %> result )
+          </span>
+        </a>
+      </h4>
       <div>
         <%= this.partial({ url: base_url + '/templates/search_results/other_mutations.ejs' }) %>
       </div>
