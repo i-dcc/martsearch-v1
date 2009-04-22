@@ -25,10 +25,6 @@ h1 span.subhead {
 	vertical-align: super;
 }
 
-h4 {
-	
-}
-
 h4 span.subheading_counts {
 	font-size: x-small;
 	color: gray;
@@ -79,6 +75,11 @@ h4 span.subheading_counts {
 	margin-bottom: 15px;
 	margin-top: 15px;
 }
+
+#results th {
+	text-align: left;
+}
+
 
 .gene_symbol {
 	font-weight: bold;
