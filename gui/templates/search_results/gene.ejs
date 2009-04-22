@@ -38,6 +38,9 @@
       </h4>
       <div>
         <%= this.partial({ url: base_url + '/templates/search_results/ext_gene_ids.ejs' }) %>
+        <span class="attribution">
+          data provided by <a href="http://www.sanger.ac.uk/htgt/biomart">KOMP-DCC</a>
+        </span>
       </div>
     </div>
     <div id="<%= gene.symbol %>_microinjections">
@@ -51,6 +54,9 @@
       </h4>
       <div>
         <%= this.partial({ url: base_url + '/templates/search_results/microinjections.ejs' }) %>
+        <span class="attribution">
+          data provided by <a href="http://www.sanger.ac.uk/htgt/biomart">Kermits</a>
+        </span>
       </div>
     </div>
     <div id="<%= gene.symbol %>_targeted_constructs">
@@ -64,6 +70,9 @@
       </h4>
       <div>
         <%= this.partial({ url: base_url + '/templates/search_results/targeted_constructs.ejs' }) %>
+        <span class="attribution">
+          data provided by <a href="http://www.sanger.ac.uk/htgt/biomart">HTGT</a>
+        </span>
       </div>
     </div>
     <div id="<%= gene.symbol %>_other_mutations">
@@ -77,6 +86,9 @@
       </h4>
       <div>
         <%= this.partial({ url: base_url + '/templates/search_results/other_mutations.ejs' }) %>
+        <span class="attribution">
+          data provided by <a href="http://www.sanger.ac.uk/htgt/biomart">HTGT</a>
+        </span>
       </div>
     </div>
   </div>

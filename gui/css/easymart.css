@@ -92,6 +92,14 @@ h4 span.subheading_counts {
 	clear:both;
 }
 
+.attribution {
+	float: right;
+	font-size: x-small;
+	color: gray;
+	font-style: italic;
+	margin-top: 15px;
+}
+
 /* Lists for browsing the data - (browse by gene / chromosome) */
 
 ul.browse_list  {
