@@ -28,7 +28,7 @@ require "json"
 #@@index_url = "http://localhost:8983/solr/select"
 
 # Set the number of threads to use to query the index
-@@number_of_query_threads = 10
+@@number_of_query_threads = 20
 
 #
 # TEMP ADDITION TO THE BIOMART CLASS WHILE THE DCC MART IS OFF
@@ -66,7 +66,7 @@ end
 #
 
 dcc_mart = DccBiomart.new( 
-  :url        => "http://htgt.internal.sanger.ac.uk:9002/dev/martsearch/htgtdev/biomart/martservice", 
+  :url        => "http://www.i-dcc.org/dev/martsearch/htgtdev/biomart/martservice", 
   :dataset    => "dcc",
   :attributes => [
     "marker_symbol",
@@ -95,7 +95,7 @@ dcc_mart = DccBiomart.new(
 )
 
 targ_mart = Biomart.new(
-  :url        => "http://htgt.internal.sanger.ac.uk:9002/dev/martsearch/htgtdev/biomart/martservice",
+  :url        => "http://www.i-dcc.org/dev/martsearch/htgtdev/biomart/martservice",
   :dataset    => "htgt_targ",
   :attributes => [
     "marker_symbol",
@@ -112,7 +112,7 @@ targ_mart = Biomart.new(
 )
 
 trap_mart = Biomart.new(
-  :url        => "http://htgt.internal.sanger.ac.uk:9002/dev/martsearch/htgtdev/biomart/martservice",
+  :url        => "http://www.i-dcc.org/dev/martsearch/htgtdev/biomart/martservice",
   :dataset    => "htgt_trap",
   :attributes => [
     "marker_symbol",
@@ -145,9 +145,9 @@ trap_mart = Biomart.new(
 
 def batch_tests( data, index_field )
   
-  #if data.size > 100
-  #  data = data[ 0 .. 100 ]
-  #end
+  if data.size > 100
+    data = data[ 0 .. 100 ]
+  end
   
   # Set-up the result store
   result = {
@@ -185,18 +185,18 @@ def batch_tests( data, index_field )
         
         # Use a seperate thread per test
         threads << Thread.new(test_var) do |test|
-          count += 1
+          begin
+            count += 1
+            puts "\t\t\t #{index_field}:#{test}"
 
-          # Escape any foreign characters
-          #test = CGI::escape(test)
-          puts "\t\t\t #{index_field}:#{test}"
-
-          if test_index( "#{index_field}:#{test}" )
-            result[:found] += 1
-          else
-            result[:missing].push( test )
+            if test_index( "#{index_field}:#{test}" )
+              result[:found] += 1
+            else
+              result[:missing].push( test )
+            end
+          rescue TimeoutError => e
+            retry
           end
-
         end
         
       end
@@ -228,11 +228,8 @@ def test_index( query )
   
   url = URI.parse( @@index_url )
   response = @@http_agent.post_form( url, { :q => "#{query}", :wt => "json" } )
-  #response = Net::HTTP.post_form( url, { :q => "#{query}", :wt => "json" } )
-  #puts response.body
   
   query_result = JSON.parse response.body
-  #puts "--- #{query_result['response']['numFound']} ---"
   
   if query_result['response']['numFound'].to_int > 0
     return true
