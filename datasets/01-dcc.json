@@ -1,0 +1,9 @@
+{
+  "url":                "/htgtdev/biomart",
+  "full_url":           "http://www.sanger.ac.uk/htgt/biomart",
+  "mart_dataset":       "dcc",
+  "display_name":       "knockoutmouse.org",
+  "joined_index_field": "marker_symbol",
+  "joined_filter":      "marker_symbol",
+  "default_attributes": []
+}
