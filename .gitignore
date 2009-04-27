@@ -1,3 +1,6 @@
 .DS_Store
 test_coverage*
 *.tmproj
+messages/*.html
+messages/*.textile
+messages/*.markdown
