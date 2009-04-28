@@ -42,7 +42,76 @@
       <div id="header">
         <h1>MartSearch <span class="subhead">alpha</span></h1>
       </div>
-      w00t
+      
+      <!-- BEGIN: tabs -->
+      <div id="tabs">
+        <ul>
+          <li><a href="#search">Search</a></li>
+          <li><a href="#browse_by_symbol">Browse By Gene Symbol</a></li>
+          <li><a href="#browse_by_chr">Browse By Chromosome</a></li>
+          <li><a href="#configure">Configure</a></li>
+          <li><a href="#help">Help</a></li>
+          <li><a href="#about">About</a></li>
+        </ul>
+        
+        <!-- main search tab -->
+        <div id="search">
+          
+          <!-- search form -->
+          <div class="center ui-widget">
+            <form id="mart_search" action="search" method="get" accept-charset="utf-8">
+              <input type="text" name="query" value="" id="query" size="50" />&nbsp;
+              <input class="ui-button ui-state-default ui-corner-all" type="submit" value="Search" /><br />
+              <small>Enter gene symbols, gene or product identifiers or any other search term described in the <a class="help_link" href="#help">help</a> section.</small>
+            </form>
+          </div>
+          
+          <!-- loading marker -->
+          <span id="loading" style="display: none;"><img src="images/loading.gif" alt="searching..." /></span>
+          
+          <!-- results section -->
+          <div id="results">
+            <div id="results_pager" class="pagination"></div>
+            <ul id="result_list" class="result_list"></ul>
+          </div>
+          
+          <!-- messages for the user -->
+          <div id="messages" class="ui-widget"></div>
+          
+          <!-- Intro text -->
+          <div id="intro_text" class="center"></div>
+        </div>
+        
+        <!-- browse by gene symbol tab -->
+        <div id="browse_by_symbol"></div>
+        
+        <!-- browse by chromosome tab -->
+        <div id="browse_by_chr"></div>
+        
+        <!-- configuration options tab -->
+        <div id="configure"></div>
+        
+        <!-- help tab -->
+        <div id="help"></div>
+        
+        <!-- about tab -->
+        <div id="about"></div>
+        
+      </div>
+      <!-- END: tabs -->
+      
+      <div id="footer">
+        <div id="powered">
+          <a href="http://jquery.com" title="jQuery"><img src="images/jquery.png" alt="jQuery" /></a> 
+          <a href="http://jqueryui.com" title="jQuery UI"><img src="images/jquery-ui.png" alt="jQuery UI" /></a> 
+          <a href="http://lucene.apache.org/solr/" title="Apache Solr"><img src="images/solr.png" alt="Apache Solr" /></a> 
+          <a href="http://www.biomart.org" title="Biomart"><img src="images/biomart.png" alt="Biomart" /></a> 
+        </div>
+        <div id="credits">
+          
+        </div>
+      </div>
+      
     </div>
   </body>
 </html>
