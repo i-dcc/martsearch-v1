@@ -5,5 +5,5 @@
   "display_name":       "knockoutmouse.org",
   "joined_index_field": "marker_symbol",
   "joined_filter":      "marker_symbol",
-  "default_attributes": []
+  "enabled_attributes": []
 }

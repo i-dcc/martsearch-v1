@@ -22,7 +22,7 @@ var martsearch = {
 
     /* Pagination options */
     items_per_page: 10,
-
+    
     /* Placeholder for datasets */
     datasets: []
   },
@@ -34,24 +34,27 @@ var martsearch = {
   * @alias    martsearch.init
   * @return   {Boolean}
   */
-  init: function () {
+  init: function() {
+    
+    // Set a variable to determine the status of the function run
+    var init_status = true;
     
     /*
-    * First, make the interface active...
+    * Make the interface active...
     */
     
     // Make the page tabbed
     jQuery('#tabs').tabs({ fx: { opacity: 'toggle' } });
-    
-    // Activate links between the tabs
-    jQuery('a.help_link').click( function() { jQuery('#tabs').tabs('select', 4); return false; });
-    jQuery('a.about_link').click(function() { jQuery('#tabs').tabs('select', 5); return false; });
     
     // Override the submit function on the search form
     jQuery('#mart_search').submit( function(){
       //$j.c.Search.run( jQuery('#query').val(), 0 );
       return false;
     });
+    
+    // Activate links between the tabs
+    jQuery('a.help_link').click( function() { jQuery('#tabs').tabs('select', 4); return false; });
+    jQuery('a.about_link').click(function() { jQuery('#tabs').tabs('select', 5); return false; });
     
     // Make form buttons respond to mouse interaction
     jQuery(".ui-button:not(.ui-state-disabled)")
@@ -71,7 +74,7 @@ var martsearch = {
       });
     
     /*
-    * Next load in the dataset config files
+    * Load in the dataset config files
     */
     
     jQuery.ajax({
@@ -79,13 +82,20 @@ var martsearch = {
       type:     'GET',
       dataType: 'json',
       async:    false,
-      success: function (datasets) {
+      success:  function (datasets) {
         for (var i=0; i < datasets.length; i++) {
           var ds = new DataSet( datasets[i], martsearch.conf.base_url );
           martsearch.conf.datasets.push(ds)
         };
-        
         log.info('[config] finished loading datasets');
+      },
+      error:    function( XMLHttpRequest, textStatus, errorThrown ) {
+        init_status = false;
+        log.error( "Error initializing datasets - " + textStatus + " (" + errorThrown + ")" );
+        martsearch.message.add(
+          "Error initializing martsearch datasets - " + textStatus + " (" + errorThrown + ")",
+          "error"
+        );
       }
     });
     
@@ -100,7 +110,7 @@ var martsearch = {
     martsearch.message.init();
     
     // If all goes well, return true.
-    return true;
+    return init_status;
   },
   
   /*
