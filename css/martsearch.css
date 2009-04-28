@@ -31,7 +31,6 @@ h4 span.subheading_counts {
 	font-style: italic;
 }
 
-
 /* Status Indicators */
 
 #loading {
@@ -42,15 +41,24 @@ h4 span.subheading_counts {
 	margin-top: -65px;
 }
 
-#progressbar {
-	width: 50%;
-	margin: 0 auto;
-	margin-top: 20px;
-	margin-bottom: 15px;
-}
+/* Messages */
 
 #messages {
 	margin: 15px;
+}
+
+#messages div {
+	margin-bottom: 7px;
+	padding: 0 10px;
+}
+
+#messages div .ui-icon {
+	float: left;
+	margin-top: 12px;
+}
+
+#messages div p {
+	margin-left: 20px;
 }
 
 /* jQuery UI Dialogs */

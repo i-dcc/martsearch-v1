@@ -65,21 +65,20 @@ sub wrap_message {
   
   my $return = qq[
     <!-- User message from file: $file -->
-    <div class="ui-state-$status ui-corner-all " style="padding: 0 .7em;">
-      <p>
+    <div class="ui-state-$status ui-corner-all ">
   ];
   
   if ( $status eq 'error' ) {
     $return .= q[
-        <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+        <span class="ui-icon ui-icon-alert"></span>
     ];
   } elsif ( $status eq 'highlight' ) {
     $return .= q[
-        <span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+        <span class="ui-icon ui-icon-info"></span>
     ];
   }
   
-  $return .= $message;
+  $return .= '<p>' . $message;
   
   $return .= q[
       </p>
