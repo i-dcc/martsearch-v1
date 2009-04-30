@@ -12,12 +12,15 @@
     
     <!-- The MartSearch App -->
     <script type="text/javascript" src="js/support.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/message.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/dataset.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/martsearch.js" charset="utf-8"></script>
     <link rel="stylesheet" href="css/martsearch.css" type="text/css" media="screen" charset="utf-8" />
     <script type="text/javascript" charset="utf-8">
       jQuery(document).ready(function() {
-        martsearch.init();
+        //martsearch.init();
+        ms = new MartSearch({});
+        ms.init();
       });
     </script>
     

@@ -12,8 +12,9 @@ DataSet = function( params, base_url ) {
   this.joined_filter      = params.joined_filter;
   this.mart_conf_version  = params.mart_conf_version ? params.mart_conf_version : "0.6";
   this.enabled_attributes = params.enabled_attributes;
-  this.attributes         = this.fetch_all_attributes();
+  this.message            = new Message({ base_url: base_url });
   
+  this.attributes         = this.fetch_all_attributes();
 };
 
 DataSet.prototype = {
@@ -24,13 +25,14 @@ DataSet.prototype = {
   *                     and the full display names as the values.
   */
   fetch_all_attributes: function() {
+    var ds = this;
     var attributes = {};
     
     jQuery.ajax({
-      url:      this.url + "/martservice",
+      url:      ds.url + "/martservice",
       type:     "GET",
       async:    false,
-      data:     { type: "attributes", dataset: this.mart_dataset },
+      data:     { type: "attributes", dataset: ds.mart_dataset },
       success:  function ( data ) {
         var attrs = data.split("\n");
         for (var i=0; i < attrs.length; i++) {
@@ -40,6 +42,10 @@ DataSet.prototype = {
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
         log.error( "Error fetching attribute descriptions for - "+ this.mart_dataset +" ("+ errorThrown +")" );
+        ds.message.add( 
+          "Error fetching attribute descriptions for - "+ this.mart_dataset +" ("+ errorThrown +")",
+          "error"
+        );
       }
     });
     
@@ -78,6 +84,10 @@ DataSet.prototype = {
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
         log.error( "Error querying biomart '"+ this.mart_dataset +"' for '"+ query +"' ("+ errorThrown +")" );
+        ds.message.add(
+          "Error querying biomart '"+ this.mart_dataset +"' for '"+ query +"' ("+ errorThrown +")",
+          "error"
+        );
       }
     });
     
