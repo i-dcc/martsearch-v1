@@ -5,24 +5,32 @@
 MartSearch = function ( params ) {
   this.base_url = params.base_url ? params.base_url : "";
   
-  if ( params.index ) {
-    this.index = {
-      url:  params.index.url ? params.index.url : "/solr",
-      full_url: params.index.full_url,
-      docs_per_page: params.index.docs_per_page ? params.index.docs_per_page : 10
+  // Configure and instantiate the index object
+  var index_conf = {};
+  if ( params.index_conf ) {
+    index_conf = {
+      base_url: this.base_url,
+      url:  params.index_conf.url ? params.index_conf.url : "/solr",
+      full_url: params.index_conf.full_url,
+      docs_per_page: params.index_conf.docs_per_page ? params.index_conf.docs_per_page : 10
     };
-  } 
+  }
   else {
-    this.index = {
+    index_conf = {
+      base_url: this.base_url,
       url: "/solr",
       full_url: "",
       docs_per_page: 10
-    };
+    }
   };
+  this.index = new Index( index_conf );
   
+  // Instantiate the messaging object
+  this.message = new Message({ base_url: this.base_url });
+  
+  // Placeholder for dataset objects
   this.datasets = [];
   
-  this.message = new Message({ base_url: this.base_url });
 }
 
 MartSearch.prototype = {
