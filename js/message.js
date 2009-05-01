@@ -41,7 +41,9 @@ Message.prototype = {
   * @alias  Message.clear
   */
   clear: function() {
-    jQuery("#messages").html('');
+    jQuery("#messages").hide("fast");
+    jQuery("#messages").html("");
+    jQuery("#messages").show("fast");
   },
   
   /*
@@ -60,6 +62,6 @@ Message.prototype = {
     };
     
     message_string += '<p>' + message + '</p></div>';
-    jQuery("#messages").append( message_string );
+    jQuery("#messages").append( message_string ).show("fast");
   }
 };
