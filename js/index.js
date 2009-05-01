@@ -6,7 +6,7 @@
 Index = function ( params ) {
   this.base_url       = params.base_url ? params.base_url : ""
   this.url            = this.base_url + params.url;
-  this.full_url       = params.full_url;
+  this.primary_field  = params.primary_field;
   this.docs_per_page  = params.docs_per_page;
   this.message        = new Message({ base_url: this.base_url });
 };
@@ -48,10 +48,10 @@ Index.prototype = {
   * @alias    Index.search
   * @param    {String}    The query string to search for.
   * @param    {Integer}   The start position for the search results.
-  * @param    {Function}  Callback function to handle the results.
   */
-  search: function ( query, start_pos, callback ) {
+  search: function ( query, start_pos ) {
     var search_url = this.url + "/select";
+    var search_results = {};
     
     jQuery.ajax({
       type:     "POST",
@@ -65,23 +65,11 @@ Index.prototype = {
         rows:       this.docs_per_page
       },
       success:  function ( json ) {
-        
-        jQuery.each( json.response.docs, function ( index, gene ) {
-          
-          marker_symbols.push( gene.marker_symbol );
-          
-          if ( gene.escell && gene.escell.length > 0 ) {
-            $.each( gene.escell, function (index) {
-              escell_clones.push( gene.escell[index] );
-            });
-          };
-          
-        });
-        
-        num_results = json.response.numFound;
+        search_results = json;
       }
     });
     
+    return search_results;
   }
   
 };

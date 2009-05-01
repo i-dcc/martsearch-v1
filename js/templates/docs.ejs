@@ -1,0 +1,12 @@
+<% for ( var i=0; i<docs.length; i++ ) { %>
+  <li id="<%= docs[i][primary_field] %>" class="ui-widget-content ui-corner-all">
+    <h2 class="doc_primary_field"><%= docs[i][primary_field] %></h2>
+    
+    <% for ( var j=0; j<datasets.length; j++ ) { %>
+      <div id="<% datasets[j].internal_name %>">
+        <h3 class="dataset_name"><%= datasets[j].display_name %></h3>
+        <div class="content"></div>
+      </div>
+    <% } %>
+  </li>
+<% } %>

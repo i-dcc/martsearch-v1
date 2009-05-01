@@ -9,18 +9,18 @@ MartSearch = function ( params ) {
   var index_conf = {};
   if ( params.index_conf ) {
     index_conf = {
-      base_url: this.base_url,
-      url:  params.index_conf.url ? params.index_conf.url : "/solr",
-      full_url: params.index_conf.full_url,
-      docs_per_page: params.index_conf.docs_per_page ? params.index_conf.docs_per_page : 10
+      base_url:       this.base_url,
+      url:            params.index_conf.url ? params.index_conf.url : "/solr",
+      primary_field:  params.primary_field,
+      docs_per_page:  params.index_conf.docs_per_page ? params.index_conf.docs_per_page : 10
     };
   }
   else {
     index_conf = {
-      base_url: this.base_url,
-      url: "/solr",
-      full_url: "",
-      docs_per_page: 10
+      base_url:       this.base_url,
+      url:            "/solr",
+      primary_field:  "marker_symbol",
+      docs_per_page:  10
     }
   };
   this.index = new Index( index_conf );
@@ -31,6 +31,7 @@ MartSearch = function ( params ) {
   // Placeholder for dataset objects
   this.datasets = [];
   
+  this.current_query = "";
 }
 
 MartSearch.prototype = {
@@ -44,7 +45,7 @@ MartSearch.prototype = {
   */
   init: function() {
     // scope the local object
-    var martsearch = this;
+    var ms = this;
     
     // Set a variable to determine the status of the function run
     var init_status = true;
@@ -58,7 +59,8 @@ MartSearch.prototype = {
     
     // Override the submit function on the search form
     jQuery('#mart_search').submit( function(){
-      //$j.c.Search.run( jQuery('#query').val(), 0 );
+      ms.current_query = jQuery('#query').val();
+      ms.search( ms.current_query, 0 );
       return false;
     });
     
@@ -88,26 +90,37 @@ MartSearch.prototype = {
     */
     
     jQuery.ajax({
-      url:      martsearch.base_url + "/bin/dataset-feed.pl",
+      url:      ms.base_url + "/bin/dataset-feed.pl",
       type:     'GET',
       dataType: 'json',
       async:    false,
       success:  function (datasets) {
         for (var i=0; i < datasets.length; i++) {
-          var ds = new DataSet( datasets[i], martsearch.base_url );
-          martsearch.datasets.push(ds)
+          var ds = new DataSet( datasets[i], ms.base_url );
+          ms.datasets.push(ds)
         };
         log.info('[config] finished loading datasets');
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
         init_status = false;
         log.error( "Error initializing datasets - " + textStatus + " (" + errorThrown + ")" );
-        martsearch.message.add(
+        ms.message.add(
           "Error initializing martsearch datasets - " + textStatus + " (" + errorThrown + ")",
           "error"
         );
       }
     });
+    
+    /*
+    * Make sure the index is up
+    */
+    if ( ms.index.is_alive() != true ) {
+      ms.message.add(
+          "Sorry the main search index is offline - this tool will not function without "
+        + "the main search index. Please check back soon.  Sorry for any inconvenience caused.",
+        "error"
+      );
+    };
     
     /*
     * Finish up
@@ -117,11 +130,122 @@ MartSearch.prototype = {
     jQuery('#query').focus();
     
     // Load any stored messages
-    martsearch.message.init();
+    ms.message.init();
     
     // If all goes well, return true.
     return init_status;
+  },
+  
+  /**
+  *
+  */
+  search: function ( search_string, page ) {
+    
+    // Set the scope
+    var ms = this;
+    
+    // Show the loading indicator
+    jQuery("#loading").show();
+    
+    // Calculate what our starting doc is
+    var start_doc = 0;
+    if ( page ) { start_doc = page * ms.index.docs_per_page; };
+    
+    // Clear any messages and previous results
+    if ( jQuery("#messages").html() != "" ) { ms.message.clear(); };
+    jQuery("#result_list").html("");
+    
+    // Query the index
+    var index_response = this.index.search( search_string, start_doc );
+    
+    // See if we need to paginate results
+    if ( index_response.response.numFound > ms.index.docs_per_page ) {
+      jQuery('#results_pager').pagination( 
+        index_response.response.numFound,
+        {
+          items_per_page:       ms.index.docs_per_page,
+          num_edge_entries:     1,
+          num_display_entries:  5,
+          current_page:         page,
+          callback:             function(page,dom_elem){ ms.pager(page,dom_elem) }
+        }
+      );
+    }
+    else {
+      jQuery("#results_pager").html("");
+    };
+    
+    // Load in the doc skeleton...
+    var docs = new EJS({ url: ms.base_url + "/js/templates/docs.ejs" }).render(
+      {
+        docs:           index_response.response.docs,
+        primary_field:  ms.index.primary_field,
+        datasets:       ms.datasets
+      }
+    );
+    jQuery("#result_list").html(docs);
+    
+    
+    // Now process the results of the index_reponse and extract the fields
+    // from each doc into a hash - this pre-computation should stop us 
+    // performing the same steps for each and every dataset.
+    var index_values = {};
+    for (var i=0; i < index_response.response.docs.length; i++) {
+      var doc = index_response.response.docs[i];
+      var fields = jQuery.keys(doc);
+      
+      for (var j=0; j < fields.length; j++) {
+        // Find or create a key/value pair for this field type
+        if ( index_values[ fields[j] ] == undefined ) { index_values[ fields[j] ] = []; };
+        
+        if ( typeof doc[ fields[j] ] == "string" ) {
+          index_values[ fields[j] ].push( doc[ fields[j] ] );
+        } else {
+          for (var k=0; k < doc[ fields[j] ].length; k++) {
+            index_values[ fields[j] ].push( doc[ fields[j] ][k] );
+          };
+        };
+      };
+    };
+    
+    // Remove duplicate entries... 
+    // For this we use the jQuery.protify plugin to mimic Prototype's 
+    // (prototype.js) array manipulation capabilities.
+    var fields = jQuery.keys(index_values);
+    for (var i=0; i < fields.length; i++) {
+      index_values[ fields[i] ] = jQuery.protify( index_values[ fields[i] ] ).uniq();
+    };
+    
+    console.log( index_values );
+    
+    
+    // TODO: Finish adding the display (and child searches) code here!
+    for (var i=0; i < ms.datasets.length; i++) {
+      var ds = ms.datasets[i];
+      
+      ds.search( index_values[ ds.joined_index_field ] );
+      
+      
+      
+    };
+    
+    
+    
+    // Hide the loading indicator
+    jQuery("#loading").hide();
+    
+    return false;
+  },
+  
+  /**
+  * Helper function to handle pagination of the search results
+  * 
+  */
+  pager: function ( new_page_index, pagination_container ) {
+    this.search( this.current_query, new_page_index );
+    return false;
   }
+  
   
 };
 
