@@ -15,9 +15,9 @@
 # NOTE: THERE IS A TEMPORARY HACK IN HERE TO USE A LOCAL FILE FOR THE 
 # DCC MART DATA AS THE DCC MART IS CURRENTLY OFFLINE.
 
-require "lib/array"
-require "lib/biomart"
-require "lib/document"
+require "../lib/array"
+require "../lib/biomart"
+require "../lib/document"
 require "net/http"
 
 #

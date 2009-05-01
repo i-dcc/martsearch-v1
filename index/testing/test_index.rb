@@ -11,8 +11,8 @@
 # The output for this script is a HTML page generated from the ERB 
 # template file 'test_index.rhtml'.
 
-require "lib/biomart"
-require "lib/array"
+require "../lib/biomart"
+require "../lib/array"
 require "net/http"
 require "erb"
 require "cgi"
