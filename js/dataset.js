@@ -4,7 +4,9 @@
 * Dataset class - used to represent a biomart dataset
 */
 DataSet = function( params, base_url ) {
-  this.url                = base_url ? base_url + params.url : params.url;
+  this.internal_name      = params.internal_name;
+  this.base_url           = base_url ? base_url : "";
+  this.url                = this.base_url + params.url;
   this.full_url           = params.full_url;
   this.mart_dataset       = params.mart_dataset;
   this.display_name       = params.display_name;
@@ -12,9 +14,11 @@ DataSet = function( params, base_url ) {
   this.joined_filter      = params.joined_filter;
   this.mart_conf_version  = params.mart_conf_version ? params.mart_conf_version : "0.6";
   this.enabled_attributes = params.enabled_attributes;
-  this.message            = new Message({ base_url: base_url });
   
-  this.attributes         = this.fetch_all_attributes();
+  this.template           = params.template ? this.base_url+'/js/templates/'+params.template : this.base_url+'/js/templates/default.ejs';
+  
+  this.message            = new Message({ base_url: base_url });
+  //this.attributes         = this.fetch_all_attributes();
 };
 
 DataSet.prototype = {
@@ -61,25 +65,26 @@ DataSet.prototype = {
   * @return   {String}  Tab-separated results from a biomart search
   */
   search: function ( query ) {
-    log.profile("mart query: "+ this.mart_dataset +" for "+ query);
+    var ds = this;
+    log.profile("[mart - '"+ ds.mart_dataset +"']: "+ query);
     var results = '';
-    var dataset = this;
     
     $.ajax({
       type:     "POST",
-      url:      dataset.url + "/martservice",
-      async:    false,  // FIXME: This query needs to be asyncronous!
-      data:     { "query": this._biomart_xml( query ) },
+      url:      ds.url + "/martservice",
+      async:    true,
+      data:     { "query": ds._biomart_xml( query ) },
       success:  function ( data ) {
         
+        results = ds._biomart_tsv2json_hh( data );
         
-        results = dataset._biomart_tsv2json_ah( data );
+        console.log(results);
         
-        /*
-        * TODO:   Finish this function so that it updates a series 
-        *         of DOM elements in the search results using the 
-        *         dataset defined template.
-        */
+        var keys = jQuery.keys(results);
+        for (var i=0; i < keys.length; i++) {
+          var template = new EJS({ url: ds.template }).render({ result: results[ keys[i] ] });
+          jQuery( "#"+keys[i] ).html(template);
+        };
         
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
@@ -91,7 +96,7 @@ DataSet.prototype = {
       }
     });
     
-    log.profile("mart query: "+ this.mart_dataset +" for "+ query);
+    log.profile("[mart - '"+ ds.mart_dataset +"']: "+ query);
     return results;
   },
   
@@ -124,28 +129,61 @@ DataSet.prototype = {
   * array of objects.
   * 
   * @private
-  * @name     _biomart_tsv2json_ah
+  * @name     _biomart_tsv2json_hh
   * @param    {String}  A tab separated data from a biomart search.
-  * @return   {Object}  A JSON array of result objects (keyed by attribute).
+  * @return   {Object}  A JSON hash of result objects (keyed by the content_id 
+  *                     used within the DOM of the results list).
   */
-  _biomart_tsv2json_ah: function ( data ) {
+  _biomart_tsv2json_hh: function ( data ) {
     // Split the tsv string on newlines, then each line on tabs
     // before building into the JSON output
-    var json = [];
+    var array_of_hashes = [];
     
     var data_by_line = data.split("\n");
     data_by_line.pop(); // Remove the last entry - this is always empty
     
+    // Create an array of hashes that contain the returned values, 
+    // keyed by the attribute name
     for (var i=0; i < data_by_line.length; i++) {
         var intermediate_hash = {};
         var data_by_item = data_by_line[i].split("\t");
         for (var j=0; j < data_by_item.length; j++) {
           intermediate_hash[ this.enabled_attributes[j] ] = data_by_item[j];
         };
-        json.push(intermediate_hash);
+        array_of_hashes.push(intermediate_hash);
     };
-
-    return json;
+    
+    console.log(array_of_hashes);
+    
+    // Now manipulate this into a hash of objects (hashes) keyed by the 
+    // main linking - this will match the DOM id in the docs.ejs template...
+    var hash_of_hashes = {};
+    for (var i=0; i < array_of_hashes.length; i++) {
+      var content_id = array_of_hashes[i][ this.joined_filter ];
+      if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); };
+      content_id = content_id.substr(0,20);
+      hash_of_hashes[ this.internal_name + '_' + content_id ] = array_of_hashes[i];
+    };
+    
+    return hash_of_hashes;
+  },
+  
+  /**
+  *
+  */
+  search_link_url: function ( query ) {
+    var url = this.full_url + "/martview?VIRTUALSCHEMANAME=default";
+    
+    var attrs = [];
+    for (var i=0; i < this.enabled_attributes.length; i++) {
+      attrs.push(this.mart_dataset +'.default.attributes.'+ this.enabled_attributes[i]);
+    };
+    url += "&ATTRIBUTES=" + attrs.join("|");
+    url += "&FILTERS=";
+    url += this.mart_dataset +'.default.filters.'+ this.joined_filter +'.&quot;'+ query +'&quot;';
+    url += "&VISIBLEPANEL=resultspanel";
+    
+    return url;
   }
   
 };

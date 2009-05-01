@@ -84,27 +84,44 @@ h4 span.subheading_counts {
 	margin-top: 15px;
 }
 
+#results table {
+	width: 100%;
+}
+
 #results th {
 	text-align: left;
 }
 
-.gene_symbol {
-	font-weight: bold;
-	font-size: 1.3em;
-}
-
-.result_list {
+#results ul.result_list {
 	list-style: none;
 	padding: 0;
 	clear:both;
 }
 
-.attribution {
-	float: right;
+#results ul.result_list li {
+	padding: 7px;
+	margin-bottom: 7px;
+}
+
+#results h2.doc_primary_field,
+#results h3.dataset_name {
+	margin-top: 2px;
+}
+
+#results h3.dataset_name {
+	border-bottom: 1px solid #999;
+}
+
+#results div.dataset {
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+#results .credit {
 	font-size: x-small;
-	color: gray;
 	font-style: italic;
-	margin-top: 15px;
+	margin-top: 10px;
+	text-align: right;
 }
 
 /* Lists for browsing the data - (browse by gene / chromosome) */

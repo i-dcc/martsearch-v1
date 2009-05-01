@@ -1,0 +1,29 @@
+{
+  "internal_name":      "htgt_targ_alleles",
+  "display_name":       "IKMC Targeted Alleles",
+  "url":                "/htgtdev/biomart",
+  "full_url":           "http://htgt.internal.sanger.ac.uk:9002/dev/martsearch/htgtdev/biomart",
+  "mart_dataset":       "htgt_targ",
+  "joined_index_field": "marker_symbol",
+  "joined_filter":      "marker_symbol",
+  "template":           "htgt_targ_details.ejs",
+  "enabled_attributes": [
+    "marker_symbol",
+    "is_eucomm",
+    "is_komp_csd",
+    "is_komp_regeneron",
+    "is_norcomm",
+    "is_mgp",
+    "status",
+    "htgt_project_id",
+    "targvec_plate",
+    "targvec_well",
+    "backbone",
+    "cassette",
+    "targvec_distribute",
+    "allele_name",
+    "escell_clone_name",
+    "es_cell_line",
+    "escell_distribute"
+  ]
+}

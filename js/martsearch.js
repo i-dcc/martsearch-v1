@@ -159,6 +159,7 @@ MartSearch.prototype = {
     var index_response = this.index.search( search_string, start_doc );
     
     // See if we need to paginate results
+    // (Using the jquery.pagination plugin)
     if ( index_response.response.numFound > ms.index.docs_per_page ) {
       jQuery('#results_pager').pagination( 
         index_response.response.numFound,
@@ -174,17 +175,6 @@ MartSearch.prototype = {
     else {
       jQuery("#results_pager").html("");
     };
-    
-    // Load in the doc skeleton...
-    var docs = new EJS({ url: ms.base_url + "/js/templates/docs.ejs" }).render(
-      {
-        docs:           index_response.response.docs,
-        primary_field:  ms.index.primary_field,
-        datasets:       ms.datasets
-      }
-    );
-    jQuery("#result_list").html(docs);
-    
     
     // Now process the results of the index_reponse and extract the fields
     // from each doc into a hash - this pre-computation should stop us 
@@ -216,8 +206,15 @@ MartSearch.prototype = {
       index_values[ fields[i] ] = jQuery.protify( index_values[ fields[i] ] ).uniq();
     };
     
-    console.log( index_values );
-    
+    // Load in the doc skeleton...
+    var docs = new EJS({ url: ms.base_url + "/js/templates/docs.ejs" }).render(
+      {
+        docs:           index_response.response.docs,
+        primary_field:  ms.index.primary_field,
+        datasets:       ms.datasets
+      }
+    );
+    jQuery("#result_list").html(docs);
     
     // TODO: Finish adding the display (and child searches) code here!
     for (var i=0; i < ms.datasets.length; i++) {
