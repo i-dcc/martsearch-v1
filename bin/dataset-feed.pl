@@ -13,13 +13,12 @@ use strict;
 use warnings;
 use CGI qw/:standard/;
 #use CGI::Carp qw/fatalsToBrowser/;
-use JSON;
 
 # Print the header - Enable browsers to cache the resulting JSON 
 # string for 24 hours...
 print header(
   -type          => 'text/plain',
-  #-type          => 'application/json',
+  -type          => 'application/json',
   -cache_control => 'max-age=86400',
   -expires       => '+1d',
   -charset       => 'utf-8'
@@ -39,10 +38,14 @@ foreach my $file ( <*.json> ) {
   my $file_string = <FILE>;
   close FILE;
   
-  push( @{$return_arrayref}, from_json($file_string) );
+  push( @{$return_arrayref}, $file_string );
   
 }
 
-print encode_json($return_arrayref);
+my $return_string = "[";
+$return_string .= join( ",", @{$return_arrayref} );
+$return_string .= "]";
+
+print $return_string;
 
 exit(0);

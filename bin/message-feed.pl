@@ -32,7 +32,7 @@ chdir('../messages');
 my $messages = [];
 
 # Push each message into our message array with the correct formatting
-foreach my $file ( <*> ) {
+foreach my $file ( <*.html *.markdown *.textile> ) {
   
   local $/=undef;
   open( FILE, $file ) or die "Couldn't open file: $!";
