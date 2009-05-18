@@ -49,7 +49,7 @@ function datasetTests ( ds, ds_chk ) {
     ds.attributes = ds.fetch_all_attributes();
   });
   
-  test( ds.display_name+" - Simulating a safe search piece by piece: '"+safe_search+"'", function() {
+  test( ds.display_name+" - Simulating a safe search piece by piece: '"+safe_search+"' ", function() {
     // Query the index
     var index_response = ms.index.search( safe_search, 0 );
     ok( index_response instanceof Object, "Got an index response object " );
@@ -91,7 +91,7 @@ function datasetTests ( ds, ds_chk ) {
     
   });
   
-  test( ds.display_name+" - Simulating a not so safe search piece by piece: '"+not_so_safe_search+"'", function() {
+  test( ds.display_name+" - Simulating a not so safe search piece by piece: '"+not_so_safe_search+"' ", function() {
     // Query the index
     var index_response = ms.index.search( not_so_safe_search, 0 );
     ok( index_response instanceof Object, "Got an index response object " );
@@ -132,7 +132,7 @@ function datasetTests ( ds, ds_chk ) {
     
   });
   
-  test( ds.display_name+" - Running a safe search: '"+safe_search+"'", function() {
+  test( ds.display_name+" - Running a safe search: '"+safe_search+"' ", function() {
     // Query the index
     var index_response = ms.index.search( safe_search, 0 );
     ok( index_response instanceof Object, "Got an index response object " );
@@ -150,7 +150,7 @@ function datasetTests ( ds, ds_chk ) {
     }
   });
   
-  test( ds.display_name+" - Running a not so safe search: '"+not_so_safe_search+"'", function() {
+  test( ds.display_name+" - Running a not so safe search: '"+not_so_safe_search+"' ", function() {
     // Query the index
     var index_response = ms.index.search( not_so_safe_search, 0 );
     ok( index_response instanceof Object, "Got an index response object " );
@@ -168,4 +168,36 @@ function datasetTests ( ds, ds_chk ) {
     }
   });
   
+  test( ds.display_name+" - Simulating a failed search: '"+safe_search+"' ", function() {
+    // Deliberatley bork the dataset URL
+    var real_url = ds.url;
+    ds.url = "/foo";
+    
+    // Query the index
+    var index_response = ms.index.search( safe_search, 0 );
+    ok( index_response instanceof Object, "Got an index response object " );
+    if ( typeof console.log != "undefined" ) { console.log(index_response); };
+    
+    // Fetch the pre-computed mart search terms from the index search
+    var index_values = ms.index.grouped_query_terms();
+    ok( index_values instanceof Object, "Got a pre-computed mart search term object from the index " );
+    if ( typeof console.log != "undefined" ) { console.log(index_values); };
+    
+    if ( index_values[ ds.joined_index_field ] ) {
+      var results = ds.search( index_values[ ds.joined_index_field ], index_response.response.docs, ms.index.primary_field );
+      ok( jQuery.keys(results).length > 0 || results === false, "Got some results or 'false' from the biomart query " );
+      if ( typeof console.log != "undefined" ) { console.log(results); };
+    }
+    
+    // Set the URL back
+    ds.url = real_url;
+  });
+  
+  test( ds.display_name+" - Generating a Biomart search link url ", function() {
+    expect(3);
+    var url = ds.search_link_url( safe_search );
+    ok( typeof url === "string", "Got a string back " );
+    ok( url !== "", "String is not empty " );
+    ok( url.match(/^http:\/\/.*/), "Got a valid url " );
+  });
 };

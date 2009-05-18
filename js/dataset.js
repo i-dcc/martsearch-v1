@@ -1,4 +1,4 @@
-/*
+/**
 * @namespace {DataSet}
 * 
 * Dataset class - used to represent a biomart dataset
@@ -29,7 +29,7 @@ DataSet = function( params, base_url ) {
 
 DataSet.prototype = {
   
-  /*
+  /**
   * @alias    DataSet.fetch_all_attributes
   * @return   {Object}  A hash containing the short attribute names as the keys
   *                     and the full display names as the values.
@@ -51,9 +51,9 @@ DataSet.prototype = {
         };
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
-        log.error( "Error fetching attribute descriptions for - "+ this.mart_dataset +" ("+ errorThrown +")" );
+        log.error( "Error fetching attribute descriptions for - "+ ds.mart_dataset +" (Error: "+ errorThrown +")" );
         ds.message.add( 
-          "Error fetching attribute descriptions for - "+ this.mart_dataset +" ("+ errorThrown +")",
+          "Error fetching attribute descriptions for - "+ ds.mart_dataset +" (Error: "+ errorThrown +")",
           "error"
         );
       }
@@ -62,7 +62,7 @@ DataSet.prototype = {
     return attributes;
   },
   
-  /*
+  /**
   * Main search function to submit a query to the biomart server and 
   * process the results ready to be displayed.
   *
@@ -77,7 +77,7 @@ DataSet.prototype = {
     
     var run_async = true;
     if ( ds.test_mode ) { run_async = false };
-    var results;
+    var results = false;
     
     jQuery.ajax({
       type:     "POST",
@@ -86,54 +86,41 @@ DataSet.prototype = {
       data:     { "query": ds._biomart_xml( query ) },
       success:  function ( data ) {
         
-        if ( ds.custom_result_parser == undefined ) { results = ds._parse_biomart_data( data, docs, primary_index_field ); }
+        if ( ds.custom_result_parser == undefined ) { results = ds._parse_biomart_data( data, docs ); }
         else                                        { results = ds.custom_result_parser( data, ds ); };
         
         if ( results ) {
           
           for (var i=0; i < docs.length; i++) {
-
+            
             var content_id = docs[i][ ds.joined_index_field ];
             
             if ( content_id !== undefined && content_id !== "" ) {
-
+              
               // Figure out the DOM id
               if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); };
               content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
               content_id = ds.internal_name + '_' + content_id;
               if ( ds.debug_mode ) { log.debug('processing '+ content_id); };
-
+              
               if ( results[ content_id ] ) {
                 var template = new EJS({ url: ds.template }).render({ 'results': results[ content_id ] });
                 jQuery( "#"+content_id ).html(template);
               } else {
                 jQuery( "#"+content_id ).parent().hide();
               };
-
+              
             };
             
+          };
           
         };
-        
-        
-          
-          
-          
-        };
-        
-        /*
-        var keys = jQuery.keys(results);
-        for (var i=0; i < keys.length; i++) {
-          var template = new EJS({ url: ds.template }).render({ 'results': results[ keys[i] ] });
-          jQuery( "#"+keys[i] ).html(template);
-        };
-        */ 
         
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
-        log.error( "Error querying biomart '"+ this.mart_dataset +"' for '"+ query +"' ("+ errorThrown +")" );
+        log.error( "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query +"' (Error: "+ errorThrown +")" );
         ds.message.add(
-          "Error querying biomart '"+ this.mart_dataset +"' for '"+ query +"' ("+ errorThrown +")",
+          "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query +"' (Error: "+ errorThrown +")",
           "error"
         );
       }
@@ -143,7 +130,7 @@ DataSet.prototype = {
     return results;
   },
   
-  /*
+  /**
   * Create the XML file to pass to a biomart for querying
   *
   * @private
@@ -167,80 +154,27 @@ DataSet.prototype = {
     return xml;
   },
   
-  /*
+  /**
   * Convert the tab separated results from a biomart search into a JSON 
-  * array of hashes.
+  * hash of arrays.
   * 
-  * @private
-  * @name     _biomart_tsv2json_ah
-  * @param    {String}  A tab separated data from a biomart search.
-  * @return   {Object}  A JSON array of result objects.
-  */
-  _biomart_tsv2json_ah: function ( data ) {
-    // Split the tsv string on newlines, then each line on tabs
-    // before building into the JSON output
-    var array_of_hashes = [];
-    
-    var data_by_line = data.split("\n");
-    data_by_line.pop(); // Remove the last entry - this is always empty
-    
-    // Create an array of hashes that contain the returned values, 
-    // keyed by the attribute name
-    for (var i=0; i < data_by_line.length; i++) {
-        var intermediate_hash = {};
-        var data_by_item = data_by_line[i].split("\t");
-        for (var j=0; j < data_by_item.length; j++) {
-          intermediate_hash[ this.enabled_attributes[j] ] = data_by_item[j];
-        };
-        array_of_hashes.push(intermediate_hash);
-    };
-    
-    return array_of_hashes;
-  },
-  
-  /*
-  * Convert the tab separated results from a biomart search into a JSON 
-  * hash of hashes.
+  * The main key for the hash is the 'content_id' that matches the DOM id's 
+  * generated by the initial index results.  The values are arrays of result 
+  * hashes signifying the data returned from the mart...
   * 
-  * @private
-  * @name     _biomart_tsv2json_hh
-  * @param    {String}  A tab separated data from a biomart search.
+  * i.e.
+  *   'Cbx1' => [
+  *     { marker_symbol: 'Cbx1', synonym: 'foo' },
+  *     { marker_symbol: 'Cbx1', synonym: 'bar' }
+  *   ]
+  * 
+  * @name     _parse_biomart_data
+  * @param    {String}  Tab separated data from a biomart search.
+  * @param    {Array}   The 'docs' array from the index query.
   * @return   {Object}  A JSON hash of result objects - keyed by the content_id 
   *                     used within the DOM of the results list.
   */
-  _biomart_tsv2json_hh: function ( data ) {
-    // Split the tsv string on newlines, then each line on tabs
-    // before building into the JSON output
-    var array_of_hashes = [];
-    
-    var data_by_line = data.split("\n");
-    data_by_line.pop(); // Remove the last entry - this is always empty
-    
-    // Create an array of hashes that contain the returned values, 
-    // keyed by the attribute name
-    for (var i=0; i < data_by_line.length; i++) {
-        var intermediate_hash = {};
-        var data_by_item = data_by_line[i].split("\t");
-        for (var j=0; j < data_by_item.length; j++) {
-          intermediate_hash[ this.enabled_attributes[j] ] = data_by_item[j];
-        };
-        array_of_hashes.push(intermediate_hash);
-    };
-    
-    // Now manipulate this into a hash of objects (hashes) keyed by the 
-    // main linking attributes - this will match the DOM id in the docs.ejs template...
-    var hash_of_hashes = {};
-    for (var i=0; i < array_of_hashes.length; i++) {
-      var content_id = array_of_hashes[i][ this.joined_filter ];
-      if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); };
-      content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
-      hash_of_hashes[ this.internal_name + '_' + content_id ] = array_of_hashes[i];
-    };
-    
-    return hash_of_hashes;
-  },
-  
-  _parse_biomart_data: function ( data, docs, primary_index_field ) {
+  _parse_biomart_data: function ( data, docs ) {
     // Split the tsv string on newlines, then each line on tabs
     // before building into the JSON output
     var array_of_hashes = [];
@@ -252,12 +186,6 @@ DataSet.prototype = {
     * Create a hash, keyed by the 'joined_index_field' where each value 
     * contains an array of hashes representing the returned data rows 
     * related to the 'joined_index_field'.
-    * 
-    * i.e.
-    *   'Cbx1' => [
-    *     { marker_symbol: 'Cbx1', synonym: 'foo' },
-    *     { marker_symbol: 'Cbx1', synonym: 'bar' }
-    *   ]
     * 
     * This allows us to handle both types of Biomarts that are expected to 
     * be one-to-one mapped with the index, and one-to-many with the same 
@@ -345,6 +273,36 @@ DataSet.prototype = {
     };
     
     return data_to_return;
+  },
+  
+  /**
+  * Convert the tab separated results from a biomart search into a JSON 
+  * array of hashes.  Can be used if a dataset needs a custom parser.
+  * 
+  * @name     _biomart_tsv2json_ah
+  * @param    {String}  A tab separated data from a biomart search.
+  * @return   {Object}  A JSON array of result objects.
+  */
+  _biomart_tsv2json_ah: function ( data ) {
+    // Split the tsv string on newlines, then each line on tabs
+    // before building into the JSON output
+    var array_of_hashes = [];
+    
+    var data_by_line = data.split("\n");
+    data_by_line.pop(); // Remove the last entry - this is always empty
+    
+    // Create an array of hashes that contain the returned values, 
+    // keyed by the attribute name
+    for (var i=0; i < data_by_line.length; i++) {
+        var intermediate_hash = {};
+        var data_by_item = data_by_line[i].split("\t");
+        for (var j=0; j < data_by_item.length; j++) {
+          intermediate_hash[ this.enabled_attributes[j] ] = data_by_item[j];
+        };
+        array_of_hashes.push(intermediate_hash);
+    };
+    
+    return array_of_hashes;
   },
   
   /**
