@@ -23,3 +23,11 @@ var log = {
   error:    function() {},
   profile:  function() {}
 };
+
+// Dummy console object for browsers that don't support console
+if ( window.console === undefined ) {
+  window.console = {
+    log: function() {}
+  };
+};
+
