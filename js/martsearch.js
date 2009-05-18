@@ -156,7 +156,10 @@ MartSearch.prototype = {
     jQuery("#result_list").html("");
     
     // Query the index
-    var index_response = this.index.search( search_string, start_doc );
+    var index_response = ms.index.search( search_string, start_doc );
+    
+    // Fetch the pre-computed mart search terms from the index search
+    var index_values = ms.index.grouped_query_terms();
     
     // See if we need to paginate results
     // (Using the jquery.pagination plugin)
@@ -176,36 +179,6 @@ MartSearch.prototype = {
       jQuery("#results_pager").html("");
     };
     
-    // Now process the results of the index_reponse and extract the fields
-    // from each doc into a hash - this pre-computation should stop us 
-    // performing the same steps for each and every dataset.
-    var index_values = {};
-    for (var i=0; i < index_response.response.docs.length; i++) {
-      var doc = index_response.response.docs[i];
-      var fields = jQuery.keys(doc);
-      
-      for (var j=0; j < fields.length; j++) {
-        // Find or create a key/value pair for this field type
-        if ( index_values[ fields[j] ] == undefined ) { index_values[ fields[j] ] = []; };
-        
-        if ( typeof doc[ fields[j] ] == "string" ) {
-          index_values[ fields[j] ].push( doc[ fields[j] ] );
-        } else {
-          for (var k=0; k < doc[ fields[j] ].length; k++) {
-            index_values[ fields[j] ].push( doc[ fields[j] ][k] );
-          };
-        };
-      };
-    };
-    
-    // Remove duplicate entries... 
-    // For this we use the jQuery.protify plugin to mimic Prototype's 
-    // (prototype.js) array manipulation capabilities.
-    var fields = jQuery.keys(index_values);
-    for (var i=0; i < fields.length; i++) {
-      index_values[ fields[i] ] = jQuery.protify( index_values[ fields[i] ] ).uniq();
-    };
-    
     // Load in the doc skeleton...
     var docs = new EJS({ url: ms.base_url + "/js/templates/docs.ejs" }).render(
       {
@@ -216,17 +189,13 @@ MartSearch.prototype = {
     );
     jQuery("#result_list").html(docs);
     
-    // TODO: Finish adding the display (and child searches) code here!
+    // Load in each dataset...
     for (var i=0; i < ms.datasets.length; i++) {
       var ds = ms.datasets[i];
-      
-      ds.search( index_values[ ds.joined_index_field ] );
-      
-      
-      
+      if ( index_values[ ds.joined_index_field ] !== undefined && index_values[ ds.joined_index_field ] !== "" ) {
+        ds.search( index_values[ ds.joined_index_field ], index_response.response.docs, ms.index.primary_field );
+      };
     };
-    
-    
     
     // Hide the loading indicator
     jQuery("#loading").hide();

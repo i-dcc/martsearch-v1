@@ -3,23 +3,24 @@
     <h2 class="doc_primary_field"><%= docs[i][primary_field] %></h2>
     
     <% for ( var j=0; j<datasets.length; j++ ) { %>
-      <div id="<%= datasets[j].internal_name %>" class="dataset ui-widget-content ui-corner-all">
-        <h3 class="dataset_name"><%= datasets[j].display_name %></h3>
-        <%
-          var content_id = docs[i][ datasets[j].joined_index_field ];
+      <%
+        var content_id = docs[i][ datasets[j].joined_index_field ];
+        if ( content_id !== undefined && content_id !== "" ) {
           if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); };
-          content_id = content_id.substr(0,20);
-        %>
-        <div id="<%= datasets[j].internal_name + '_' + content_id %>" class="content"></div>
-        
-        <div id="<%= datasets[j].internal_name %>_credit" class="credit">
-          <%
-            var link_url = datasets[j].search_link_url( docs[i][ datasets[j].joined_index_field ] );
-          %>
-          Data supplied by the <%= datasets[j].mart_dataset %> biomart. 
-          <a href='<%= link_url %>' target="_blank">See these results in their original mart</a>.
+          content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
+      %>
+        <div class="dataset ui-widget-content ui-corner-all">
+          <h3 class="dataset_name"><%= datasets[j].display_name %></h3>
+          <div id="<%= datasets[j].internal_name + '_' + content_id %>" class="content"></div>
+          <div id="<%= datasets[j].internal_name + '_' + content_id %>_credit" class="credit">
+            <%
+              var link_url = datasets[j].search_link_url( docs[i][ datasets[j].joined_index_field ] );
+            %>
+            Data supplied by the <%= datasets[j].mart_dataset %> biomart. 
+            <a href='<%= link_url %>' target="_blank">See these results in their original mart</a>.
+          </div>
         </div>
-      </div>
+      <% } %>
     <% } %>
   </li>
 <% } %>

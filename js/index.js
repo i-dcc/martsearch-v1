@@ -9,6 +9,8 @@ Index = function ( params ) {
   this.primary_field  = params.primary_field;
   this.docs_per_page  = params.docs_per_page;
   this.message        = new Message({ base_url: this.base_url });
+  
+  this.raw_results    = {};
 };
 
 Index.prototype = {
@@ -69,7 +71,49 @@ Index.prototype = {
       }
     });
     
+    this.raw_results = search_results;
     return search_results;
+  },
+  
+  /**
+  * Helper function to process the results of the JSON response and 
+  * extract the fields from each doc into a hash.
+  * 
+  * @alias    Index.grouped_query_terms
+  */
+  grouped_query_terms: function () {
+    var grouped_terms = {};
+    
+    for (var i=0; i < this.raw_results.response.docs.length; i++) {
+      var doc = this.raw_results.response.docs[i];
+      var fields = jQuery.keys(doc);
+      
+      for (var j=0; j < fields.length; j++) {
+        // Find or create a key/value pair for this field type
+        if ( grouped_terms[ fields[j] ] == undefined ) { grouped_terms[ fields[j] ] = []; };
+        
+        if ( typeof doc[ fields[j] ] == "string" ) {
+          grouped_terms[ fields[j] ].push( doc[ fields[j] ] );
+        } else {
+          for (var k=0; k < doc[ fields[j] ].length; k++) {
+            grouped_terms[ fields[j] ].push( doc[ fields[j] ][k] );
+          };
+        };
+      };
+    };
+    
+    /**
+    * Remove duplicate entries... 
+    * For this we use the jQuery.protify plugin to mimic Prototype's 
+    * (prototype.js) array manipulation capabilities.
+    */
+    var fields = jQuery.keys(grouped_terms);
+    for (var i=0; i < fields.length; i++) {
+      grouped_terms[ fields[i] ] = jQuery.protify( grouped_terms[ fields[i] ] ).uniq();
+    };
+    
+    this.grouped_terms = grouped_terms;
+    return grouped_terms;
   }
   
 };
