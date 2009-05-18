@@ -1,0 +1,41 @@
+<% if ( results != undefined ) { %>
+  <% 
+    var projects = [];
+    jQuery.each( results, function ( index, project ) {
+      if ( project["is_latest_for_gene"] == 1 ) { projects.unshift(project); }
+      else                                      { projects.push(project);    }
+    });
+  %>
+  
+  <% for ( var i=0; i<projects.length; i++ ) { %>
+    <%
+      var project = projects[i];
+      
+      var sponsor = [];
+      if ( project["is_eucomm"] == 1 )         { sponsor.push("EUCOMM"); };
+      if ( project["is_komp_csd"] == 1 )       { sponsor.push("KOMP-CSD"); };
+      if ( project["is_komp_regeneron"] == 1 ) { sponsor.push("KOMP-Regeneron"); };
+      if ( project["is_norcomm"] == 1 )        { sponsor.push("NorCOMM"); };
+      if ( project["is_mgp"] == 1 )            { sponsor.push("MGP"); };
+    %>
+    
+    <div>
+      <% if ( sponsor.length == 1 ) { %> <strong>Sponsor:</strong> 
+      <% } else { %> <strong>Sponsors:</strong> 
+      <% } %>
+      <%= sponsor.join(", ") %>
+      
+      
+      
+      
+    </div>
+    
+    
+    
+    
+    
+  <% } %>
+  
+<% } else { %>
+  <em>No alleles found.</em>
+<% } %>

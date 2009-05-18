@@ -1,29 +1,90 @@
 {
-  "internal_name":      "htgt_targ_alleles",
-  "display_name":       "IKMC Targeted Alleles",
-  "url":                "/htgtdev/biomart",
-  "full_url":           "http://htgt.internal.sanger.ac.uk:9002/dev/martsearch/htgtdev/biomart",
-  "mart_dataset":       "htgt_targ",
-  "joined_index_field": "marker_symbol",
-  "joined_filter":      "marker_symbol",
-  "template":           "htgt_targ_details.ejs",
-  "enabled_attributes": [
-    "marker_symbol",
+  internal_name:      "htgt_targ_alleles",
+  display_name:       "IKMC Targeted Alleles",
+  url:                "/htgtdev/biomart",
+  full_url:           "http://htgt.internal.sanger.ac.uk:9002/dev/martsearch/htgtdev/biomart",
+  mart_dataset:       "htgt_targ",
+  joined_index_field: "marker_symbol",
+  joined_filter:      "marker_symbol",
+  template:           "htgt_targ_details.ejs",
+  enabled_attributes: [
     "is_eucomm",
     "is_komp_csd",
     "is_komp_regeneron",
     "is_norcomm",
     "is_mgp",
+    "marker_symbol",
     "status",
     "htgt_project_id",
+    "bac",
+    "design_id",
+    "design_plate",
+    "design_well",
+    "intvec_plate",
+    "intvec_well",
+    "intvec_distribute",
     "targvec_plate",
     "targvec_well",
+    "targvec_distribute",
     "backbone",
     "cassette",
-    "targvec_distribute",
     "allele_name",
     "escell_clone_name",
+    "escell_distribute",
     "es_cell_line",
-    "escell_distribute"
-  ]
+    "colonies_picked",
+    "is_latest_for_gene"
+  ],
+  custom_result_parser: function ( data, ds ) {
+    var results = {};
+    var int_results = ds._biomart_tsv2json_ah( data );
+    
+    // Process the biomart return and organise into projects...
+    for (var i=0; i < int_results.length; i++) {
+      var result = int_results[i];
+      
+      // Only store a result if we have a htgt_project_id
+      if ( result["htgt_project_id"] ) {
+        // Set the DOM element id we need to lookup
+        var content_id = ds.internal_name + '_' + result["marker_symbol"].replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
+        
+        // Find or create a result and project entry
+        if ( results[ content_id ] == undefined ) { results[ content_id ] = {}; };
+
+        if ( results[ content_id ][ result["htgt_project_id"] ] == undefined ) {
+          results[ content_id ][ result["htgt_project_id"] ] = {};
+        };
+
+        var project = results[ content_id ][ result["htgt_project_id"] ];
+
+        // Extract the singular (per project) values
+        var singular_attributes = [
+          "is_eucomm", "is_komp_csd", "is_komp_regeneron", "is_norcomm", 
+          "is_mgp", "status", "htgt_project_id", "design_id", "cassette", "backbone",
+          "design_plate", "design_well", "bac", "intvec_plate", "intvec_well", 
+          "intvec_distribute", "targvec_plate", "targvec_well", "targvec_distribute",
+          "allele_name", "is_latest_for_gene"
+        ];
+
+        for (var j=0; j < singular_attributes.length; j++) {
+          project[ singular_attributes[j] ] = result[ singular_attributes[j] ];
+        };
+
+        if ( result["escell_clone_name"] ) {
+          // Find or create ES Cell entries for the project
+          if ( project["escells"] == undefined ) { project["escells"] = []; };
+
+          project["escells"].push({
+            escell_clone_name:  result["escell_clone_name"],
+            es_cell_line:       result["es_cell_line"],
+            colonies_picked:    result["colonies_picked"],
+            escell_distribute:  result["escell_distribute"]
+          });
+        };
+      };
+      
+    };
+    
+    return results;
+  }
 }

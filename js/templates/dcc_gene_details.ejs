@@ -1,9 +1,10 @@
+<% var result = results[0]; %>
 <table>
   <tr>
-    <td style="text-align: left;">
+    <td style="text-align: left;" width="100%">
       <table>
         <tr>
-          <th>Marker Name(s):</th>
+          <th width="125px">Marker Name(s):</th>
           <td><%= result['marker_names'] %></td>
         </tr>
         <tr>
@@ -15,13 +16,21 @@
           <td><%= result['marker_type'] %></td>
         </tr>
         <tr>
+          <%
+            var location_text = 'Chr' + result['chromosome'];
+            if ( result['coord_start'] ) { location_text += ':' + result['coord_start'] };
+            if ( result['coord_end'] )   { location_text += '-' + result['coord_end'] };
+            if ( result['strand'] )      { location_text += '(' + result['strand'] + ')' };
+          %>
           <th>Location:</th>
-          <td>Chr<%= result['chromosome'] %>:<%= result['coord_start'] %>-<%= result['coord_end'] %>(<%= result['strand'] %>)</td>
+          <td><%= location_text %></td>
         </tr>
       </table>
     </td>
     <td style="text-align: right;">
+      <% if ( result['coord_start'] && result['coord_end'] ) { %>
       <img src="http://gbrowse.informatics.jax.org/cgi-bin/gbrowse_img/thumbs_current/?abs=1;options=Everything;width=200;name=<%= result['chromosome'] %>%3A<%= result['coord_start'] %>-<%= result['coord_end'] %>" alt="" />
+      <% } %>
     </td>
   </tr>
 </table>

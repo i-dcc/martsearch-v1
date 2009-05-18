@@ -12,6 +12,7 @@
     <!-- Supporting libraries and plugins -->
     <script type="text/javascript" src="js/utils/ejs/ejs.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/utils/ejs/view.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/utils/ejs/ejs_fulljslint.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/utils/jquery/jquery.pagination.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/utils/jquery/jquery.protify.js" charset="utf-8"></script>
     
@@ -24,7 +25,7 @@
     <link rel="stylesheet" href="css/martsearch.css" type="text/css" media="screen" charset="utf-8" />
     <script type="text/javascript" charset="utf-8">
       jQuery(document).ready(function() {
-        ms = new MartSearch({});
+        var ms = new MartSearch({});
         ms.init();
       });
     </script>
@@ -57,8 +58,7 @@
       <div id="tabs">
         <ul>
           <li><a href="#search">Search</a></li>
-          <li><a href="#browse_by_symbol">Browse By Gene Symbol</a></li>
-          <li><a href="#browse_by_chr">Browse By Chromosome</a></li>
+          <li><a href="#browse">Browse</a></li>
           <li><a href="#configure">Configure</a></li>
           <li><a href="#help">Help</a></li>
           <li><a href="#about">About</a></li>
@@ -92,11 +92,8 @@
           <div id="intro_text" class="center"></div>
         </div>
         
-        <!-- browse by gene symbol tab -->
-        <div id="browse_by_symbol"></div>
-        
-        <!-- browse by chromosome tab -->
-        <div id="browse_by_chr"></div>
+        <!-- browse tab -->
+        <div id="browse"></div>
         
         <!-- configuration options tab -->
         <div id="configure"></div>
