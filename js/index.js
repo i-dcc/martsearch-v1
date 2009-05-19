@@ -45,75 +45,94 @@ Index.prototype = {
   
   /*
   * Wrapper function to submit a search to the index, then 
-  * fire off the resulting JSON object to a callback function.
+  * return the resulting JSON object -- returns false in the 
+  * event of an error.
   * 
   * @alias    Index.search
   * @param    {String}    The query string to search for.
   * @param    {Integer}   The start position for the search results.
   */
   search: function ( query, start_pos ) {
-    var search_url = this.url + "/select";
+    var idx = this;
     var search_results = {};
     
     jQuery.ajax({
       type:     "POST",
-      url:      search_url,
+      url:      idx.url + "/select",
       async:    false,
       dataType: "json",
       data: {
         wt:         "json",
         q:          query,
         start:      start_pos,
-        rows:       this.docs_per_page
+        rows:       idx.docs_per_page
       },
       success:  function ( json ) {
-        search_results = json;
+        idx.raw_results = json;
+      },
+      error:    function( XMLHttpRequest, textStatus, errorThrown ) {
+        log.error( "Error querying index @ '"+ idx.url +"' for '"+ query +"' ("+ XMLHttpRequest.status +")" );
+        idx.message.add(
+          "Error querying the search index for '"+ query +"' ("+ XMLHttpRequest.status +")",
+          "error",
+          XMLHttpRequest.responseText
+        );
+        idx.raw_results = false;
       }
     });
     
-    this.raw_results = search_results;
-    return search_results;
+    return idx.raw_results;
   },
   
   /**
   * Helper function to process the results of the JSON response and 
-  * extract the fields from each doc into a hash.
+  * extract the fields from each doc into a hash (which is returned) 
+  * -- returns false in the event of an error, i.e. if the search 
+  * results JSON object is non-existent.
   * 
   * @alias    Index.grouped_query_terms
   */
   grouped_query_terms: function () {
-    var grouped_terms = {};
+    var idx = this;
     
-    for (var i=0; i < this.raw_results.response.docs.length; i++) {
-      var doc = this.raw_results.response.docs[i];
-      var fields = jQuery.keys(doc);
+    if ( idx.raw_results !== false ) {
+      var grouped_terms = {};
       
-      for (var j=0; j < fields.length; j++) {
-        // Find or create a key/value pair for this field type
-        if ( grouped_terms[ fields[j] ] == undefined ) { grouped_terms[ fields[j] ] = []; };
-        
-        if ( typeof doc[ fields[j] ] == "string" ) {
-          grouped_terms[ fields[j] ].push( doc[ fields[j] ] );
-        } else {
-          for (var k=0; k < doc[ fields[j] ].length; k++) {
-            grouped_terms[ fields[j] ].push( doc[ fields[j] ][k] );
+      for (var i=0; i < idx.raw_results.response.docs.length; i++) {
+        var doc = idx.raw_results.response.docs[i];
+        var fields = jQuery.keys(doc);
+
+        for (var j=0; j < fields.length; j++) {
+          // Find or create a key/value pair for this field type
+          if ( grouped_terms[ fields[j] ] == undefined ) { grouped_terms[ fields[j] ] = []; };
+
+          if ( typeof doc[ fields[j] ] == "string" ) {
+            grouped_terms[ fields[j] ].push( doc[ fields[j] ] );
+          } else {
+            for (var k=0; k < doc[ fields[j] ].length; k++) {
+              grouped_terms[ fields[j] ].push( doc[ fields[j] ][k] );
+            };
           };
         };
       };
+
+      /**
+      * Remove duplicate entries... 
+      * For this we use the jQuery.protify plugin to mimic Prototype's 
+      * (prototype.js) array manipulation capabilities.
+      */
+      var fields = jQuery.keys(grouped_terms);
+      for (var i=0; i < fields.length; i++) {
+        grouped_terms[ fields[i] ] = jQuery.protify( grouped_terms[ fields[i] ] ).uniq();
+      };
+      
+      idx.grouped_terms = grouped_terms;
+    }
+    else {
+      idx.grouped_terms = false;
     };
     
-    /**
-    * Remove duplicate entries... 
-    * For this we use the jQuery.protify plugin to mimic Prototype's 
-    * (prototype.js) array manipulation capabilities.
-    */
-    var fields = jQuery.keys(grouped_terms);
-    for (var i=0; i < fields.length; i++) {
-      grouped_terms[ fields[i] ] = jQuery.protify( grouped_terms[ fields[i] ] ).uniq();
-    };
-    
-    this.grouped_terms = grouped_terms;
-    return grouped_terms;
+    return idx.grouped_terms;
   }
   
 };

@@ -25,10 +25,11 @@ Message.prototype = {
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
         status = false;
-        log.error( "Error initializing martsearch messaging - " + textStatus + " (" + errorThrown + ")" );
+        log.error( "Error initializing martsearch messaging - " + textStatus + " ("+ XMLHttpRequest.status +")" );
         message.add(
-          "Error initializing martsearch messaging - " + textStatus + " (" + errorThrown + ")",
-          "error"
+          "Error initializing martsearch messaging - " + textStatus + " ("+ XMLHttpRequest.status +")",
+          "error",
+          XMLHttpRequest.responseText
         );
       }
     });
@@ -52,16 +53,28 @@ Message.prototype = {
   * @param  {String} 
   * @param  {String} 
   */
-  add: function( message, state ) {
+  add: function( message, state, error_msg ) {
+    var timestamp = new Date().getTime();
     var message_string = '<div class="ui-state-'+state+' ui-corner-all">';
     
     if ( state === 'error' ) {
       message_string += '<span class="ui-icon ui-icon-alert"></span>';
-    } else if ( state === 'highlight' ) {
+      message_string += '<p>' + message;
+      if ( error_msg !== undefined || error_msg !== "" ) {
+        message_string += ' <small><a id="errortoggle'+ timestamp +'" href="#" class="error_toggle">full error message</a></small></p>';
+        message_string += '<div id="errormsg'+ timestamp +'" class="error_msg" style="display:none;">'+ error_msg +'</div>';
+        message_string += '</div>';
+      }
+      else {
+        message_string += '</p></div>';
+      };
+    }
+    else if ( state === 'highlight' ) {
       message_string += '<span class="ui-icon ui-icon-info"></span>';
+      message_string += '<p>' + message + '</p></div>';
     };
     
-    message_string += '<p>' + message + '</p></div>';
     jQuery("#messages").append( message_string ).show("fast");
+    jQuery('#errortoggle'+timestamp).toggleControl('#errormsg'+timestamp);
   }
 };

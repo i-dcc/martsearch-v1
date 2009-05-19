@@ -1,0 +1,14 @@
+<table class="with_border">
+  <tr>
+    <% for ( var i=0; i<dataset.enabled_attributes.length; i++ ) { %>
+      <th><%= dataset.attributes[ dataset.enabled_attributes[i] ] %></th>
+    <% } %>
+  </tr>
+  <% for ( var i=0; i<results.length; i++ ) { %>
+    <tr>
+      <% for ( var j=0; j<dataset.enabled_attributes.length; j++ ) { %>
+        <td><%= results[i][ dataset.enabled_attributes[j] ] %></td>
+      <% } %>
+    </tr>
+  <% } %>
+</table>
