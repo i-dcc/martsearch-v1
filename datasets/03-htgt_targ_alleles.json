@@ -1,8 +1,8 @@
 {
   internal_name:      "htgt_targ_alleles",
   display_name:       "IKMC Targeted Alleles",
-  url:                "/htgtdev/biomart",
-  full_url:           "http://htgt.internal.sanger.ac.uk:9002/dev/martsearch/htgtdev/biomart",
+  url:                "/htgt/biomart",
+  full_url:           "http://www.sanger.ac.uk/htgt/biomart",
   mart_dataset:       "htgt_targ",
   joined_index_field: "marker_symbol",
   joined_filter:      "marker_symbol",
