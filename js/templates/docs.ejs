@@ -16,7 +16,7 @@
             <%
               var link_url = datasets[j].search_link_url( docs[i][ datasets[j].joined_index_field ] );
             %>
-            Data supplied by the <%= datasets[j].mart_dataset %> biomart. 
+            Data supplied by the <%= datasets[j].display_name %> biomart. 
             <a href='<%= link_url %>' target="_blank">See these results in their original mart</a>.
           </div>
         </div>

@@ -18,7 +18,7 @@ DataSet = function( params, base_url ) {
   
   this.template            = params.template ? this.base_url+'/js/templates/'+params.template : this.base_url+'/js/templates/default_dataset.ejs';
   if ( params.template === undefined ) {
-    this.attributes = this.fetch_all_attributes();
+    this.fetch_all_attributes();
   };
   
   this.custom_result_parser = params.custom_result_parser;
@@ -40,29 +40,38 @@ DataSet.prototype = {
     var ds = this;
     var attributes = {};
     
+    var run_async = true;
+    if ( ds.test_mode ) { run_async = false };
+    var results = false;
+    
     jQuery.ajax({
       url:      ds.url + "/martservice",
       type:     "GET",
-      async:    false,
-      data:     { type: "attributes", dataset: ds.mart_dataset },
-      success:  function ( data ) {
-        var attrs = data.split("\n");
-        for (var i=0; i < attrs.length; i++) {
-          attr_info = attrs[i].split("\t");
-          if ( attr_info[0] !== "" ) { attributes[ attr_info[0] ] = attr_info[1] };
-        };
+      async:    run_async,
+      data:     { type: "configuration", dataset: ds.mart_dataset },
+      success:  function ( xml ) {
+        
+        // Fetch the attributes...
+        jQuery(xml).find("AttributeDescription").each(function() {
+          attributes[ jQuery(this).attr("internalName") ] = {
+            displayName: jQuery(this).attr("displayName"),
+            description: jQuery(this).attr("description"),
+            linkoutURL:  jQuery(this).attr("linkoutURL")
+          };
+        });
+        
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
-        log.error( "Error fetching attribute descriptions for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")" );
+        log.error( "Error fetching configuration for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")" );
         ds.message.add( 
-          "Error fetching attribute descriptions for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")",
+          "Error fetching configuration for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")",
           "error",
           XMLHttpRequest.responseText
         );
       }
     });
     
-    return attributes;
+    ds.attributes = attributes;
   },
   
   /**
@@ -104,7 +113,7 @@ DataSet.prototype = {
           else                                        { results = ds.custom_result_parser( data, ds ); };
 
           if ( results ) {
-            console.log(results);
+            if ( ds.debug_mode ) { if ( typeof console.log != "undefined" ) { console.log(results); }; };
             
             for (var i=0; i < docs.length; i++) {
               var content_id = docs[i][ ds.joined_index_field ];
@@ -237,8 +246,6 @@ DataSet.prototype = {
           data_by_joined_field[ tmp_hash[ ds.joined_filter ] ].push(tmp_hash);
         };
     };
-    console.log("data_by_joined_field");
-    console.log(data_by_joined_field);
     
     /**
     * Finally, if we have any results to show manipulate these array elements 

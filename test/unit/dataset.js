@@ -33,7 +33,7 @@ function datasetTests ( ds, ds_chk ) {
   });
   
   test( ds.display_name+" - Retrieving all biomart attributes dynamically ", function() {
-    ds.attributes = ds.fetch_all_attributes();
+    ds.fetch_all_attributes();
 
     expect(3);
     ok( jQuery.keys(ds.attributes).length > 0, "We returned some attributes " );
@@ -42,11 +42,11 @@ function datasetTests ( ds, ds_chk ) {
     // Deliberatly fail the fetch...
     var real_url = ds.url;
     ds.url = '/foo';
-    ds.attributes = ds.fetch_all_attributes();
+    ds.fetch_all_attributes();
     ok( jQuery.keys(ds.attributes).length == 0, "We failed to fetch any attributes " );
 
     ds.url = real_url;
-    ds.attributes = ds.fetch_all_attributes();
+    ds.fetch_all_attributes();
   });
   
   test( ds.display_name+" - Simulating a safe search piece by piece: '"+safe_search+"' ", function() {
