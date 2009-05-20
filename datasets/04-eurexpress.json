@@ -1,0 +1,19 @@
+{
+  internal_name:      "eurexpress",
+  display_name:       "Eurexpress",
+  url:                "/eurexpress/biomart",
+  full_url:           "http://biomart.eurexpress.org/biomart",
+  mart_dataset:       "template",
+  joined_index_field: "marker_symbol",
+  joined_filter:      "tmp_gene_symbol",
+  enabled_attributes: [
+    "tmp_gene_symbol",
+    "ass_assay_id_key",
+    "ass_external_set_id"
+  ],
+  required_attributes: [
+    "ass_assay_id_key"
+  ]
+}
+
+
