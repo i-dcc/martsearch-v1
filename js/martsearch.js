@@ -201,6 +201,8 @@ MartSearch.prototype = {
       
     };
     
+    // Make the dataset 'bubbles' toggleable
+    jQuery('.dataset_title').toggleControl('.dataset_content', { hide: false, speed: "fast" });
     
     // Hide the loading indicator
     jQuery("#loading").hide();

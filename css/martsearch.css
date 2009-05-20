@@ -60,15 +60,19 @@ h4 span.subheading_counts {
 	margin-left: 20px;
 }
 
-a.toggle-open, a.toggle-close {
+.toggle-open, .toggle-close {
 	background: url(../images/silk_icons/bullet_arrow_down.png) no-repeat;
 	padding-left: 16px;
 	padding-top: 2px;
 	padding-bottom: 2px;
 }
 
-a.toggle-close {
+.toggle-close {
 	background: url(../images/silk_icons/bullet_arrow_up.png) no-repeat;
+}
+
+.toggle-open:hover, .toggle-close:hover {
+	cursor: pointer;
 }
 
 .error_msg {
@@ -121,12 +125,12 @@ a.toggle-close {
 	margin-bottom: 7px;
 }
 
-#results h2.doc_primary_field,
-#results h3.dataset_name {
+#results h2.doc_title,
+#results h3.dataset_title {
 	margin-top: 2px;
 }
 
-#results h3.dataset_name {
+#results h3.dataset_title {
 	border-bottom: 1px solid #999;
 }
 
