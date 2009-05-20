@@ -156,6 +156,7 @@ MartSearch.prototype = {
     // Clear any messages and previous results
     if ( jQuery("#messages").html() != "" ) { ms.message.clear(); };
     jQuery("#result_list").html("");
+    jQuery(".pagination").html("");
     
     // Query the index
     var index_response = ms.index.search( search_string, start_doc );
@@ -165,24 +166,6 @@ MartSearch.prototype = {
       // Fetch the pre-computed mart search terms from the index search
       var index_values = ms.index.grouped_query_terms();
       
-      // See if we need to paginate results
-      // (Using the jquery.pagination plugin)
-      if ( index_response.response.numFound > ms.index.docs_per_page ) {
-        jQuery('#results_pager').pagination( 
-          index_response.response.numFound,
-          {
-            items_per_page:       ms.index.docs_per_page,
-            num_edge_entries:     1,
-            num_display_entries:  5,
-            current_page:         page,
-            callback:             function(page,dom_elem){ ms.pager(page,dom_elem) }
-          }
-        );
-      }
-      else {
-        jQuery("#results_pager").html("");
-      };
-
       // Load in the doc skeleton...
       var docs = new EJS({ url: ms.base_url + "/js/templates/docs.ejs" }).render(
         {
@@ -192,6 +175,21 @@ MartSearch.prototype = {
         }
       );
       jQuery("#result_list").html(docs);
+      
+      // See if we need to paginate results
+      // (Using the jquery.pagination plugin)
+      if ( index_response.response.numFound > ms.index.docs_per_page ) {
+        jQuery('.pagination').pagination( 
+          index_response.response.numFound,
+          {
+            items_per_page:       ms.index.docs_per_page,
+            num_edge_entries:     1,
+            num_display_entries:  5,
+            current_page:         page,
+            callback:             function(page,dom_elem){ ms.pager(page,dom_elem) }
+          }
+        );
+      };
 
       // Load in each dataset...
       for (var i=0; i < ms.datasets.length; i++) {
