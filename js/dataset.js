@@ -38,40 +38,77 @@ DataSet.prototype = {
   */
   fetch_all_attributes: function() {
     var ds = this;
-    var attributes = {};
+    ds.attributes = {};
     
     var run_async = true;
     if ( ds.test_mode ) { run_async = false };
     var results = false;
     
-    jQuery.ajax({
-      url:      ds.url + "/martservice",
-      type:     "GET",
-      async:    run_async,
-      data:     { type: "configuration", dataset: ds.mart_dataset },
-      success:  function ( xml ) {
-        
-        // Fetch the attributes...
-        jQuery(xml).find("AttributeDescription").each(function() {
-          attributes[ jQuery(this).attr("internalName") ] = {
-            displayName: jQuery(this).attr("displayName"),
-            description: jQuery(this).attr("description"),
-            linkoutURL:  jQuery(this).attr("linkoutURL")
-          };
-        });
-        
-      },
-      error:    function( XMLHttpRequest, textStatus, errorThrown ) {
-        log.error( "Error fetching configuration for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")" );
-        ds.message.add( 
-          "Error fetching configuration for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")",
-          "error",
-          XMLHttpRequest.responseText
-        );
-      }
-    });
-    
-    ds.attributes = attributes;
+    /**
+    * Unfortunatley this is a work-around for IE...
+    * It just won't parse the XML sent back from biomart so we have to 
+    * revert to using tab separated attribute info which doesn't contain 
+    * any linking information - therefore the basic marts in MartSearch 
+    * will be REALLY basic under IE.
+    */
+    if ( jQuery.browser.msie ) {
+      
+      jQuery.ajax({
+        url:      ds.url + "/martservice",
+        type:     "GET",
+        async:    run_async,
+        data:     { type: "attributes", dataset: ds.mart_dataset },
+        success:  function ( data ) {
+            var attrs = data.split("\n");
+            for (var i=0; i < attrs.length; i++) {
+              attr_info = attrs[i].split("\t");
+              if ( attr_info[0] !== "" ) {
+                ds.attributes[ attr_info[0] ] = {
+                  displayname: attr_info[1]
+                };
+                //attributes[ attr_info[0] ] = attr_info[1]
+              };
+            };
+        },
+        error:    function( XMLHttpRequest, textStatus, errorThrown ) {
+          log.error( "Error fetching configuration for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")" );
+          ds.message.add( 
+            "Error fetching configuration for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")",
+            "error",
+            XMLHttpRequest.responseText
+          );
+        }
+      });
+      
+    }
+    else {
+      
+      jQuery.ajax({
+        url:      ds.url + "/martservice",
+        type:     "GET",
+        async:    run_async,
+        data:     { type: "configuration", dataset: ds.mart_dataset },
+        //dataType: (jQuery.browser.msie) ? "xml" : "text/xml",
+        success:  function ( xml ) {
+          jQuery(xml).find("attributedescription").each( function() {
+            ds.attributes[ jQuery(this).attr("internalname") ] = {
+              displayname: jQuery(this).attr("displayname"),
+              description: jQuery(this).attr("description"),
+              linkouturl:  jQuery(this).attr("linkouturl")
+            };
+          });
+        },
+        error:    function( XMLHttpRequest, textStatus, errorThrown ) {
+          log.error( "Error fetching configuration for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")" );
+          ds.message.add( 
+            "Error fetching configuration for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")",
+            "error",
+            XMLHttpRequest.responseText
+          );
+        }
+      });
+      
+    };
   },
   
   /**

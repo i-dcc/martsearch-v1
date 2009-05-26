@@ -1,16 +1,16 @@
 <table class="with_border">
   <tr>
     <% for ( var i=0; i<dataset.enabled_attributes.length; i++ ) { %>
-      <th><%= dataset.attributes[ dataset.enabled_attributes[i] ].displayName %></th>
+      <th><%= dataset.attributes[ dataset.enabled_attributes[i] ].displayname %></th>
     <% } %>
   </tr>
   <% for ( var i=0; i<results.length; i++ ) { %>
     <tr>
       <% for ( var j=0; j<dataset.enabled_attributes.length; j++ ) { %>
         <td>
-          <% if ( dataset.attributes[ dataset.enabled_attributes[j] ].linkoutURL ) { %>
+          <% if ( dataset.attributes[ dataset.enabled_attributes[j] ].linkouturl ) { %>
             <%
-              var link_url = dataset.attributes[ dataset.enabled_attributes[j] ].linkoutURL;
+              var link_url = dataset.attributes[ dataset.enabled_attributes[j] ].linkouturl;
               link_url = link_url.replace( '%s', results[i][ dataset.enabled_attributes[j] ] );
             %>
             <a href="<%= link_url %>" target="_blank"><%= results[i][ dataset.enabled_attributes[j] ] %></a>
