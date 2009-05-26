@@ -147,7 +147,7 @@ MartSearch.prototype = {
     var ms = this;
     
     // Show the loading indicator
-    jQuery("#loading").show();
+    jQuery("#loading").fadeIn("fast");
     
     // Calculate what our starting doc is
     var start_doc = 0;
@@ -208,7 +208,7 @@ MartSearch.prototype = {
     * Make the doc 'bubbles' toggleable, and if there is a lot of results 
     * to go through, collapse them...
     */
-    if ( index_response.response.numFound > ms.index.docs_per_page ) {
+    if ( index_response && index_response.response.numFound > ms.index.docs_per_page ) {
       jQuery('.doc_title').toggleControl('.doc_content', { speed: "fast" });
     }
     else {
@@ -216,7 +216,7 @@ MartSearch.prototype = {
     };
     
     // Hide the loading indicator
-    jQuery("#loading").hide();
+    jQuery("#loading").fadeOut("fast");
     
     return false;
   },
