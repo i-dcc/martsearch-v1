@@ -149,33 +149,33 @@ DataSet.prototype = {
           if ( ds.custom_result_parser == undefined ) { results = ds._parse_biomart_data( data, docs ); }
           else                                        { results = ds.custom_result_parser( data, ds ); };
 
-          if ( results ) {
-            if ( ds.debug_mode ) { if ( typeof console.log != "undefined" ) { console.log(results); }; };
-            
-            for (var i=0; i < docs.length; i++) {
-              var content_id = docs[i][ ds.joined_index_field ];
-              if ( content_id !== undefined && content_id !== "" ) {
+          if ( ds.debug_mode ) { if ( typeof console.log != "undefined" ) { console.log(results); }; };
+          
+          for (var i=0; i < docs.length; i++) {
+            var content_id = docs[i][ ds.joined_index_field ];
+            if ( content_id !== undefined && content_id !== "" ) {
 
-                // Figure out the DOM id
-                if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); };
-                content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
-                content_id = ds.internal_name + '_' + content_id;
-                if ( ds.debug_mode ) { log.debug('processing '+ content_id); };
+              // Figure out the DOM id
+              if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); };
+              content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
+              content_id = ds.internal_name + '_' + content_id;
+              if ( ds.debug_mode ) { log.debug('processing '+ content_id); };
 
-                if ( results[ content_id ] !== undefined && results[ content_id ].length !== 0 ) {
-                  var template = new EJS({ url: ds.template }).render({ 'results': results[ content_id ], dataset: ds });
-                  jQuery( "#"+content_id ).html(template);
-                }
-                else {
-                  jQuery( "#"+content_id ).parent().hide();
-                  jQuery( "#"+content_id+'_is_present' ).hide();
-                };
-
+              if ( results[ content_id ] !== undefined && results[ content_id ].length !== 0 ) {
+                var template = new EJS({ url: ds.template }).render({ 'results': results[ content_id ], dataset: ds });
+                jQuery( "#"+content_id ).html(template);
+                
+              }
+              else {
+                jQuery( "#"+content_id ).parent().parent().hide();
+                jQuery( "#"+content_id+'_is_present' ).hide();
               };
+
             };
           };
-          
         };
+          
+
         
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
@@ -241,102 +241,107 @@ DataSet.prototype = {
     
     // Split the tsv string on newlines, then each line on tabs
     // before building into the JSON output
-    var array_of_hashes = [];
-    
     var data_by_line = data.split("\n");
     data_by_line.pop(); // Remove the last entry - this is always empty
     
-    /** 
-    * Create a hash, keyed by the 'joined_index_field' where each value 
-    * contains an array of hashes representing the returned data rows 
-    * related to the 'joined_index_field'.
-    * 
-    * This allows us to handle both types of Biomarts that are expected to 
-    * be one-to-one mapped with the index, and one-to-many with the same 
-    * data structure.
-    * 
-    * Also at the same time, (in this loop) if we have defined a field 
-    * that MUST be present filter out the data rows that do not have 
-    * these values...
-    */
-    var data_by_joined_field = {};
-    for (var i=0; i < data_by_line.length; i++) {
-        var tmp_hash = {};
-        var data_by_item = data_by_line[i].split("\t");
-        for (var j=0; j < data_by_item.length; j++) {
-          tmp_hash[ ds.enabled_attributes[j] ] = data_by_item[j];
-        };
-        
-        // Filter out unwanted rows...
-        var save_this_row = true;
-        if ( ds.required_attributes !== undefined ) {
-          for (var j=0; j < ds.required_attributes.length; j++) {
-            if ( tmp_hash[ ds.required_attributes[j] ] === "" ) {
-              save_this_row = false;
-            };
+    if ( data_by_line.length > 0 ) {
+      
+      /** 
+      * Create a hash, keyed by the 'joined_index_field' where each value 
+      * contains an array of hashes representing the returned data rows 
+      * related to the 'joined_index_field'.
+      * 
+      * This allows us to handle both types of Biomarts that are expected to 
+      * be one-to-one mapped with the index, and one-to-many with the same 
+      * data structure.
+      * 
+      * Also at the same time, (in this loop) if we have defined a field 
+      * that MUST be present filter out the data rows that do not have 
+      * these values...
+      */
+      var data_by_joined_field = {};
+      for (var i=0; i < data_by_line.length; i++) {
+          var tmp_hash = {};
+          var data_by_item = data_by_line[i].split("\t");
+          for (var j=0; j < data_by_item.length; j++) {
+            tmp_hash[ ds.enabled_attributes[j] ] = data_by_item[j];
           };
-        };
-        
-        if ( save_this_row ) {
-          if ( data_by_joined_field[ tmp_hash[ ds.joined_filter ] ] === undefined ) {
-            data_by_joined_field[ tmp_hash[ ds.joined_filter] ] = [];
-          };
-          data_by_joined_field[ tmp_hash[ ds.joined_filter ] ].push(tmp_hash);
-        };
-    };
-    
-    /**
-    * Finally, if we have any results to show manipulate these array elements 
-    * into a hash keyed by the content_id that would be generated by the docs 
-    * in the index...
-    * 
-    * I apologise now for the horrendous nested de-referencing...
-    */
-    var data_to_return = {};
-    if ( jQuery.keys(data_by_joined_field).length > 0 ) {
-      for (var i=0; i < docs.length; i++) {
 
-        // Calculate the content_id - The unique DOM element identifier that this
-        // returned data will be injected into
-        var content_id = docs[i][ ds.joined_index_field ];
-        if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); };
-        content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
-
-        // Set up a temp array to put all of our info into...
-        var tmp_array = [];
-
-        // Now collect each row of data that matches this 'joined_index_field'
-        if ( typeof docs[i][ ds.joined_index_field ] == 'string' ) {
-          // We only have a single value to match to...
-          var index_item = docs[i][ ds.joined_index_field ];
-          if ( data_by_joined_field[ index_item ] != undefined ) {
-            for (var j=0; j < data_by_joined_field[ index_item ].length; j++) {
-              tmp_array.push( data_by_joined_field[ index_item ][j] );
-            };
-          };
-        }
-        else {
-          // We have an array of values to match to...
-          for (var j=0; j < docs[i][ ds.joined_index_field ].length; j++) {
-            var index_item = docs[i][ ds.joined_index_field ][j];
-
-            if ( data_by_joined_field[ index_item ] != undefined ) {
-              for (var k=0; k < data_by_joined_field[ index_item ].length; k++) {
-                tmp_array.push( data_by_joined_field[ index_item ][k] );
+          // Filter out unwanted rows...
+          var save_this_row = true;
+          if ( ds.required_attributes !== undefined ) {
+            for (var j=0; j < ds.required_attributes.length; j++) {
+              if ( tmp_hash[ ds.required_attributes[j] ] === "" ) {
+                save_this_row = false;
               };
             };
           };
+
+          if ( save_this_row ) {
+            if ( data_by_joined_field[ tmp_hash[ ds.joined_filter ] ] === undefined ) {
+              data_by_joined_field[ tmp_hash[ ds.joined_filter] ] = [];
+            };
+            data_by_joined_field[ tmp_hash[ ds.joined_filter ] ].push(tmp_hash);
+          };
+      };
+
+      /**
+      * Finally, if we have any results to show manipulate these array elements 
+      * into a hash keyed by the content_id that would be generated by the docs 
+      * in the index...
+      * 
+      * I apologise now for the horrendous nested de-referencing...
+      */
+      var data_to_return = {};
+      if ( jQuery.keys(data_by_joined_field).length > 0 ) {
+        for (var i=0; i < docs.length; i++) {
+
+          // Calculate the content_id - The unique DOM element identifier that this
+          // returned data will be injected into
+          var content_id = docs[i][ ds.joined_index_field ];
+          if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); };
+          content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
+
+          // Set up a temp array to put all of our info into...
+          var tmp_array = [];
+
+          // Now collect each row of data that matches this 'joined_index_field'
+          if ( typeof docs[i][ ds.joined_index_field ] == 'string' ) {
+            // We only have a single value to match to...
+            var index_item = docs[i][ ds.joined_index_field ];
+            if ( data_by_joined_field[ index_item ] != undefined ) {
+              for (var j=0; j < data_by_joined_field[ index_item ].length; j++) {
+                tmp_array.push( data_by_joined_field[ index_item ][j] );
+              };
+            };
+          }
+          else {
+            // We have an array of values to match to...
+            for (var j=0; j < docs[i][ ds.joined_index_field ].length; j++) {
+              var index_item = docs[i][ ds.joined_index_field ][j];
+
+              if ( data_by_joined_field[ index_item ] != undefined ) {
+                for (var k=0; k < data_by_joined_field[ index_item ].length; k++) {
+                  tmp_array.push( data_by_joined_field[ index_item ][k] );
+                };
+              };
+            };
+          };
+
+          data_to_return[ ds.internal_name + '_' + content_id ] = tmp_array;
         };
 
-        data_to_return[ ds.internal_name + '_' + content_id ] = tmp_array;
+      }
+      else {
+        data_to_return = false;
       };
+
+      return data_to_return;
       
     }
     else {
-      data_to_return = false;
+      return false;
     };
-    
-    return data_to_return;
   },
   
   /**
