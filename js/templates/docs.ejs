@@ -1,6 +1,21 @@
 <% for ( var i=0; i<docs.length; i++ ) { %>
   <li id="<%= docs[i][primary_field] %>" class="ui-widget-content ui-corner-all">
+    <div class="doc_datasets_present">
+      Data returned from: 
+      <% for ( var j=0; j<datasets.length; j++ ) { %>
+        <%
+          var is_present_id = docs[i][ datasets[j].joined_index_field ];
+          if ( is_present_id !== undefined && is_present_id !== "" ) {
+            if ( typeof is_present_id != 'string' ) { is_present_id = is_present_id.join('_'); };
+            is_present_id = is_present_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
+            is_present_id = datasets[j].internal_name + '_' + is_present_id + '_is_present';
+        %>
+        <span id="<%= is_present_id %>" class="dataset_is_present"><%= datasets[j].display_name.replace( /\s/g, "&nbsp;" ) %></span>
+        <% } %>
+      <% } %>
+    </div>
     <h2 class="doc_title"><%= docs[i][primary_field] %></h2>
+    <div class="clear"></div>
     <div class="doc_content">
       <% for ( var j=0; j<datasets.length; j++ ) { %>
         <%

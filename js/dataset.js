@@ -162,12 +162,13 @@ DataSet.prototype = {
                 content_id = ds.internal_name + '_' + content_id;
                 if ( ds.debug_mode ) { log.debug('processing '+ content_id); };
 
-                if ( results[ content_id ] ) {
+                if ( results[ content_id ] !== undefined && results[ content_id ].length !== 0 ) {
                   var template = new EJS({ url: ds.template }).render({ 'results': results[ content_id ], dataset: ds });
                   jQuery( "#"+content_id ).html(template);
                 }
                 else {
                   jQuery( "#"+content_id ).parent().hide();
+                  jQuery( "#"+content_id+'_is_present' ).hide();
                 };
 
               };

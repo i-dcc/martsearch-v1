@@ -204,6 +204,17 @@ MartSearch.prototype = {
     // Make the dataset 'bubbles' toggleable
     jQuery('.dataset_title').toggleControl('.dataset_content', { hide: false, speed: "fast" });
     
+    /**
+    * Make the doc 'bubbles' toggleable, and if there is a lot of results 
+    * to go through, collapse them...
+    */
+    if ( index_response.response.numFound > ms.index.docs_per_page ) {
+      jQuery('.doc_title').toggleControl('.doc_content', { speed: "fast" });
+    }
+    else {
+      jQuery('.doc_title').toggleControl('.doc_content', { hide: false, speed: "fast" });
+    };
+    
     // Hide the loading indicator
     jQuery("#loading").hide();
     
