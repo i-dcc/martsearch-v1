@@ -23,7 +23,8 @@ test("Searching with the index  - something that works ", function() {
 });
 
 test("Searching with the index  - something that should fail ", function() {
-  expect(1);
+  expect(2);
   var results = index.search( "chromosome:!", 0 );
   ok( results === false, "Got a results object " );
+  ok( index.grouped_query_terms() === false, "Refused to process results from a bad search " );
 });
