@@ -65,8 +65,8 @@ MartSearch.prototype = {
     });
     
     // Activate links between the tabs
-    jQuery('a.help_link').click( function() { jQuery('#tabs').tabs('select', 4); return false; });
-    jQuery('a.about_link').click(function() { jQuery('#tabs').tabs('select', 5); return false; });
+    jQuery('a.help_link').click( function()  { jQuery('#tabs').tabs('select', 3); return false; } );
+    jQuery('a.about_link').click( function() { jQuery('#tabs').tabs('select', 4); return false; } );
     
     // Make form buttons respond to mouse interaction
     jQuery(".ui-button:not(.ui-state-disabled)")
@@ -85,10 +85,9 @@ MartSearch.prototype = {
         }
       });
     
-    /*
+    /**
     * Load in the dataset config files
     */
-    
     jQuery.ajax({
       url:      ms.base_url + "/bin/dataset-feed.pl",
       type:     'GET',
@@ -112,10 +111,11 @@ MartSearch.prototype = {
       }
     });
     
-    /*
+    /**
     * Make sure the index is up
     */
     if ( ms.index.is_alive() != true ) {
+      init_status = false;
       ms.message.add(
           "Sorry the main search index is offline - this tool will not function without "
         + "the main search index. Please check back soon.  Sorry for any inconvenience caused.",
@@ -124,7 +124,7 @@ MartSearch.prototype = {
       );
     };
     
-    /*
+    /**
     * Finish up
     */
     
