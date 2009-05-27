@@ -11,8 +11,8 @@
  *
  */
 
-;(function($) {
-    $.fn.extend({
+;(function(jQuery) {
+    jQuery.fn.extend({
         toggleControl: function( element, options ) {
             
             var defaults = {
@@ -23,24 +23,24 @@
                 closeClass: "toggle-close"
             };
             
-            var options = $.extend(defaults, options);
+            var options = jQuery.extend(defaults, options);
             
             return this.each( function( index ) {
-                var obj = $(this);
+                var obj = jQuery(this);
                 
-                $(this).each( function ( i, toggle ) {
+                jQuery(this).each( function ( i, toggle ) {
                     
                     if ( options.hide ) {
-                        $(toggle).addClass( options.openClass );
-                        $(element).slideUp( options.speed );
+                        jQuery(toggle).addClass( options.openClass );
+                        jQuery(element).slideUp( options.speed );
                     } else {
-                        $(toggle).addClass( options.closeClass );
+                        jQuery(toggle).addClass( options.closeClass );
                     }
                     
-                    $(toggle).bind( options.event, function(event) {
-                        $(toggle).toggleClass( options.openClass );
-                        $(toggle).toggleClass( options.closeClass );
-                        $(element).eq(index).slideToggle( options.speed );
+                    jQuery(toggle).bind( options.event, function(event) {
+                        jQuery(toggle).toggleClass( options.openClass );
+                        jQuery(toggle).toggleClass( options.closeClass );
+                        jQuery(element).eq(index).slideToggle( options.speed );
                     });
                 });
                 
