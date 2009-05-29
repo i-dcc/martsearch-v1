@@ -103,10 +103,11 @@ MartSearch.prototype = {
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
         init_status = false;
-        log.error( "Error initializing datasets - " + textStatus + " (" + errorThrown + ")" );
+        log.error( "Error initializing datasets - " + textStatus + " ("+ XMLHttpRequest.status +")" );
         ms.message.add(
-          "Error initializing martsearch datasets - " + textStatus + " (" + errorThrown + ")",
-          "error"
+          "Error initializing martsearch datasets - " + textStatus + " ("+ XMLHttpRequest.status +")",
+          "error",
+          XMLHttpRequest.responseText
         );
       }
     });
@@ -118,7 +119,8 @@ MartSearch.prototype = {
       ms.message.add(
           "Sorry the main search index is offline - this tool will not function without "
         + "the main search index. Please check back soon.  Sorry for any inconvenience caused.",
-        "error"
+        "error",
+        undefined
       );
     };
     
@@ -158,44 +160,49 @@ MartSearch.prototype = {
     // Query the index
     var index_response = ms.index.search( search_string, start_doc );
     
-    // Fetch the pre-computed mart search terms from the index search
-    var index_values = ms.index.grouped_query_terms();
-    
-    // See if we need to paginate results
-    // (Using the jquery.pagination plugin)
-    if ( index_response.response.numFound > ms.index.docs_per_page ) {
-      jQuery('#results_pager').pagination( 
-        index_response.response.numFound,
+    // Only continue if the index has returned something... (No point otherwise!)
+    if ( index_response ) {
+      // Fetch the pre-computed mart search terms from the index search
+      var index_values = ms.index.grouped_query_terms();
+      
+      // See if we need to paginate results
+      // (Using the jquery.pagination plugin)
+      if ( index_response.response.numFound > ms.index.docs_per_page ) {
+        jQuery('#results_pager').pagination( 
+          index_response.response.numFound,
+          {
+            items_per_page:       ms.index.docs_per_page,
+            num_edge_entries:     1,
+            num_display_entries:  5,
+            current_page:         page,
+            callback:             function(page,dom_elem){ ms.pager(page,dom_elem) }
+          }
+        );
+      }
+      else {
+        jQuery("#results_pager").html("");
+      };
+
+      // Load in the doc skeleton...
+      var docs = new EJS({ url: ms.base_url + "/js/templates/docs.ejs" }).render(
         {
-          items_per_page:       ms.index.docs_per_page,
-          num_edge_entries:     1,
-          num_display_entries:  5,
-          current_page:         page,
-          callback:             function(page,dom_elem){ ms.pager(page,dom_elem) }
+          docs:           index_response.response.docs,
+          primary_field:  ms.index.primary_field,
+          datasets:       ms.datasets
         }
       );
-    }
-    else {
-      jQuery("#results_pager").html("");
-    };
-    
-    // Load in the doc skeleton...
-    var docs = new EJS({ url: ms.base_url + "/js/templates/docs.ejs" }).render(
-      {
-        docs:           index_response.response.docs,
-        primary_field:  ms.index.primary_field,
-        datasets:       ms.datasets
-      }
-    );
-    jQuery("#result_list").html(docs);
-    
-    // Load in each dataset...
-    for (var i=0; i < ms.datasets.length; i++) {
-      var ds = ms.datasets[i];
-      if ( index_values[ ds.joined_index_field ] !== undefined && index_values[ ds.joined_index_field ] !== "" ) {
-        ds.search( index_values[ ds.joined_index_field ], index_response.response.docs, ms.index.primary_field );
+      jQuery("#result_list").html(docs);
+
+      // Load in each dataset...
+      for (var i=0; i < ms.datasets.length; i++) {
+        var ds = ms.datasets[i];
+        if ( index_values[ ds.joined_index_field ] !== undefined && index_values[ ds.joined_index_field ] !== "" ) {
+          ds.search( index_values[ ds.joined_index_field ], index_response.response.docs, ms.index.primary_field );
+        };
       };
+      
     };
+    
     
     // Hide the loading indicator
     jQuery("#loading").hide();

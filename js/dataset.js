@@ -16,12 +16,14 @@ DataSet = function( params, base_url ) {
   this.enabled_attributes  = params.enabled_attributes;
   this.required_attributes = params.required_attributes;
   
-  this.template            = params.template ? this.base_url+'/js/templates/'+params.template : this.base_url+'/js/templates/default.ejs';
+  this.template            = params.template ? this.base_url+'/js/templates/'+params.template : this.base_url+'/js/templates/default_dataset.ejs';
+  if ( params.template === undefined ) {
+    this.attributes = this.fetch_all_attributes();
+  };
   
   this.custom_result_parser = params.custom_result_parser;
   
   this.message             = new Message({ base_url: base_url });
-  //this.attributes         = this.fetch_all_attributes();
   
   this.test_mode           = params.test_mode ? params.test_mode : false;
   this.debug_mode          = params.debug_mode ? params.debug_mode : false;
@@ -51,10 +53,11 @@ DataSet.prototype = {
         };
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
-        log.error( "Error fetching attribute descriptions for - "+ ds.mart_dataset +" (Error: "+ errorThrown +")" );
+        log.error( "Error fetching attribute descriptions for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")" );
         ds.message.add( 
-          "Error fetching attribute descriptions for - "+ ds.mart_dataset +" (Error: "+ errorThrown +")",
-          "error"
+          "Error fetching attribute descriptions for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")",
+          "error",
+          XMLHttpRequest.responseText
         );
       }
     });
@@ -86,42 +89,54 @@ DataSet.prototype = {
       data:     { "query": ds._biomart_xml( query ) },
       success:  function ( data ) {
         
-        if ( ds.custom_result_parser == undefined ) { results = ds._parse_biomart_data( data, docs ); }
-        else                                        { results = ds.custom_result_parser( data, ds ); };
-        
-        if ( results ) {
+        // Catch a Biomart error (as biomart doesn't send 500 messages...)
+        if ( data.search(/Query ERROR/) >= 0 ) {
+          log.error( "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query.toString().substr(0,30) +"...' (Biomart Error)" );
+          ds.message.add(
+            "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query.toString().substr(0,20) +"...' (Biomart Error)",
+            "error",
+            data
+          );
+        }
+        else {
           
-          for (var i=0; i < docs.length; i++) {
+          if ( ds.custom_result_parser == undefined ) { results = ds._parse_biomart_data( data, docs ); }
+          else                                        { results = ds.custom_result_parser( data, ds ); };
+
+          if ( results ) {
+            console.log(results);
             
-            var content_id = docs[i][ ds.joined_index_field ];
-            
-            if ( content_id !== undefined && content_id !== "" ) {
-              
-              // Figure out the DOM id
-              if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); };
-              content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
-              content_id = ds.internal_name + '_' + content_id;
-              if ( ds.debug_mode ) { log.debug('processing '+ content_id); };
-              
-              if ( results[ content_id ] ) {
-                var template = new EJS({ url: ds.template }).render({ 'results': results[ content_id ] });
-                jQuery( "#"+content_id ).html(template);
-              } else {
-                jQuery( "#"+content_id ).parent().hide();
+            for (var i=0; i < docs.length; i++) {
+              var content_id = docs[i][ ds.joined_index_field ];
+              if ( content_id !== undefined && content_id !== "" ) {
+
+                // Figure out the DOM id
+                if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); };
+                content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
+                content_id = ds.internal_name + '_' + content_id;
+                if ( ds.debug_mode ) { log.debug('processing '+ content_id); };
+
+                if ( results[ content_id ] ) {
+                  var template = new EJS({ url: ds.template }).render({ 'results': results[ content_id ], dataset: ds });
+                  jQuery( "#"+content_id ).html(template);
+                }
+                else {
+                  jQuery( "#"+content_id ).parent().hide();
+                };
+
               };
-              
             };
-            
           };
           
         };
         
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
-        log.error( "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query +"' (Error: "+ errorThrown +")" );
+        log.error( "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query +"' ("+ XMLHttpRequest.status +")" );
         ds.message.add(
-          "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query +"' (Error: "+ errorThrown +")",
-          "error"
+          "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query +"' ("+ XMLHttpRequest.status +")",
+          "error",
+          XMLHttpRequest.responseText
         );
       }
     });
@@ -175,6 +190,8 @@ DataSet.prototype = {
   *                     used within the DOM of the results list.
   */
   _parse_biomart_data: function ( data, docs ) {
+    var ds = this;
+    
     // Split the tsv string on newlines, then each line on tabs
     // before building into the JSON output
     var array_of_hashes = [];
@@ -200,26 +217,28 @@ DataSet.prototype = {
         var tmp_hash = {};
         var data_by_item = data_by_line[i].split("\t");
         for (var j=0; j < data_by_item.length; j++) {
-          tmp_hash[ this.enabled_attributes[j] ] = data_by_item[j];
+          tmp_hash[ ds.enabled_attributes[j] ] = data_by_item[j];
         };
         
         // Filter out unwanted rows...
         var save_this_row = true;
-        if ( this.required_attributes != undefined ) {
-          for (var j=0; j < this.required_attributes.length; j++) {
-            if ( tmp_hash[ this.required_attributes[j] ] === "" ) {
+        if ( ds.required_attributes !== undefined ) {
+          for (var j=0; j < ds.required_attributes.length; j++) {
+            if ( tmp_hash[ ds.required_attributes[j] ] === "" ) {
               save_this_row = false;
             };
           };
         };
         
         if ( save_this_row ) {
-          if ( data_by_joined_field[ tmp_hash[ this.joined_index_field] ] === undefined ) {
-            data_by_joined_field[ tmp_hash[ this.joined_index_field] ] = [];
+          if ( data_by_joined_field[ tmp_hash[ ds.joined_filter ] ] === undefined ) {
+            data_by_joined_field[ tmp_hash[ ds.joined_filter] ] = [];
           };
-          data_by_joined_field[ tmp_hash[ this.joined_index_field ] ].push(tmp_hash);
+          data_by_joined_field[ tmp_hash[ ds.joined_filter ] ].push(tmp_hash);
         };
     };
+    console.log("data_by_joined_field");
+    console.log(data_by_joined_field);
     
     /**
     * Finally, if we have any results to show manipulate these array elements 
@@ -234,7 +253,7 @@ DataSet.prototype = {
 
         // Calculate the content_id - The unique DOM element identifier that this
         // returned data will be injected into
-        var content_id = docs[i][ this.joined_index_field ];
+        var content_id = docs[i][ ds.joined_index_field ];
         if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); };
         content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
 
@@ -242,9 +261,9 @@ DataSet.prototype = {
         var tmp_array = [];
 
         // Now collect each row of data that matches this 'joined_index_field'
-        if ( typeof docs[i][ this.joined_index_field ] == 'string' ) {
+        if ( typeof docs[i][ ds.joined_index_field ] == 'string' ) {
           // We only have a single value to match to...
-          var index_item = docs[i][ this.joined_index_field ];
+          var index_item = docs[i][ ds.joined_index_field ];
           if ( data_by_joined_field[ index_item ] != undefined ) {
             for (var j=0; j < data_by_joined_field[ index_item ].length; j++) {
               tmp_array.push( data_by_joined_field[ index_item ][j] );
@@ -253,8 +272,8 @@ DataSet.prototype = {
         }
         else {
           // We have an array of values to match to...
-          for (var j=0; j < docs[i][ this.joined_index_field ].length; j++) {
-            var index_item = docs[i][ this.joined_index_field ][j];
+          for (var j=0; j < docs[i][ ds.joined_index_field ].length; j++) {
+            var index_item = docs[i][ ds.joined_index_field ][j];
 
             if ( data_by_joined_field[ index_item ] != undefined ) {
               for (var k=0; k < data_by_joined_field[ index_item ].length; k++) {
@@ -264,7 +283,7 @@ DataSet.prototype = {
           };
         };
 
-        data_to_return[ this.internal_name + '_' + content_id ] = tmp_array;
+        data_to_return[ ds.internal_name + '_' + content_id ] = tmp_array;
       };
       
     }

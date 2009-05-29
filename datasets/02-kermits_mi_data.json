@@ -1,12 +1,11 @@
 {
   internal_name:      "kermits_mi_data",
   display_name:       "IKMC Mice",
-  url:                "/htgtdev/biomart",
-  full_url:           "http://htgt.internal.sanger.ac.uk:9002/dev/martsearch/htgtdev/biomart",
+  url:                "/htgt/biomart",
+  full_url:           "http://www.sanger.ac.uk/htgt/biomart",
   mart_dataset:       "kermits",
   joined_index_field: "escell",
   joined_filter:      "escell_clone_name",
-  template:           "generic_one_to_many.ejs",
   enabled_attributes: [
     "sponsor",
     "escell_clone_name",

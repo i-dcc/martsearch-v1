@@ -15,6 +15,7 @@
     <script type="text/javascript" src="js/utils/ejs/ejs_fulljslint.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/utils/jquery/jquery.pagination.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/utils/jquery/jquery.protify.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/utils/jquery/jquery.togglecontrol.js" charset="utf-8"></script>
     
     <!-- The MartSearch App -->
     <script type="text/javascript" src="js/support.js" charset="utf-8"></script>
@@ -25,7 +26,7 @@
     <link rel="stylesheet" href="css/martsearch.css" type="text/css" media="screen" charset="utf-8" />
     <script type="text/javascript" charset="utf-8">
       jQuery(document).ready(function() {
-        var ms = new MartSearch({ base_url: "/martsearch" });
+        ms = new MartSearch({ base_url: "/martsearch" });
         ms.init();
       });
     </script>
