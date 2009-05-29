@@ -32,6 +32,7 @@ MartSearch = function ( params ) {
   });
   
   // Configure and instantiate the index object
+  jQuery.extend( params.index_conf, { base_url: ms.base_url } );
   ms.index = new Index( params.index_conf );
   
   // Load the browsable content configuration
