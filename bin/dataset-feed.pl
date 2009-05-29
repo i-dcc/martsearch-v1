@@ -25,7 +25,7 @@ print header(
 );
 
 # Change directory
-chdir('../datasets');
+chdir('../conf/datasets');
 
 my $return_arrayref;
 
