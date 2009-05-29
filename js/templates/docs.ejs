@@ -7,7 +7,7 @@
           var is_present_id = docs[i][ datasets[j].joined_index_field ];
           if ( is_present_id !== undefined && is_present_id !== "" ) {
             if ( typeof is_present_id != 'string' ) { is_present_id = is_present_id.join('_'); };
-            is_present_id = is_present_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
+            is_present_id = is_present_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).substr(0,20);
             is_present_id = datasets[j].internal_name + '_' + is_present_id + '_is_present';
         %>
         <span id="<%= is_present_id %>" class="dataset_is_present"><%= datasets[j].display_name.replace( /\s/g, "&nbsp;" ) %></span>
@@ -22,7 +22,7 @@
           var content_id = docs[i][ datasets[j].joined_index_field ];
           if ( content_id !== undefined && content_id !== "" ) {
             if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); };
-            content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
+            content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).substr(0,20);
         %>
           <div class="dataset ui-widget-content ui-corner-all">
             <h3 class="dataset_title"><%= datasets[j].display_name %></h3>

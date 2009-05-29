@@ -16,15 +16,20 @@ DataSet = function( params, base_url ) {
   this.enabled_attributes  = params.enabled_attributes;
   this.required_attributes = params.required_attributes;
   
+  // Custom template?
   this.template            = params.template ? this.base_url+'/js/templates/'+params.template : this.base_url+'/js/templates/default_dataset.ejs';
   if ( params.template === undefined ) {
     this.fetch_all_attributes();
   }
   
+  // Custom functions
   this.custom_result_parser = params.custom_result_parser;
+  this.post_display_hook    = params.post_display_hook;
   
+  // Initiate messaging
   this.message             = new Message({ base_url: base_url });
   
+  // Test/debug mode?
   this.test_mode           = params.test_mode ? params.test_mode : false;
   this.debug_mode          = params.debug_mode ? params.debug_mode : false;
 };
@@ -157,14 +162,13 @@ DataSet.prototype = {
 
               // Figure out the DOM id
               if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); }
-              content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
+              content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).substr(0,20);
               content_id = ds.internal_name + '_' + content_id;
               if ( ds.debug_mode ) { log.debug('processing '+ content_id); }
 
               if ( results[ content_id ] !== undefined && results[ content_id ].length !== 0 ) {
                 var template = new EJS({ url: ds.template }).render({ 'results': results[ content_id ], dataset: ds });
                 jQuery( "#"+content_id ).html(template);
-                
               }
               else {
                 jQuery( "#"+content_id ).parent().parent().fadeOut("fast");
@@ -296,7 +300,7 @@ DataSet.prototype = {
           // returned data will be injected into
           var content_id = docs[i][ ds.joined_index_field ];
           if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); }
-          content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).substr(0,20);
+          content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).substr(0,20);
 
           // Set up a temp array to put all of our info into...
           var tmp_array = [];
