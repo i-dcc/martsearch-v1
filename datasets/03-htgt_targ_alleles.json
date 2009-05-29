@@ -1,4 +1,6 @@
 {
+  active:             true,
+  debug_mode:         true,
   internal_name:      "htgt_targ_alleles",
   display_name:       "IKMC Targeted Alleles",
   url:                "/htgt/biomart",

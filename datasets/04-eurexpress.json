@@ -1,4 +1,6 @@
 {
+  active:             true,
+  debug_mode:         false,
   internal_name:      "eurexpress",
   display_name:       "Eurexpress",
   url:                "/eurexpress/biomart",
@@ -15,5 +17,3 @@
     "ass_assay_id_key"
   ]
 }
-
-
