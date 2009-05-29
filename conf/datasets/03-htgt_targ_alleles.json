@@ -120,9 +120,9 @@
     
     return results;
   },
-  post_display_hook: function() {
-    jQuery("a[rel^='prettyPhoto']").prettyPhoto();
-    jQuery('.htgt_targ_allele_progress_clones_toggle').toggleControl('.htgt_targ_allele_progress_clones_content', { speed: "fast" });
-    jQuery('.htgt_targ_allele_progress_toggle').toggleControl('.htgt_targ_allele_progress_content', { speed: "fast" });
+  post_display_hook: function( content_id ) {
+    jQuery('#'+content_id+" a[rel^='prettyPhoto']").prettyPhoto();
+    jQuery('#'+content_id+' .htgt_targ_allele_progress_clones_toggle').toggleControl('#'+content_id+' .htgt_targ_allele_progress_clones_content', { speed: "fast" });
+    jQuery('#'+content_id+' .htgt_targ_allele_progress_toggle').toggleControl('#'+content_id+' .htgt_targ_allele_progress_content', { speed: "fast" });
   }
 }

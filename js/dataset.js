@@ -170,6 +170,9 @@ DataSet.prototype = {
               if ( results[ content_id ] !== undefined && results[ content_id ].length !== 0 ) {
                 var template = new EJS({ url: ds.template }).render({ 'results': results[ content_id ], dataset: ds });
                 jQuery( "#"+content_id ).html(template);
+                
+                // Run any post display functions
+                if ( ds.post_display_hook ) { ds.post_display_hook( content_id ); }
               }
               else {
                 jQuery( "#"+content_id ).parent().parent().fadeOut("fast");
@@ -180,8 +183,6 @@ DataSet.prototype = {
           }
         }
         
-        // Run any post display functions
-        if ( ds.post_display_hook ) { ds.post_display_hook(); }
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
         log.error( "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query +"' ("+ XMLHttpRequest.status +")" );

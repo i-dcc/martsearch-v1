@@ -271,21 +271,32 @@
                   allele_picture_text += " - <a href='http://www.sanger.ac.uk/htgt/report/gene_report?project_id=" + project["htgt_project_id"] + "' target='_blank'>view this in HTGT</a>";
                 %>
                 
+                <% if ( project["ensembl_gene_id"] ) { %>
                 <div class="htgt_targ_allele_box ui-widget-content ui-corner-all">
                   <img src="<%= dataset.base_url %>/images/e-ensembl.png" alt="Ensembl" />
                   <ul>
                     <li><a href="<%= ensembl_link %>" target="_blank">view this allele in Ensembl</a></li>
-                    <li><a href="http://www.i-dcc.org/dev/ensembl-images/normal-track/<%= project["htgt_project_id"] %>.png" class="image" rel="prettyPhoto" title="<%= ensembl_picture_text %>">view/download a pre-prepared Ensemble allele graphic (suitable for publications)</a></li>
+                    <li><a href="http://www.i-dcc.org/dev/ensembl-images/normal-track/<%= project["htgt_project_id"] %>.png" class="image" rel="prettyPhoto" title="<%= ensembl_picture_text %>">view/download a pre-prepared Ensembl allele graphic (suitable for publications)</a></li>
                   </ul>
                 </div>
+                <% } %>
                 
+                <% if (
+                        ( project["targvec_plate"] && project["targvec_well"] && project["targvec_distribute"] === "yes" ) 
+                     || ( project["escells"] && project["escells"].length > 0 )
+                      ) { %>
                 <div class="htgt_targ_allele_box ui-widget-content ui-corner-all">
                   <img src="<%= dataset.base_url %>/images/sanger_logo.png" alt="The Wellcome Trust Sanger Institute" />
                   <ul>
-                    <li><a href="http://www.i-dcc.org/dev/all_vector_complete_allele_pics/<%= project["htgt_project_id"] %>.html?iframe=true&amp;width=90%&amp;height=60%" class="image" rel="prettyPhoto" title="<%= vector_picture_text %>">view a graphical representation of the targeting vector</a></li>
-                    <li><a href="http://www.i-dcc.org/dev/allele_pages/<%= project["htgt_project_id"] %>.html?iframe=true&amp;width=90%&amp;height=40%" class="image" rel="prettyPhoto" title="<%= allele_picture_text %>">view a graphical representation of the allele</a></li>
+                    <% if ( project["targvec_plate"] && project["targvec_well"] && project["targvec_distribute"] === "yes" ) { %>
+                    <li><a href="http://www.i-dcc.org/dev/all_vector_complete_allele_pics/<%= project["htgt_project_id"] %>.html?iframe=true&amp;width=90%&amp;height=70%" class="image" rel="prettyPhoto" title="<%= vector_picture_text %>">view a graphical representation of the targeting vector</a></li>
+                    <% } %>
+                    <% if ( project["escells"] && project["escells"].length > 0 ) { %>
+                    <li><a href="http://www.i-dcc.org/dev/allele_pages/<%= project["htgt_project_id"] %>.html?iframe=true&amp;width=90%&amp;height=50%" class="image" rel="prettyPhoto" title="<%= allele_picture_text %>">view a graphical representation of the allele</a></li>
+                    <% } %>
                   </ul>
                 </div>
+                <% } %>
                 
               </td>
               <td style="text-align:left;">
