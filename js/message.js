@@ -21,7 +21,7 @@ Message.prototype = {
       async:    true,
       data:     {},
       success:  function( data ) {
-        if ( data != "" ) { jQuery("#messages").append( data ); };
+        if ( data !== "" ) { jQuery("#messages").append( data ); }
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
         status = false;
@@ -67,12 +67,12 @@ Message.prototype = {
       }
       else {
         message_string += '</p></div>';
-      };
+      }
     }
     else if ( state === 'highlight' ) {
       message_string += '<span class="ui-icon ui-icon-info"></span>';
       message_string += '<p>' + message + '</p></div>';
-    };
+    }
     
     jQuery("#messages").append( message_string ).show("fast");
     jQuery('#errortoggle'+timestamp).toggleControl('#errormsg'+timestamp);

@@ -21,8 +21,8 @@ MartSearch = function ( params ) {
       url:            "/solr",
       primary_field:  "marker_symbol",
       docs_per_page:  10
-    }
-  };
+    };
+  }
   this.index = new Index( index_conf );
   
   // Instantiate the messaging object
@@ -32,7 +32,7 @@ MartSearch = function ( params ) {
   this.datasets = [];
   
   this.current_query = "";
-}
+};
 
 MartSearch.prototype = {
   
@@ -96,8 +96,8 @@ MartSearch.prototype = {
       success:  function (datasets) {
         for (var i=0; i < datasets.length; i++) {
           var ds = new DataSet( datasets[i], ms.base_url );
-          ms.datasets.push(ds)
-        };
+          ms.datasets.push(ds);
+        }
         log.info('[config] finished loading datasets');
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
@@ -114,15 +114,14 @@ MartSearch.prototype = {
     /**
     * Make sure the index is up
     */
-    if ( ms.index.is_alive() != true ) {
+    if ( ms.index.is_alive() !== true ) {
       init_status = false;
       ms.message.add(
-          "Sorry the main search index is offline - this tool will not function without "
-        + "the main search index. Please check back soon.  Sorry for any inconvenience caused.",
+        "Sorry the main search index is offline - this tool will not function without the main search index. Please check back soon.  Sorry for any inconvenience caused.",
         "error",
         undefined
       );
-    };
+    }
     
     /**
     * Finish up
@@ -151,10 +150,10 @@ MartSearch.prototype = {
     
     // Calculate what our starting doc is
     var start_doc = 0;
-    if ( page ) { start_doc = page * ms.index.docs_per_page; };
+    if ( page ) { start_doc = page * ms.index.docs_per_page; }
     
     // Clear any messages and previous results
-    if ( jQuery("#messages").html() != "" ) { ms.message.clear(); };
+    if ( jQuery("#messages").html() !== "" ) { ms.message.clear(); }
     jQuery("#result_list").html("");
     jQuery(".pagination").html("");
     
@@ -186,20 +185,20 @@ MartSearch.prototype = {
             num_edge_entries:     1,
             num_display_entries:  5,
             current_page:         page,
-            callback:             function(page,dom_elem){ ms.pager(page,dom_elem) }
+            callback:             function(page,dom_elem){ ms.pager(page,dom_elem); }
           }
         );
-      };
+      }
 
       // Load in each dataset...
       for (var i=0; i < ms.datasets.length; i++) {
         var ds = ms.datasets[i];
         if ( index_values[ ds.joined_index_field ] !== undefined && index_values[ ds.joined_index_field ] !== "" ) {
           ds.search( index_values[ ds.joined_index_field ], index_response.response.docs, ms.index.primary_field );
-        };
-      };
+        }
+      }
       
-    };
+    }
     
     // Make the dataset 'bubbles' toggleable
     jQuery('.dataset_title').toggleControl('.dataset_content', { hide: false, speed: "fast" });
@@ -213,7 +212,7 @@ MartSearch.prototype = {
     }
     else {
       jQuery('.doc_title').toggleControl('.doc_content', { hide: false, speed: "fast" });
-    };
+    }
     
     // Hide the loading indicator
     jQuery("#loading").fadeOut("fast");

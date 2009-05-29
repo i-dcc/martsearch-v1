@@ -6,7 +6,7 @@
 jQuery.extend({
   keys: function(obj){
     var a = [];
-    jQuery.each(obj, function(k){ a.push(k) });
+    jQuery.each(obj, function(k){ a.push(k); });
     return a;
   }
 });
@@ -29,5 +29,5 @@ if ( window.console === undefined ) {
   window.console = {
     log: function() {}
   };
-};
+}
 
