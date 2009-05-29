@@ -131,6 +131,15 @@
   table.htgt_targ_allele_progress td.end_warn {
     background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-end-warn.png');
   }
+  
+  div.htgt_targ_allele_box {
+    padding: 5px;
+    margin: 4px;
+  }
+  
+  div.htgt_targ_allele_box ul li {
+    margin: 0 !important;
+  }
 </style>
 
 <!-- Draw the progress bar -->
@@ -215,19 +224,19 @@
         <div class="htgt_targ_allele_progress_content">
           <table>
             <tr>
-              <td width="310px" style="vertical-align:top;">
+              <td width="35%" style="vertical-align:top;text-align:left;">
                 <%
                   // Configure our link out to Ensembl...
                   var tracks_to_change = {
                     contig:                                         "normal",
                     ruler:                                          "normal",
                     scalebar:                                       "normal",
-                    transcript_core_ensembl:                        "collapsed_label",
-                    transcript_vega_otter:                          "collapsed_label",
+                    transcript_core_ensembl:                        "transcript_label",
+                    transcript_vega_otter:                          "transcript_label",
+                    alignment_compara_364_constrained:              "compact",
                     "das:http://das.sanger.ac.uk/das/KO_vectors":   "normal",
 
                     alignment_compara_364_scores:                   "off",
-                    alignment_compara_364_constrained:              "off",
                     chr_band_core:                                  "off",
                     dna_align_cdna_cDNA_update:                     "off",
                     dna_align_core_CCDS:                            "off",
@@ -249,11 +258,35 @@
                   var ensembl_link = "http://www.ensembl.org/Mus_musculus/Location/View";
                   ensembl_link += "?g=" + project["ensembl_gene_id"] + ";";
                   ensembl_link += "contigviewbottom=" + settings.join(",");
+                  
+                  var ensembl_picture_text = "Knockout design " + project["design_id"];
+                  ensembl_picture_text += " (" + project["design_plate"] + "_" + project["design_well"] + ")";
+                  ensembl_picture_text += " for " + project["marker_symbol"] + " (" + project["ensembl_gene_id"] + ")";
+                  ensembl_picture_text += " - <a href='" + ensembl_link + "' target='_blank'>view this allele in Ensembl</a>"
 
+                  var vector_picture_text = "HTGT targeting vector for " + project["marker_symbol"];
+                  vector_picture_text += " - <a href='http://www.sanger.ac.uk/htgt/report/gene_report?project_id=" + project["htgt_project_id"] + "' target='_blank'>view this in HTGT</a>";
+                  
+                  var allele_picture_text = "HTGT allele for " + project["marker_symbol"];
+                  allele_picture_text += " - <a href='http://www.sanger.ac.uk/htgt/report/gene_report?project_id=" + project["htgt_project_id"] + "' target='_blank'>view this in HTGT</a>";
                 %>
-                <a href="<%= ensembl_link %>">
-                  <img src="http://www.i-dcc.org/dev/ensembl-images/normal-track/<%= project["htgt_project_id"] %>.png" height="200px" width="300px" />
-                </a>
+                
+                <div class="htgt_targ_allele_box ui-widget-content ui-corner-all">
+                  <img src="<%= dataset.base_url %>/images/e-ensembl.png" alt="Ensembl" />
+                  <ul>
+                    <li><a href="<%= ensembl_link %>" target="_blank">view this allele in Ensembl</a></li>
+                    <li><a href="http://www.i-dcc.org/dev/ensembl-images/normal-track/<%= project["htgt_project_id"] %>.png" class="image" rel="prettyPhoto" title="<%= ensembl_picture_text %>">view/download a pre-prepared Ensemble allele graphic (suitable for publications)</a></li>
+                  </ul>
+                </div>
+                
+                <div class="htgt_targ_allele_box ui-widget-content ui-corner-all">
+                  <img src="<%= dataset.base_url %>/images/sanger_logo.png" alt="The Wellcome Trust Sanger Institute" />
+                  <ul>
+                    <li><a href="http://www.i-dcc.org/dev/all_vector_complete_allele_pics/<%= project["htgt_project_id"] %>.html?iframe=true&amp;width=90%&amp;height=60%" class="image" rel="prettyPhoto" title="<%= vector_picture_text %>">view a graphical representation of the targeting vector</a></li>
+                    <li><a href="http://www.i-dcc.org/dev/allele_pages/<%= project["htgt_project_id"] %>.html?iframe=true&amp;width=90%&amp;height=40%" class="image" rel="prettyPhoto" title="<%= allele_picture_text %>">view a graphical representation of the allele</a></li>
+                  </ul>
+                </div>
+                
               </td>
               <td style="text-align:left;">
                 <a href="http://www.sanger.ac.uk/htgt/report/gene_report?project_id=<%= project["htgt_project_id"] %>" target="_blank">View this allele in HTGT</a>
@@ -349,6 +382,7 @@
                   <p>&nbsp;&nbsp;&nbsp;<em>None available...</em></p>
                 <% } %>
 
+                <!--
                 <h4>Intermediate Vector</h4>
                 <% if ( project["intvec_plate"] && project["intvec_well"] && project["intvec_distribute"] === "yes" ) { %>
                   <table class="with_border">
@@ -377,7 +411,8 @@
                 <% } else { %>
                   <p>&nbsp;&nbsp;&nbsp;<em>None available...</em></p>
                 <% } %>
-
+                -->
+                
               </td>
             </tr>
           </table>

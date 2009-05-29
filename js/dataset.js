@@ -151,11 +151,12 @@ DataSet.prototype = {
         }
         else {
           
+          // Parse the returned results
           if ( ds.custom_result_parser === undefined ) { results = ds._parse_biomart_data( data, docs ); }
           else                                         { results = ds.custom_result_parser( data, ds ); }
-
           if ( ds.debug_mode ) { if ( typeof console.log !== "undefined" ) { console.log(results); } }
           
+          // Now display the results for each 'doc'
           for (var i=0; i < docs.length; i++) {
             var content_id = docs[i][ ds.joined_index_field ];
             if ( content_id !== undefined && content_id !== "" ) {
@@ -179,6 +180,7 @@ DataSet.prototype = {
           }
         }
         
+        // Run any post display functions
         if ( ds.post_display_hook ) { ds.post_display_hook(); }
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
