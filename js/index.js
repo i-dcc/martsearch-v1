@@ -64,6 +64,7 @@ Index.prototype = {
       data: {
         wt:         "json",
         q:          query,
+        sort:       idx.primary_field + " asc",
         start:      start_pos,
         rows:       idx.docs_per_page
       },
