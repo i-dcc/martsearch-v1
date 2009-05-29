@@ -1,0 +1,30 @@
+<table>
+  <% for (var i=0; i < ms.browsable_content.length; i++) { %>
+    <% var browser = ms.browsable_content[i]; %>
+    <tr>
+      <th><%= browser.display_name %>:</th>
+      <td>
+        <ul class="browse_list">
+          <% for (var j=0; j < browser.options.length; j++) { %>
+            <% var option = browser.options[j]; %>
+            <li class="ui-button ui-state-default ui-corner-all">
+              <% if ( option instanceof Array ) { %>
+                <%
+                  var search_term = browser.index_field + ":" + option[1];
+                  if ( browser.exact_search !== true ) { search_term += "*"; }
+                %>
+                <a href="#" rel="<%= search_term %>"><%= option[0] %></a>
+              <% } else { %>
+                <%
+                  var search_term = browser.index_field + ":" + option;
+                  if ( browser.exact_search !== true ) { search_term += "*"; }
+                %>
+                <a href="#" rel="<%= search_term %>"><%= option %></a>
+              <% } %>
+            </li>
+          <% } %>
+        </ul>
+      </td>
+    </tr>
+  <% } %>
+</table>

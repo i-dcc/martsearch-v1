@@ -21,7 +21,7 @@ Message.prototype = {
       async:    true,
       data:     {},
       success:  function( data ) {
-        if ( data !== "" ) { jQuery("#messages").append( data ); }
+        if ( data !== "" ) { jQuery(".messages").append( data ); }
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
         status = false;
@@ -42,9 +42,9 @@ Message.prototype = {
   * @alias  Message.clear
   */
   clear: function() {
-    jQuery("#messages").hide("fast");
-    jQuery("#messages").html("");
-    jQuery("#messages").show("fast");
+    jQuery(".messages").hide("fast");
+    jQuery(".messages").html("");
+    jQuery(".messages").show("fast");
   },
   
   /*
@@ -74,7 +74,7 @@ Message.prototype = {
       message_string += '<p>' + message + '</p></div>';
     }
     
-    jQuery("#messages").append( message_string ).show("fast");
+    jQuery(".messages").append( message_string ).show("fast");
     jQuery('#errortoggle'+timestamp).toggleControl('#errormsg'+timestamp);
   }
 };

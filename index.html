@@ -71,6 +71,9 @@
         <!-- main search tab -->
         <div id="search">
           
+          <!-- loading marker -->
+          <span id="search_loading" class="loading" style="display: none;"><img src="images/loading.gif" alt="searching..." /></span>
+          
           <!-- search form -->
           <div class="center ui-widget">
             <form id="mart_search" action="search" method="get" accept-charset="utf-8">
@@ -80,17 +83,14 @@
             </form>
           </div>
           
-          <!-- loading marker -->
-          <span id="loading" style="display: none;"><img src="images/loading.gif" alt="searching..." /></span>
-          
           <!-- messages for the user -->
-          <div id="messages" class="ui-widget"></div>
+          <div id="search_messages" class="messages ui-widget"></div>
           
           <!-- results section -->
-          <div id="results">
-            <div id="results_pager_top" class="pagination"></div>
-            <ul id="result_list" class="result_list"></ul>
-            <div id="results_pager_bottom" class="pagination"></div>
+          <div id="search_results" class="results">
+            <div id="search_results_pager_top" class="pagination"></div>
+            <ul id="search_result_list" class="result_list"></ul>
+            <div id="search_results_pager_bottom" class="pagination"></div>
             <div class="clear"></div>
           </div>
           
@@ -99,7 +99,27 @@
         </div>
         
         <!-- browse tab -->
-        <div id="browse"></div>
+        <div id="browse">
+          
+          <!-- loading marker -->
+          <span id="browse_loading" class="loading" style="display: none;"><img src="images/loading.gif" alt="searching..." /></span>
+          
+          <h2>Browse our data by...</h2>
+          <div id="browse_controls">
+            
+          </div>
+          
+          <!-- messages for the user -->
+          <div id="browse_messages" class="messages ui-widget"></div>
+          
+          <!-- results section -->
+          <div id="browse_results" class="results">
+            <div id="browse_results_pager_top" class="pagination"></div>
+            <ul id="browse_result_list" class="result_list"></ul>
+            <div id="browse_results_pager_bottom" class="pagination"></div>
+            <div class="clear"></div>
+          </div>
+        </div>
         
         <!-- configuration options tab -->
         <div id="configure"></div>
