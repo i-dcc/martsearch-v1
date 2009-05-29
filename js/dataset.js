@@ -178,9 +178,8 @@ DataSet.prototype = {
             }
           }
         }
-          
-
         
+        if ( ds.post_display_hook ) { ds.post_display_hook(); }
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
         log.error( "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query +"' ("+ XMLHttpRequest.status +")" );
