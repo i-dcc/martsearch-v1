@@ -3,35 +3,45 @@
 * whole search application.
 */
 MartSearch = function ( params ) {
-  this.base_url = params.base_url ? params.base_url : "";
+  var ms = this;
   
-  // Configure and instantiate the index object
-  var index_conf = {};
-  if ( params.index_conf ) {
-    index_conf = {
-      base_url:       this.base_url,
-      url:            params.index_conf.url ? params.index_conf.url : "/solr",
-      primary_field:  params.primary_field,
-      docs_per_page:  params.index_conf.docs_per_page ? params.index_conf.docs_per_page : 10
-    };
-  }
-  else {
-    index_conf = {
-      base_url:       this.base_url,
-      url:            "/solr",
-      primary_field:  "marker_symbol",
-      docs_per_page:  10
-    };
-  }
-  this.index = new Index( index_conf );
+  // Set the base url if appropriate
+  ms.base_url = params.base_url ? params.base_url : "";
   
   // Instantiate the messaging object
-  this.message = new Message({ base_url: this.base_url });
+  ms.message = new Message({ base_url: ms.base_url });
+  
+  // Load in the config file
+  jQuery.ajax({
+    url:      ms.base_url + "/conf/martsearch.json",
+    type:     'GET',
+    dataType: 'json',
+    async:    false,
+    success:  function (conf) {
+      jQuery.extend( params, conf );
+    },
+    error:    function( XMLHttpRequest, textStatus, errorThrown ) {
+      init_status = false;
+      log.error( "Error initializing MartSearch - " + textStatus + " ("+ XMLHttpRequest.status +")" );
+      ms.message.add(
+        "Error initializing MartSearch - " + textStatus + " ("+ XMLHttpRequest.status +") please reload the page.",
+        "error",
+        XMLHttpRequest.responseText
+      );
+    }
+  });
+  
+  // Configure and instantiate the index object
+  jQuery.extend( params.index_conf, { base_url: ms.base_url } );
+  ms.index = new Index( params.index_conf );
+  
+  // Load the browsable content configuration
+  ms.browsable_content = params.browsable_content;
   
   // Placeholder for dataset objects
-  this.datasets = [];
+  ms.datasets = [];
   
-  this.current_query = "";
+  ms.current_query = "";
 };
 
 MartSearch.prototype = {
@@ -59,31 +69,13 @@ MartSearch.prototype = {
     
     // Override the submit function on the search form
     jQuery('#mart_search').submit( function(){
-      ms.current_query = jQuery('#query').val();
-      ms.search( ms.current_query, 0 );
+      ms.search( jQuery('#query').val(), 0, 'search' );
       return false;
     });
     
     // Activate links between the tabs
     jQuery('a.help_link').click( function()  { jQuery('#tabs').tabs('select', 3); return false; } );
     jQuery('a.about_link').click( function() { jQuery('#tabs').tabs('select', 4); return false; } );
-    
-    // Make form buttons respond to mouse interaction
-    jQuery(".ui-button:not(.ui-state-disabled)")
-      .hover(
-        function(){ jQuery(this).addClass("ui-state-hover"); },
-        function(){ jQuery(this).removeClass("ui-state-hover"); }
-      )
-      .mousedown(function(){
-        jQuery(this).parents('.ui-buttonset-single:first').find(".ui-button.ui-state-active").removeClass("ui-state-active");
-        if( jQuery(this).is('.ui-state-active.ui-button-toggleable, .ui-buttonset-multi .ui-state-active') ){ jQuery(this).removeClass("ui-state-active"); }
-        else { jQuery(this).addClass("ui-state-active"); }	
-      })
-      .mouseup(function(){
-        if(! jQuery(this).is('.ui-button-toggleable, .ui-buttonset-single .ui-button,  .ui-buttonset-multi .ui-button') ){
-          jQuery(this).removeClass("ui-state-active");
-        }
-      });
     
     /**
     * Load in the dataset config files
@@ -133,6 +125,32 @@ MartSearch.prototype = {
     // Load any stored messages
     ms.message.init();
     
+    // Build the browsable content
+    if ( ms.browsable_content ) {
+      var browsers = new EJS({ url: ms.base_url + "/js/templates/martsearch_browse.ejs" }).render({ ms: ms });
+      jQuery("#browse_controls").html(browsers);
+      jQuery("#browse_controls ul.browse_list a").click( function() {
+        ms.search( jQuery(this).attr("rel"), 0, "browse" );
+      });
+    };
+    
+    // Make form buttons respond to mouse interaction
+    jQuery(".ui-button:not(.ui-state-disabled)")
+      .hover(
+        function(){ jQuery(this).addClass("ui-state-hover"); },
+        function(){ jQuery(this).removeClass("ui-state-hover"); }
+      )
+      .mousedown(function(){
+        jQuery(this).parents('.ui-buttonset-single:first').find(".ui-button.ui-state-active").removeClass("ui-state-active");
+        if( jQuery(this).is('.ui-state-active.ui-button-toggleable, .ui-buttonset-multi .ui-state-active') ){ jQuery(this).removeClass("ui-state-active"); }
+        else { jQuery(this).addClass("ui-state-active"); }	
+      })
+      .mouseup(function(){
+        if(! jQuery(this).is('.ui-button-toggleable, .ui-buttonset-single .ui-button,  .ui-buttonset-multi .ui-button') ){
+          jQuery(this).removeClass("ui-state-active");
+        }
+      });
+    
     // If all goes well, return true.
     return init_status;
   },
@@ -140,22 +158,23 @@ MartSearch.prototype = {
   /**
   *
   */
-  search: function ( search_string, page ) {
+  search: function ( search_string, page, search_or_browse ) {
     
     // Set the scope
     var ms = this;
+    ms.current_query = search_string;
     
     // Show the loading indicator
-    jQuery("#loading").fadeIn("fast");
+    jQuery("#"+search_or_browse+"_loading").fadeIn("fast");
     
     // Calculate what our starting doc is
     var start_doc = 0;
     if ( page ) { start_doc = page * ms.index.docs_per_page; }
     
     // Clear any messages and previous results
-    if ( jQuery("#messages").html() !== "" ) { ms.message.clear(); }
-    jQuery("#result_list").html("");
-    jQuery(".pagination").html("");
+    if ( jQuery(".messages").html() !== "" ) { ms.message.clear(); }
+    jQuery("#"+search_or_browse+"_result_list").html("");
+    jQuery("#"+search_or_browse+"_results .pagination").html("");
     
     // Query the index
     var index_response = ms.index.search( search_string, start_doc );
@@ -173,19 +192,19 @@ MartSearch.prototype = {
           datasets:       ms.datasets
         }
       );
-      jQuery("#result_list").html(docs);
+      jQuery("#"+search_or_browse+"_result_list").html(docs);
       
       // See if we need to paginate results
       // (Using the jquery.pagination plugin)
       if ( index_response.response.numFound > ms.index.docs_per_page ) {
-        jQuery('.pagination').pagination( 
+        jQuery("#"+search_or_browse+"_results .pagination").pagination( 
           index_response.response.numFound,
           {
             items_per_page:       ms.index.docs_per_page,
             num_edge_entries:     1,
             num_display_entries:  5,
             current_page:         page,
-            callback:             function(page,dom_elem){ ms.pager(page,dom_elem); }
+            callback:             function(page,dom_elem){ ms._pager(page,dom_elem,search_or_browse); }
           }
         );
       }
@@ -207,15 +226,15 @@ MartSearch.prototype = {
     * Make the doc 'bubbles' toggleable, and if there is a lot of results 
     * to go through, collapse them...
     */
-    if ( index_response && index_response.response.numFound > ms.index.docs_per_page ) {
-      jQuery('.doc_title').toggleControl('.doc_content', { speed: "fast" });
-    }
-    else {
+    //if ( index_response && index_response.response.numFound > ms.index.docs_per_page ) {
+    //  jQuery('.doc_title').toggleControl('.doc_content', { speed: "fast" });
+    //}
+    //else {
       jQuery('.doc_title').toggleControl('.doc_content', { hide: false, speed: "fast" });
-    }
+    //}
     
     // Hide the loading indicator
-    jQuery("#loading").fadeOut("fast");
+    jQuery("#"+search_or_browse+"_loading").fadeOut("fast");
     
     return false;
   },
@@ -224,11 +243,9 @@ MartSearch.prototype = {
   * Helper function to handle pagination of the search results
   * 
   */
-  pager: function ( new_page_index, pagination_container ) {
-    this.search( this.current_query, new_page_index );
+  _pager: function ( new_page_index, pagination_container, search_or_browse ) {
+    this.search( this.current_query, new_page_index, search_or_browse );
     return false;
   }
-  
-  
 };
 

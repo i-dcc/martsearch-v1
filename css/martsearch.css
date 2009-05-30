@@ -1,6 +1,4 @@
-/* @override 
-	http://martsearch.site/css/martsearch.css
-*/
+/* @override http://martsearch.site/css/martsearch.css */
 
 body{
 	margin: 50px;
@@ -33,31 +31,43 @@ h4 span.subheading_counts {
 
 /* Status Indicators */
 
-#loading {
+#search_loading {
 	background: #fff url(../images/loading.gif) no-repeat left center;
 	min-width: 32px;
 	min-height: 32px;
-	float: left;
-	margin-top: -65px;
+	position: absolute;
+	right: 70px;
+	top: 130px;
 }
+
+#browse_loading {
+	background: #fff url(../images/loading.gif) no-repeat left center;
+	min-width: 32px;
+	min-height: 32px;
+	position: absolute;
+	right: 70px;
+	top: 130px;
+}
+
+
 
 /* Messages */
 
-#messages {
+.messages {
 	margin: 15px;
 }
 
-#messages div {
+.messages div {
 	margin-bottom: 7px;
 	padding: 0 10px;
 }
 
-#messages div .ui-icon {
+.messages div .ui-icon {
 	float: left;
 	margin-top: 12px;
 }
 
-#messages div p {
+.messages div p {
 	margin-left: 20px;
 }
 
@@ -104,72 +114,72 @@ h4 span.subheading_counts {
 
 /* Search and results */
 
-#mart_search, #results {
+#mart_search, .results {
 	margin-bottom: 15px;
 	margin-top: 15px;
 }
 
-#results table {
+.results table {
 	width: 100%;
 }
 
-#results th {
+.results th {
 	text-align: left;
 }
 
-#results ul.result_list {
+.results ul.result_list {
 	list-style: none;
 	padding: 0;
 	clear:both;
 }
 
-#results ul.result_list li {
+.results ul.result_list li {
 	padding: 7px;
 	margin-bottom: 7px;
 }
 
-#results h2.doc_title,
-#results h3.dataset_title {
+.results h2.doc_title,
+.results h3.dataset_title {
 	margin-top: 2px;
 }
 
-#results h3.dataset_title {
+.results h3.dataset_title {
 	border-bottom: 1px solid #999;
 }
 
-#results div.dataset {
+.results div.dataset {
 	padding: 5px;
 	margin-bottom: 5px;
 }
 
-#results .credit {
+.results .credit {
 	font-size: x-small;
 	font-style: italic;
 	margin-top: 10px;
 	text-align: right;
 }
 
-#results table.with_border {
+.results table.with_border {
 	border-collapse: collapse;
 }
 
-#results table.with_border td,
-#results table.with_border th {
+.results table.with_border td,
+.results table.with_border th {
 	border: 1px solid #e2e2e2;
 	text-align: left;
 	padding: 5px;
 }
 
-#results table.with_border th {
+.results table.with_border th {
 	border: 1px solid #e2e2e2;
 	background-color: #e2e2e2;
 }
 
-#results h2 {
+.results h2 {
 	width: 30%;
 }
 
-#results .doc_datasets_present {
+.results .doc_datasets_present {
 	width: 65%;
 	float: right;
 	text-align: right;
@@ -179,7 +189,7 @@ h4 span.subheading_counts {
 	line-height: 22px;
 }
 
-#results .doc_datasets_present span {
+.results .doc_datasets_present span {
 	border: 1px solid #ca679a;
 	border-radius: 2px;
 	-webkit-border-radius: 2px;
