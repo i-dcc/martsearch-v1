@@ -1,4 +1,6 @@
 {
+  active:             true,
+  debug_mode:         true,
   internal_name:      "kermits_mi_data",
   display_name:       "IKMC Mice",
   url:                "/htgt/biomart",
@@ -13,13 +15,10 @@
     "status",
     "allele_name",
     "mi_centre",
-    "attempt_number",
-    "mi_date",
-    "blastocyst_strain",
     "test_cross_strain"
   ],
   required_attributes: [
-    "mi_date"
+    "status"
   ]
 }
 

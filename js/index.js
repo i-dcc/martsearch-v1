@@ -4,7 +4,7 @@
 * Index class - used to represent the index used in the searches
 */
 Index = function ( params ) {
-  this.base_url       = params.base_url ? params.base_url : ""
+  this.base_url       = params.base_url ? params.base_url : "";
   this.url            = this.base_url + params.url;
   this.primary_field  = params.primary_field;
   this.docs_per_page  = params.docs_per_page;
@@ -33,7 +33,7 @@ Index.prototype = {
       dataType: "json",
       data:     { "wt": "json" },
       success:  function ( data ) {
-        if ( data.status === "OK" ) { status = true; };
+        if ( data.status === "OK" ) { status = true; }
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
         log.error( "Error pinging index at '"+ ping_url +"' ("+ textStatus +":"+ errorThrown +")" );
@@ -104,33 +104,32 @@ Index.prototype = {
 
         for (var j=0; j < fields.length; j++) {
           // Find or create a key/value pair for this field type
-          if ( grouped_terms[ fields[j] ] == undefined ) { grouped_terms[ fields[j] ] = []; };
+          if ( grouped_terms[ fields[j] ] === undefined ) { grouped_terms[ fields[j] ] = []; }
 
           if ( typeof doc[ fields[j] ] == "string" ) {
             grouped_terms[ fields[j] ].push( doc[ fields[j] ] );
           } else {
             for (var k=0; k < doc[ fields[j] ].length; k++) {
               grouped_terms[ fields[j] ].push( doc[ fields[j] ][k] );
-            };
-          };
-        };
-      };
+            }
+          }
+        }
+      }
 
-      /**
-      * Remove duplicate entries... 
-      * For this we use the jQuery.protify plugin to mimic Prototype's 
-      * (prototype.js) array manipulation capabilities.
-      */
-      var fields = jQuery.keys(grouped_terms);
-      for (var i=0; i < fields.length; i++) {
-        grouped_terms[ fields[i] ] = jQuery.protify( grouped_terms[ fields[i] ] ).uniq();
-      };
+      // 
+      // Remove duplicate entries... 
+      // For this we use the jQuery.protify plugin to mimic Prototype's 
+      // (prototype.js) array manipulation capabilities.
+      var keys = jQuery.keys(grouped_terms);
+      for (var l=0; l < keys.length; l++) {
+        grouped_terms[ keys[l] ] = jQuery.protify( grouped_terms[ keys[l] ] ).uniq();
+      }
       
       idx.grouped_terms = grouped_terms;
     }
     else {
       idx.grouped_terms = false;
-    };
+    }
     
     return idx.grouped_terms;
   }

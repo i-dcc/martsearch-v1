@@ -16,6 +16,8 @@
     <script type="text/javascript" src="js/utils/jquery/jquery.pagination.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/utils/jquery/jquery.protify.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/utils/jquery/jquery.togglecontrol.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/utils/jquery/jquery.prettyPhoto.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="css/prettyPhoto.css" type="text/css" media="screen" charset="utf-8" />
     
     <!-- The MartSearch App -->
     <script type="text/javascript" src="js/support.js" charset="utf-8"></script>
@@ -44,8 +46,8 @@
 
     <!-- Firebug Lite (http://getfirebug.com/lite.html) - comment out for production -->
     <!--
-      <script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>
-      <script type="text/javascript">firebug.env.height = 500;</script>
+    <script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>
+    <script type="text/javascript">firebug.env.height = 300;</script>
     -->
   </head>
   <body>
@@ -72,7 +74,7 @@
           <div class="center ui-widget">
             <form id="mart_search" action="search" method="get" accept-charset="utf-8">
               <input type="text" name="query" value="" id="query" size="50" />&nbsp;
-              <input class="ui-button ui-state-default ui-corner-all" type="submit" value="Search" /><br />
+              <input type="submit" value="Search" /><br />
               <small>Enter gene symbols, gene or product identifiers or any other search term described in the <a class="help_link" href="#help">help</a> section.</small>
             </form>
           </div>
@@ -85,8 +87,10 @@
           
           <!-- results section -->
           <div id="results">
-            <div id="results_pager" class="pagination"></div>
+            <div id="results_pager_top" class="pagination"></div>
             <ul id="result_list" class="result_list"></ul>
+            <div id="results_pager_bottom" class="pagination"></div>
+            <div class="clear"></div>
           </div>
           
           <!-- Intro text -->

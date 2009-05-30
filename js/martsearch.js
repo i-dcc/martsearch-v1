@@ -21,8 +21,8 @@ MartSearch = function ( params ) {
       url:            "/solr",
       primary_field:  "marker_symbol",
       docs_per_page:  10
-    }
-  };
+    };
+  }
   this.index = new Index( index_conf );
   
   // Instantiate the messaging object
@@ -32,7 +32,7 @@ MartSearch = function ( params ) {
   this.datasets = [];
   
   this.current_query = "";
-}
+};
 
 MartSearch.prototype = {
   
@@ -65,8 +65,8 @@ MartSearch.prototype = {
     });
     
     // Activate links between the tabs
-    jQuery('a.help_link').click( function() { jQuery('#tabs').tabs('select', 4); return false; });
-    jQuery('a.about_link').click(function() { jQuery('#tabs').tabs('select', 5); return false; });
+    jQuery('a.help_link').click( function()  { jQuery('#tabs').tabs('select', 3); return false; } );
+    jQuery('a.about_link').click( function() { jQuery('#tabs').tabs('select', 4); return false; } );
     
     // Make form buttons respond to mouse interaction
     jQuery(".ui-button:not(.ui-state-disabled)")
@@ -85,10 +85,9 @@ MartSearch.prototype = {
         }
       });
     
-    /*
+    /**
     * Load in the dataset config files
     */
-    
     jQuery.ajax({
       url:      ms.base_url + "/bin/dataset-feed.pl",
       type:     'GET',
@@ -97,8 +96,8 @@ MartSearch.prototype = {
       success:  function (datasets) {
         for (var i=0; i < datasets.length; i++) {
           var ds = new DataSet( datasets[i], ms.base_url );
-          ms.datasets.push(ds)
-        };
+          ms.datasets.push(ds);
+        }
         log.info('[config] finished loading datasets');
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
@@ -112,19 +111,19 @@ MartSearch.prototype = {
       }
     });
     
-    /*
+    /**
     * Make sure the index is up
     */
-    if ( ms.index.is_alive() != true ) {
+    if ( ms.index.is_alive() !== true ) {
+      init_status = false;
       ms.message.add(
-          "Sorry the main search index is offline - this tool will not function without "
-        + "the main search index. Please check back soon.  Sorry for any inconvenience caused.",
+        "Sorry the main search index is offline - this tool will not function without the main search index. Please check back soon.  Sorry for any inconvenience caused.",
         "error",
         undefined
       );
-    };
+    }
     
-    /*
+    /**
     * Finish up
     */
     
@@ -147,15 +146,16 @@ MartSearch.prototype = {
     var ms = this;
     
     // Show the loading indicator
-    jQuery("#loading").show();
+    jQuery("#loading").fadeIn("fast");
     
     // Calculate what our starting doc is
     var start_doc = 0;
-    if ( page ) { start_doc = page * ms.index.docs_per_page; };
+    if ( page ) { start_doc = page * ms.index.docs_per_page; }
     
     // Clear any messages and previous results
-    if ( jQuery("#messages").html() != "" ) { ms.message.clear(); };
+    if ( jQuery("#messages").html() !== "" ) { ms.message.clear(); }
     jQuery("#result_list").html("");
+    jQuery(".pagination").html("");
     
     // Query the index
     var index_response = ms.index.search( search_string, start_doc );
@@ -165,24 +165,6 @@ MartSearch.prototype = {
       // Fetch the pre-computed mart search terms from the index search
       var index_values = ms.index.grouped_query_terms();
       
-      // See if we need to paginate results
-      // (Using the jquery.pagination plugin)
-      if ( index_response.response.numFound > ms.index.docs_per_page ) {
-        jQuery('#results_pager').pagination( 
-          index_response.response.numFound,
-          {
-            items_per_page:       ms.index.docs_per_page,
-            num_edge_entries:     1,
-            num_display_entries:  5,
-            current_page:         page,
-            callback:             function(page,dom_elem){ ms.pager(page,dom_elem) }
-          }
-        );
-      }
-      else {
-        jQuery("#results_pager").html("");
-      };
-
       // Load in the doc skeleton...
       var docs = new EJS({ url: ms.base_url + "/js/templates/docs.ejs" }).render(
         {
@@ -192,20 +174,48 @@ MartSearch.prototype = {
         }
       );
       jQuery("#result_list").html(docs);
+      
+      // See if we need to paginate results
+      // (Using the jquery.pagination plugin)
+      if ( index_response.response.numFound > ms.index.docs_per_page ) {
+        jQuery('.pagination').pagination( 
+          index_response.response.numFound,
+          {
+            items_per_page:       ms.index.docs_per_page,
+            num_edge_entries:     1,
+            num_display_entries:  5,
+            current_page:         page,
+            callback:             function(page,dom_elem){ ms.pager(page,dom_elem); }
+          }
+        );
+      }
 
       // Load in each dataset...
       for (var i=0; i < ms.datasets.length; i++) {
         var ds = ms.datasets[i];
         if ( index_values[ ds.joined_index_field ] !== undefined && index_values[ ds.joined_index_field ] !== "" ) {
           ds.search( index_values[ ds.joined_index_field ], index_response.response.docs, ms.index.primary_field );
-        };
-      };
+        }
+      }
       
-    };
+    }
     
+    // Make the dataset 'bubbles' toggleable
+    jQuery('.dataset_title').toggleControl('.dataset_content', { hide: false, speed: "fast" });
+    
+    /**
+    * Make the doc 'bubbles' toggleable, and if there is a lot of results 
+    * to go through, collapse them...
+    */
+    if ( index_response && index_response.response.numFound > ms.index.docs_per_page ) {
+      jQuery('.doc_title').toggleControl('.doc_content', { speed: "fast" });
+    }
+    else {
+      jQuery('.doc_title').toggleControl('.doc_content', { hide: false, speed: "fast" });
+    }
     
     // Hide the loading indicator
-    jQuery("#loading").hide();
+    jQuery("#loading").fadeOut("fast");
     
     return false;
   },

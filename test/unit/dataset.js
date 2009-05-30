@@ -33,7 +33,7 @@ function datasetTests ( ds, ds_chk ) {
   });
   
   test( ds.display_name+" - Retrieving all biomart attributes dynamically ", function() {
-    ds.attributes = ds.fetch_all_attributes();
+    ds.fetch_all_attributes();
 
     expect(3);
     ok( jQuery.keys(ds.attributes).length > 0, "We returned some attributes " );
@@ -42,24 +42,24 @@ function datasetTests ( ds, ds_chk ) {
     // Deliberatly fail the fetch...
     var real_url = ds.url;
     ds.url = '/foo';
-    ds.attributes = ds.fetch_all_attributes();
+    ds.fetch_all_attributes();
     ok( jQuery.keys(ds.attributes).length == 0, "We failed to fetch any attributes " );
 
     ds.url = real_url;
-    ds.attributes = ds.fetch_all_attributes();
+    ds.fetch_all_attributes();
   });
   
   test( ds.display_name+" - Simulating a safe search piece by piece: '"+safe_search+"' ", function() {
     // Query the index
     var index_response = ms.index.search( safe_search, 0 );
     ok( index_response instanceof Object, "Got an index response object " );
-    if ( typeof console.log != "undefined" ) { console.log(index_response); };
+    if ( typeof console.log !== "undefined" ) { console.log(index_response); };
     
     
     // Fetch the pre-computed mart search terms from the index search
     var index_values = ms.index.grouped_query_terms();
     ok( index_values instanceof Object, "Got a pre-computed mart search term object from the index " );
-    if ( typeof console.log != "undefined" ) { console.log(index_values); };
+    if ( typeof console.log !== "undefined" ) { console.log(index_values); };
     
     if ( index_values[ ds.joined_index_field ] ) {
       // Build the biomart XML
@@ -85,7 +85,7 @@ function datasetTests ( ds, ds_chk ) {
       });
       
       ok( jQuery.keys(results).length > 0 || results === false, "Got some results or 'false' from the biomart query " );
-      if ( typeof console.log != "undefined" ) { console.log(results); };
+      if ( typeof console.log !== "undefined" ) { console.log(results); };
       
     };
     
@@ -95,12 +95,12 @@ function datasetTests ( ds, ds_chk ) {
     // Query the index
     var index_response = ms.index.search( not_so_safe_search, 0 );
     ok( index_response instanceof Object, "Got an index response object " );
-    if ( typeof console.log != "undefined" ) { console.log(index_response); };
+    if ( typeof console.log !== "undefined" ) { console.log(index_response); };
     
     // Fetch the pre-computed mart search terms from the index search
     var index_values = ms.index.grouped_query_terms();
     ok( index_values instanceof Object, "Got a pre-computed mart search term object from the index " );
-    if ( typeof console.log != "undefined" ) { console.log(index_values); };
+    if ( typeof console.log !== "undefined" ) { console.log(index_values); };
     
     if ( index_values[ ds.joined_index_field ] ) {
       // Build the biomart XML
@@ -126,7 +126,7 @@ function datasetTests ( ds, ds_chk ) {
       });
       
       ok( jQuery.keys(results).length > 0 || results === false, "Got some results or 'false' from the biomart query " );
-      if ( typeof console.log != "undefined" ) { console.log(results); };
+      if ( typeof console.log !== "undefined" ) { console.log(results); };
       
     };
     
@@ -136,17 +136,17 @@ function datasetTests ( ds, ds_chk ) {
     // Query the index
     var index_response = ms.index.search( safe_search, 0 );
     ok( index_response instanceof Object, "Got an index response object " );
-    if ( typeof console.log != "undefined" ) { console.log(index_response); };
+    if ( typeof console.log !== "undefined" ) { console.log(index_response); };
     
     // Fetch the pre-computed mart search terms from the index search
     var index_values = ms.index.grouped_query_terms();
     ok( index_values instanceof Object, "Got a pre-computed mart search term object from the index " );
-    if ( typeof console.log != "undefined" ) { console.log(index_values); };
+    if ( typeof console.log !== "undefined" ) { console.log(index_values); };
     
     if ( index_values[ ds.joined_index_field ] ) {
       var results = ds.search( index_values[ ds.joined_index_field ], index_response.response.docs, ms.index.primary_field );
       ok( jQuery.keys(results).length > 0 || results === false, "Got some results or 'false' from the biomart query " );
-      if ( typeof console.log != "undefined" ) { console.log(results); };
+      if ( typeof console.log !== "undefined" ) { console.log(results); };
     }
   });
   
@@ -154,17 +154,17 @@ function datasetTests ( ds, ds_chk ) {
     // Query the index
     var index_response = ms.index.search( not_so_safe_search, 0 );
     ok( index_response instanceof Object, "Got an index response object " );
-    if ( typeof console.log != "undefined" ) { console.log(index_response); };
+    if ( typeof console.log !== "undefined" ) { console.log(index_response); };
     
     // Fetch the pre-computed mart search terms from the index search
     var index_values = ms.index.grouped_query_terms();
     ok( index_values instanceof Object, "Got a pre-computed mart search term object from the index " );
-    if ( typeof console.log != "undefined" ) { console.log(index_values); };
+    if ( typeof console.log !== "undefined" ) { console.log(index_values); };
     
     if ( index_values[ ds.joined_index_field ] ) {
       var results = ds.search( index_values[ ds.joined_index_field ], index_response.response.docs, ms.index.primary_field );
       ok( jQuery.keys(results).length > 0 || results === false, "Got some results or 'false' from the biomart query " );
-      if ( typeof console.log != "undefined" ) { console.log(results); };
+      if ( typeof console.log !== "undefined" ) { console.log(results); };
     }
   });
   
@@ -176,17 +176,17 @@ function datasetTests ( ds, ds_chk ) {
     // Query the index
     var index_response = ms.index.search( safe_search, 0 );
     ok( index_response instanceof Object, "Got an index response object " );
-    if ( typeof console.log != "undefined" ) { console.log(index_response); };
+    if ( typeof console.log !== "undefined" ) { console.log(index_response); };
     
     // Fetch the pre-computed mart search terms from the index search
     var index_values = ms.index.grouped_query_terms();
     ok( index_values instanceof Object, "Got a pre-computed mart search term object from the index " );
-    if ( typeof console.log != "undefined" ) { console.log(index_values); };
+    if ( typeof console.log !== "undefined" ) { console.log(index_values); };
     
     if ( index_values[ ds.joined_index_field ] ) {
       var results = ds.search( index_values[ ds.joined_index_field ], index_response.response.docs, ms.index.primary_field );
       ok( jQuery.keys(results).length > 0 || results === false, "Got some results or 'false' from the biomart query " );
-      if ( typeof console.log != "undefined" ) { console.log(results); };
+      if ( typeof console.log !== "undefined" ) { console.log(results); };
     }
     
     // Set the URL back

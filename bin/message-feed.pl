@@ -11,6 +11,8 @@
 # having to change the contents of the code repository to add a new 
 # message to the site.
 
+use lib "/software/team87/HTGT/perl/lib/perl5";
+
 use strict;
 use warnings;
 use CGI qw(:standard);

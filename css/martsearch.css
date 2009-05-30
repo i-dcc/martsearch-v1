@@ -13,7 +13,8 @@ body{
 }
 
 .clear {
-	height: 25px;
+	clear: both;
+	height: 5px;
 }
 
 /* Headings */
@@ -60,23 +61,29 @@ h4 span.subheading_counts {
 	margin-left: 20px;
 }
 
-a.toggle-open, a.toggle-close {
-	background: url(../images/silk_icons/bullet_arrow_down.png) no-repeat;
-	padding-left: 16px;
-	padding-top: 2px;
-	padding-bottom: 2px;
-}
-
-a.toggle-close {
-	background: url(../images/silk_icons/bullet_arrow_up.png) no-repeat;
-}
-
 .error_msg {
 	border: 1px solid #999;
 	background-color: #e2e2e2;
 	color: #333;
 	font-size: 10px;
 	padding: 10px;
+}
+
+/* Toggle Controls */
+
+.toggle-open, .toggle-close {
+	background: url(../images/silk_icons/bullet_arrow_down.png) no-repeat 0 center;
+	padding-left: 16px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+.toggle-close {
+	background: url(../images/silk_icons/bullet_arrow_up.png) no-repeat;
+}
+
+.toggle-open:hover, .toggle-close:hover {
+	cursor: pointer;
 }
 
 /* jQuery UI Dialogs */
@@ -121,12 +128,12 @@ a.toggle-close {
 	margin-bottom: 7px;
 }
 
-#results h2.doc_primary_field,
-#results h3.dataset_name {
+#results h2.doc_title,
+#results h3.dataset_title {
 	margin-top: 2px;
 }
 
-#results h3.dataset_name {
+#results h3.dataset_title {
 	border-bottom: 1px solid #999;
 }
 
@@ -158,6 +165,32 @@ a.toggle-close {
 	background-color: #e2e2e2;
 }
 
+#results h2 {
+	width: 30%;
+}
+
+#results .doc_datasets_present {
+	width: 65%;
+	float: right;
+	text-align: right;
+	font-weight: normal;
+	font-style: normal;
+	font-size: xx-small;
+	line-height: 22px;
+}
+
+#results .doc_datasets_present span {
+	border: 1px solid #ca679a;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	background-color: #fd9acd;
+	color: #fff;
+	padding: 4px;
+	font-weight: bold;
+}
+
+
 /* Lists for browsing the data - (browse by gene / chromosome) */
 
 ul.browse_list  {
@@ -171,32 +204,6 @@ ul.browse_list li {
 	display: inline-block;
 	margin-right: 0px;
 	margin-bottom: 5px;
-}
-
-/* Intro text */
-
-#intro_text {
-	margin-top: 25px;
-	margin-bottom: 25px;
-	width: 75%;
-	text-align: left;
-}
-
-/* Info Tables */
-
-table.ikmc-info {
-	border-collapse: collapse;
-}
-
-table.ikmc-info td, table.ikmc-info th {
-	border: 1px solid #e2e2e2;
-	text-align: left;
-	padding: 5px;
-}
-
-table.ikmc-info th {
-	border: 1px solid #e2e2e2;
-	background-color: #e2e2e2;
 }
 
 /* Pagination */
