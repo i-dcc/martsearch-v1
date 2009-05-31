@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#! /usr/local/bin/perl
 
 # == message-feed.pl
 # 
@@ -17,8 +17,8 @@ use strict;
 use warnings;
 use CGI qw(:standard);
 use CGI::Carp qw(fatalsToBrowser);
-#use Text::Markdown qw(markdown);
-#use Text::Textile qw(textile);
+use Text::Markdown qw(markdown);
+use Text::Textile qw(textile);
 
 # Print the header - disable caching...
 print header(
@@ -50,10 +50,9 @@ foreach my $file ( <*.html *.markdown *.textile> ) {
   
   my $formatted_message = '';
   
-  #if    ( $format eq 'markdown' ) { $formatted_message = markdown( $file_string ); }
-  #elsif ( $format eq 'textile' )  { $formatted_message = textile( $file_string ); }
-  #else                            { $formatted_message = $file_string; }
-  $formatted_message = $file_string;
+  if    ( $format eq 'markdown' ) { $formatted_message = markdown( $file_string ); }
+  elsif ( $format eq 'textile' )  { $formatted_message = textile( $file_string ); }
+  else                            { $formatted_message = $file_string; }
   
   push( @{$messages}, wrap_message( $formatted_message, $status, $file ) );
   

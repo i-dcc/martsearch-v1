@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="css/martsearch.css" type="text/css" media="screen" charset="utf-8" />
     <script type="text/javascript" charset="utf-8">
       jQuery(document).ready(function() {
-        ms = new MartSearch({ base_url: "/martsearch" });
+        ms = new MartSearch({});
         ms.init();
       });
     </script>
@@ -88,42 +88,64 @@
           <!-- results section -->
           <div id="search_results" class="results">
             <div id="search_results_pager_top" class="pagination"></div>
-            <ul id="search_result_list" class="result_list">
-              <li><div align="left"><big><strong>WHAT: </strong> Martsearch presents an integrated overview of mouse-data</big>
-              <br/>Martsearch focuses on mouse genes,
-              the results of high-throughput gene knockout programs, and related phenotypic and expression data.
-              Martsearch talks with BioMarts  via web-services to gather and present its data.</div></li>
-              <li><div align="left"><big><strong>WHY: </strong>Martsearch does not need a central data store or web server</big><br/>
-              Does mouse informatics have an obvious single centre?
-              Gene curation, the production of mutant ES cells, the production of mutant mice,
-              expression and phenotyping studies all have important
-              informatic data and presentation techniques to offer the end-user. Martsearch allows
-              these diverse groups to remain engaged in the portal's user interface without
-              having to centralise portal development and data in a single institute.</div></li>
-              <li><div align="left"><big><strong>HOW: </strong> Martsearch searches, indexes, retrieves and displays BioMart-served data</big><br/>
-              The data that martseach displays must be first exposed as a BioMart by some group.
-               By itself, the BioMart allows an end-user to make expert searches and bulk downloads.
-               BioMart also allows service calls to be made by computers, and this is what MartSearch does.
-               Finally, BioMarts can federate data fetches, allowing queries to join
-               information from different marts.</div>
-              <div align="left">MartSearch helps the user search this data by pre-indexing key search terms
-              downloaded from each BioMart, to allow a rapid initial response, which is then
-              backed up by further fetches from each mart. We hope this pre-indexing will become
-              redundant as the BioMarts become more sophisticated.</div>
-              </li>
-              <li><div align="left"><big><strong>YOUR DATA HERE: </strong>To  integrate your data here, present it as a BioMart</big><br/>
-              If this portal can fetch your data, then you can tweak it to show the data as you please.
-              </div>
-              </li>
-            </ul>
- 
-            </ul>
+            <ul id="search_result_list" class="result_list"></ul>
             <div id="search_results_pager_bottom" class="pagination"></div>
             <div class="clear"></div>
           </div>
           
           <!-- Intro text -->
-          <div id="intro_text" class="center"></div>
+          <div id="intro_text">
+          	<ul>
+              <li>
+								<p>
+								  <strong>WHAT:</strong> Martsearch presents an integrated overview of mouse-data
+								</p>
+								<p>
+								  Martsearch focuses on mouse genes, the results of high-throughput gene knockout programs, 
+								  and related phenotypic and expression data.  Martsearch talks with Biomarts via 
+								  web-services to gather and present its data.
+								</p>
+              </li>
+              <li>
+				        <p>
+					        <strong>WHY:</strong> Martsearch does not need a central data store or web server
+					      </p>
+                <p>
+                  Does mouse informatics have an obvious single centre? Gene curation, the production of 
+                  mutant ES cells, the production of mutant mice, expression and phenotyping studies all 
+                  have important informatic data and presentation techniques to offer the end-user. 
+                  Martsearch allows these diverse groups to remain engaged in the portal's user interface 
+                  without having to centralise portal development and data in a single institute.
+                </p>
+				      </li>
+              <li>
+					      <p>
+						      <strong>HOW:</strong> Martsearch searches, indexes, retrieves and displays Biomart-served data
+					      </p>
+            		<p>
+						      The data that martseach displays must be first exposed as a Biomart by some group.
+                  By itself, the Biomart allows an end-user to make expert searches and bulk downloads.
+                  Biomart also allows service calls to be made by computers, and this is what MartSearch 
+                  does. Finally, Biomarts can federate data fetches, allowing queries to join
+                  information from different marts.
+					      </p>
+                <p>
+						      MartSearch helps the user search this data by pre-indexing key search terms
+                  downloaded from each Biomart, to allow a rapid initial response, which is then
+                  backed up by further fetches from each mart.
+					      </p>
+              </li>
+              <li>
+                <p>
+                  <strong>YOUR DATA HERE:</strong> To integrate your data and have it shown here, present it 
+                  as a Biomart
+                </p>
+                <p>
+                  If this portal can fetch your data, then you can tweak it to show the data as you please.
+                </p>
+              </li>
+          	</ul>
+          </div>
         </div>
         
         <!-- browse tab -->
@@ -166,7 +188,7 @@
           <a href="http://jquery.com" title="jQuery"><img src="images/jquery.png" alt="jQuery" /></a> 
           <a href="http://jqueryui.com" title="jQuery UI"><img src="images/jquery-ui.png" alt="jQuery UI" /></a> 
           <a href="http://lucene.apache.org/solr/" title="Apache Solr"><img src="images/solr.png" alt="Apache Solr" /></a> 
-          <a href="http://www.biomart.org" title="Biomart"><img src="images/biomart.png" alt="Biomart" /></a> 
+          <a href="http://www.biomart.org" title="Biomart"><img src="images/Biomart.png" alt="Biomart" /></a> 
         </div>
         <div id="credits">
           Powered by <a href="http://github.com/dazoakley/martsearch/">MartSearch</a>
