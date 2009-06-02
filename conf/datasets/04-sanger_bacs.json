@@ -1,0 +1,19 @@
+{
+  active:             true,
+  debug_mode:         false,
+  internal_name:      "sanger_bacs",
+  display_name:       "Sanger Bacs",
+  url:                "/htgtdev/biomart",
+  full_url:           "http://htgt.internal.sanger.ac.uk:9002/dev/martsearch/htgtdev/biomart",
+  mart_dataset:       "bacs",
+  joined_index_field: "marker_symbol",
+  joined_filter:      "marker_symbol",
+  enabled_attributes: [
+    "marker_symbol",
+    "library",
+    "chromosome",
+    "strand",
+    "start",
+    "end"
+  ]
+}
