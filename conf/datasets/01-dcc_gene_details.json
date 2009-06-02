@@ -1,0 +1,28 @@
+{
+  active:             true,
+  debug_mode:         false,
+  internal_name:      "dcc_gene_details",
+  display_name:       "Gene Details",
+  url:                "/htgtdev/biomart",
+  full_url:           "http://htgt.internal.sanger.ac.uk:9002/dev/martsearch/htgtdev/biomart",
+  mart_dataset:       "dcc",
+  joined_index_field: "marker_symbol",
+  joined_filter:      "marker_symbol",
+  template:           "dcc_gene_details.ejs",
+  enabled_attributes: [
+    "marker_symbol",
+    "marker_names",
+    "synonyms",
+    "marker_type",
+    "chromosome",
+    "coord_start",
+    "coord_end",
+    "strand",
+    "mgi_accession_id",
+    "ensembl_gene_ids",
+    "vega_gene_ids",
+    "entrez_gene_ids",
+    "ccds_ids",
+    "omim_ids"
+  ]
+}

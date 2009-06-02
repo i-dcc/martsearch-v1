@@ -1,0 +1,105 @@
+<% var result = results[0]; %>
+<table>
+  <tr>
+    <td style="text-align: left;" width="100%">
+      <table>
+        <tr>
+          <th width="125px">Marker Name(s):</th>
+          <td><%= result['marker_names'] %></td>
+        </tr>
+        <tr>
+          <th>Synonyms:</th>
+          <td><%= result['synonyms'] %></td>
+        </tr>
+        <tr>
+          <th>Marker Type:</th>
+          <td><%= result['marker_type'] %></td>
+        </tr>
+        <tr>
+          <%
+            var location_text = 'Chr' + result['chromosome'];
+            if ( result['coord_start'] ) { location_text += ':' + result['coord_start'] };
+            if ( result['coord_end'] )   { location_text += '-' + result['coord_end'] };
+            if ( result['strand'] )      { location_text += '(' + result['strand'] + ')' };
+          %>
+          <th>Location:</th>
+          <td><%= location_text %></td>
+        </tr>
+      </table>
+    </td>
+    <td style="text-align: right;">
+      <% if ( result['coord_start'] && result['coord_end'] ) { %>
+      <img src="http://gbrowse.informatics.jax.org/cgi-bin/gbrowse_img/thumbs_current/?abs=1;options=Everything;width=200;name=<%= result['chromosome'] %>%3A<%= result['coord_start'] %>-<%= result['coord_end'] %>" alt="" />
+      <% } %>
+    </td>
+  </tr>
+</table>
+
+<h4>Other Gene IDs</h4>
+<table>
+  <tr>
+    <th width="15%">MGI Gene Accession:</th>
+    <td width="18%"><%= link_to( result['mgi_accession_id'], 'http://www.informatics.jax.org/searches/accession_report.cgi?id='+result['mgi_accession_id'] ) %></td>
+    
+    <%
+      var ensembl_ids = result['ensembl_gene_ids'].split(",");
+      var ensembl_links = [];
+      for ( var i=0; i<ensembl_ids.length; i++ ) {
+        if ( ensembl_ids[i] != "" ) {
+          ensembl_links.push( link_to( ensembl_ids[i], 'http://www.ensembl.org/Mus_musculus/contigview?gene='+ensembl_ids[i] ) );
+        };
+      }
+    %>
+    <th width="15%">Ensembl Gene ID:</th>
+    <td width="18%"><%= ensembl_links.join(", ") %></td>
+    
+    <%
+      var vega_ids = result['vega_gene_ids'].split(",");
+      var vega_links = [];
+      for ( var i=0; i<vega_ids.length; i++ ) {
+        if ( vega_ids[i] != "" ) {
+          vega_links.push( link_to( vega_ids[i], 'http://vega.sanger.ac.uk/Mus_musculus/geneview?gene='+vega_ids[i]+'&amp;db=core' ) );
+        };
+      }
+    %>
+    <th width="15%">Vega Gene ID:</th>
+    <td width="18%"><%= vega_links.join(", ") %></td>
+  </tr>
+  <tr>
+    <%
+      var entrez_ids = result['entrez_gene_ids'].split(",");
+      var entrez_links = [];
+      for ( var i=0; i<entrez_ids.length; i++ ) {
+        if ( entrez_ids[i] != "" ) {
+          entrez_links.push( link_to( entrez_ids[i], 'http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&amp;cmd=Retrieve&amp;dopt=Graphics&amp;list_uids='+entrez_ids[i] ) );
+        };
+      }
+    %>
+    <th>Entrez Gene ID:</th>
+    <td><%= entrez_links.join(", ") %></td>
+    
+    <%
+      var ccds_ids = result['ccds_ids'].split(",");
+      var ccds_links = [];
+      for ( var i=0; i<ccds_ids.length; i++ ) {
+        if ( ccds_ids[i] != "" ) {
+          ccds_links.push( link_to( ccds_ids[i], 'http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&amp;DATA='+ccds_ids[i] ) );
+        };
+      }
+    %>
+    <th>CCDS ID:</th>
+    <td><%= ccds_links.join(", ") %></td>
+    
+    <%
+      var omim_ids = result['omim_ids'].split(",");
+      var omim_links = [];
+      for ( var i=0; i<omim_ids.length; i++ ) {
+        if ( omim_ids[i] != "" ) {
+          omim_links.push( link_to( omim_ids[i], ''+omim_ids[i] ) );
+        };
+      }
+    %>
+    <th>OMIM ID:</th>
+    <td><%= omim_links.join(", ") %></td>
+  </tr>
+</table>

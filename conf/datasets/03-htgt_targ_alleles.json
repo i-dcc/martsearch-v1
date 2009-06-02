@@ -1,8 +1,8 @@
 {
   active:             true,
-  debug_mode:         true,
+  debug_mode:         false,
   internal_name:      "htgt_targ_alleles",
-  display_name:       "KOMP/EUCOMM Vectors and ES Cells",
+  display_name:       "IKMC Targeted Alleles",
   url:                "/htgt/biomart",
   full_url:           "http://www.sanger.ac.uk/htgt/biomart",
   mart_dataset:       "htgt_targ",
@@ -53,7 +53,7 @@
       var result = int_results[i];
       
       // Only store a result if we have a htgt_project_id and it's not a regeneron project
-      if ( result["htgt_project_id"] && result["is_komp_regeneron"] !== "1" && result["is_norcomm"] !== "1" ) {
+      if ( result["htgt_project_id"] && result["is_komp_regeneron"] !== "1" ) {
         // Set the DOM element id we need to lookup
         var content_id = ds.internal_name + '_' + result["marker_symbol"].replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).substr(0,20);
         
