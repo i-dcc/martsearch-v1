@@ -163,7 +163,7 @@ DataSet.prototype = {
 
               // Figure out the DOM id
               if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); }
-              content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).substr(0,20);
+              content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).replace( /\;/g, "-" ).substr(0,20);
               content_id = ds.internal_name + '_' + content_id;
               if ( ds.debug_mode ) { log.debug('processing '+ content_id); }
 
@@ -320,7 +320,7 @@ DataSet.prototype = {
           // returned data will be injected into
           var content_id = docs[i][ ds.joined_index_field ];
           if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); }
-          content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).substr(0,20);
+          content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).replace( /\;/g, "-" ).substr(0,20);
 
           // Set up a temp array to put all of our info into...
           var tmp_array = [];

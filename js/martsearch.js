@@ -38,6 +38,9 @@ MartSearch = function ( params ) {
   // Load the browsable content configuration
   ms.browsable_content = params.browsable_content;
   
+  // Build the test_conf into the MartSearch object
+  ms.test_conf = params.test_conf;
+  
   // Placeholder for dataset objects
   ms.datasets = [];
   

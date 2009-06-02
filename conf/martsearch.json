@@ -14,7 +14,6 @@
       display_name: "Marker Symbol",
       exact_search: false,
       options: [
-        //[ "1-9", "[0 TO 9]" ],
         "A","B","C","D","E","F","G","H","I","J",
         "K","L","M","N","O","P","Q","R","S","T",
         "U","V","W","X","Y","Z"
@@ -30,5 +29,11 @@
         "X","Y"
       ]
     }
-  ]
+  ],
+  
+  // Settings for the test suite
+  test_conf: {
+    safe_search: "cbx1",
+    not_so_safe_search: "chromosome:1"
+  }
 }

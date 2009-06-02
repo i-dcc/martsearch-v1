@@ -22,8 +22,8 @@ function datasetTests ( ds, ds_chk ) {
   ds.debug_mode = true;
   
   // define search strings to test with...
-  var safe_search = "cbx1";
-  var not_so_safe_search = "chromosome:1";
+  var safe_search = ms.test_conf.safe_search;
+  var not_so_safe_search = ms.test_conf.not_so_safe_search;
   
   test( ds.display_name+" - Basic object attributes ", function() {
     expect(3);
