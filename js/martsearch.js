@@ -129,8 +129,8 @@ MartSearch.prototype = {
     if ( ms.browsable_content ) {
       var browsers = new EJS({ url: ms.base_url + "/js/templates/martsearch_browse.ejs" }).render({ ms: ms });
       jQuery("#browse_controls").html(browsers);
-      jQuery("#browse_controls ul.browse_list a").click( function() {
-        ms.search( jQuery(this).attr("rel"), 0, "browse" );
+      jQuery("#browse_controls ul.browse_list li").click( function() {
+        ms.search( jQuery(this).find("a").attr("rel"), 0, "browse" );
       });
     };
     
