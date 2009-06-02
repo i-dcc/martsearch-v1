@@ -49,7 +49,12 @@ h4 span.subheading_counts {
 	top: 130px;
 }
 
+/* Descriptive Text */
 
+#intro_text, #configure, #help, #about {
+	width: 90%;
+	margin: 0 auto;
+}
 
 /* Messages */
 
@@ -159,22 +164,6 @@ h4 span.subheading_counts {
 	text-align: right;
 }
 
-.results table.with_border {
-	border-collapse: collapse;
-}
-
-.results table.with_border td,
-.results table.with_border th {
-	border: 1px solid #e2e2e2;
-	text-align: left;
-	padding: 5px;
-}
-
-.results table.with_border th {
-	border: 1px solid #e2e2e2;
-	background-color: #e2e2e2;
-}
-
 .results h2 {
 	width: 30%;
 }
@@ -200,6 +189,23 @@ h4 span.subheading_counts {
 	font-weight: bold;
 }
 
+/* Tables */
+
+table.with_border {
+	border-collapse: collapse;
+}
+
+table.with_border td,
+table.with_border th {
+	border: 1px solid #e2e2e2;
+	text-align: left;
+	padding: 5px;
+}
+
+table.with_border th {
+	border: 1px solid #e2e2e2;
+	background-color: #e2e2e2;
+}
 
 /* Lists for browsing the data - (browse by gene / chromosome) */
 
