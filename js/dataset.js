@@ -168,11 +168,29 @@ DataSet.prototype = {
               if ( ds.debug_mode ) { log.debug('processing '+ content_id); }
 
               if ( results[ content_id ] !== undefined && results[ content_id ].length !== 0 ) {
-                var template = new EJS({ url: ds.template }).render({ 'results': results[ content_id ], dataset: ds });
+                var template = new EJS({ url: ds.template }).render({ 'results': results[ content_id ], dataset: ds, 'content_id': content_id });
                 jQuery( "#"+content_id ).html(template);
                 
                 // Run any post display functions
                 if ( ds.post_display_hook ) { ds.post_display_hook( content_id ); }
+                
+                // If we're using the default template, add some table sorting...
+                if ( ds.template.match("default_dataset.ejs") ) {
+                  jQuery( "#"+content_id + "_table" ).tablesorter({ widgets: ['zebra'] });
+                  
+                  // If more than 20 entries - paginate the table
+                  if ( results[content_id].length > 20 ) {
+                    jQuery( "#"+content_id + "_table_pager" ).show();
+                    jQuery( "#"+content_id + "_table" ).tablesorterPager(
+                      {
+                        container: jQuery( "#"+content_id + "_table_pager" ), 
+                        positionFixed: false, 
+                        size: 20 
+                      }
+                    );
+                  };
+                  
+                };
               }
               else {
                 jQuery( "#"+content_id ).parent().parent().fadeOut("fast");

@@ -1,24 +1,43 @@
-<table class="with_border">
-  <tr>
-    <% for ( var i=0; i<dataset.enabled_attributes.length; i++ ) { %>
-      <th><%= dataset.attributes[ dataset.enabled_attributes[i] ].displayname %></th>
-    <% } %>
-  </tr>
-  <% for ( var i=0; i<results.length; i++ ) { %>
+<table id="<%= content_id %>_table" class="tablesorter">
+  <thead>
     <tr>
-      <% for ( var j=0; j<dataset.enabled_attributes.length; j++ ) { %>
-        <td>
-          <% if ( dataset.attributes[ dataset.enabled_attributes[j] ].linkouturl ) { %>
-            <%
-              var link_url = dataset.attributes[ dataset.enabled_attributes[j] ].linkouturl;
-              link_url = link_url.replace( '%s', results[i][ dataset.enabled_attributes[j] ] );
-            %>
-            <a href="<%= link_url %>" target="_blank"><%= results[i][ dataset.enabled_attributes[j] ] %></a>
-          <% } else { %>
-            <%= results[i][ dataset.enabled_attributes[j] ] %>
-          <% } %>
-        </td>
+      <% for ( var i=0; i<dataset.enabled_attributes.length; i++ ) { %>
+        <th><%= dataset.attributes[ dataset.enabled_attributes[i] ].displayname %></th>
       <% } %>
     </tr>
-  <% } %>
+  </thead>
+  <tbody>
+    <% for ( var i=0; i<results.length; i++ ) { %>
+      <tr>
+        <% for ( var j=0; j<dataset.enabled_attributes.length; j++ ) { %>
+          <td>
+            <% if ( dataset.attributes[ dataset.enabled_attributes[j] ].linkouturl ) { %>
+              <%
+                var link_url = dataset.attributes[ dataset.enabled_attributes[j] ].linkouturl;
+                link_url = link_url.replace( '%s', results[i][ dataset.enabled_attributes[j] ] );
+              %>
+              <a href="<%= link_url %>" target="_blank"><%= results[i][ dataset.enabled_attributes[j] ] %></a>
+            <% } else { %>
+              <%= results[i][ dataset.enabled_attributes[j] ] %>
+            <% } %>
+          </td>
+        <% } %>
+      </tr>
+    <% } %>
+  </tbody>
 </table>
+<div id="<%= content_id %>_table_pager" class="pager" style="display: none;">
+  <form>
+    <img src="<%= dataset.base_url %>/images/tablesorter/first.png" class="first"/>
+    <img src="<%= dataset.base_url %>/images/tablesorter/prev.png" class="prev"/>
+    <input type="text" class="pagedisplay"/>
+    <img src="<%= dataset.base_url %>/images/tablesorter/next.png" class="next"/>
+    <img src="<%= dataset.base_url %>/images/tablesorter/last.png" class="last"/>
+    <select class="pagesize">
+      <option value="10">10</option>
+      <option value="20" selected="selected">20</option>
+      <option value="30">30</option>
+      <option value="40">40</option>
+    </select>
+  </form>
+</div>
