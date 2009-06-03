@@ -141,6 +141,7 @@ h4 span.subheading_counts {
 .results ul.result_list li {
 	padding: 7px;
 	margin-bottom: 7px;
+	border-width: 3px;
 }
 
 .results h2.doc_title,
