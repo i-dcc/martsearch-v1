@@ -18,12 +18,15 @@ DataSet = function( params, base_url ) {
   
   // Custom template?
   this.template            = params.template ? this.base_url+'/js/templates/'+params.template : this.base_url+'/js/templates/default_dataset.ejs';
-  if ( params.template === undefined ) {
+  
+  // Do we need to fetch all the attr details from the mart?
+  if ( params.template === undefined || params.fetch_attribute_conf ) {
     this.fetch_all_attributes();
   }
   
   // Custom functions
   this.custom_result_parser = params.custom_result_parser;
+  this.pre_display_hook     = params.pre_display_hook;
   this.post_display_hook    = params.post_display_hook;
   
   // Initiate messaging
@@ -168,24 +171,27 @@ DataSet.prototype = {
               if ( ds.debug_mode ) { log.debug('processing '+ content_id); }
 
               if ( results[ content_id ] !== undefined && results[ content_id ].length !== 0 ) {
+                // Run any post display functions
+                if ( ds.pre_display_hook ) { ds.pre_display_hook( content_id ); }
+                
                 var template = new EJS({ url: ds.template }).render({ 'results': results[ content_id ], dataset: ds, 'content_id': content_id });
                 jQuery( "#"+content_id ).html(template);
                 
                 // Run any post display functions
                 if ( ds.post_display_hook ) { ds.post_display_hook( content_id ); }
                 
-                // If we're using the default template, add some table sorting...
+                // If we're using the default template, add some table sorting/pagination...
                 if ( ds.template.match("default_dataset.ejs") ) {
                   jQuery( "#"+content_id + "_table" ).tablesorter({ widgets: ['zebra'] });
                   
-                  // If more than 20 entries - paginate the table
-                  if ( results[content_id].length > 20 ) {
+                  // If more than 10 entries - paginate the table
+                  if ( results[content_id].length > 10 ) {
                     jQuery( "#"+content_id + "_table_pager" ).show();
                     jQuery( "#"+content_id + "_table" ).tablesorterPager(
                       {
                         container: jQuery( "#"+content_id + "_table_pager" ), 
                         positionFixed: false, 
-                        size: 20 
+                        size: 10 
                       }
                     );
                   };
