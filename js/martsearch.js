@@ -72,7 +72,17 @@ MartSearch.prototype = {
     
     // Override the submit function on the search form
     jQuery('#mart_search').submit( function(){
-      ms.search( jQuery('#query').val(), 0, 'search' );
+      if ( jQuery('#query').val() !== "" ) {
+        // Clear the intro text and submit the search
+        jQuery('#intro_text').fadeOut("fast");
+        ms.search( jQuery('#query').val(), 0, 'search' );
+      } else {
+        // Clear any messages and previous results
+        if ( jQuery(".messages").html() !== "" ) { ms.message.clear(); }
+        jQuery("#search_result_list").html("");
+        jQuery("#search_results .pagination").html("");
+        jQuery('#intro_text').fadeIn("fast");
+      };
       return false;
     });
     
