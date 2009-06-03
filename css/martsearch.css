@@ -299,18 +299,26 @@ table.htgt_targ_allele_progress td {
   background-position: right center;
   vertical-align: middle;
   text-align: center;
-  border: none;
   padding: 5px 15px 5px 7px;
   height: 35px;
 }
 
-table.htgt_targ_allele_progress table.with_border tr {
+table.htgt_targ_allele_progress table tr {
   border: none;
 }
 
 table.htgt_targ_allele_progress table.with_border td,
 table.htgt_targ_allele_progress table.with_border th {
   border: 1px solid #e2e2e2;
+  text-align: left;
+}
+
+table.htgt_targ_allele_progress table td {
+	text-align: left;
+}
+
+table.htgt_targ_allele_progress table.with_border td {
+	height: auto;
 }
 
 table.htgt_targ_allele_progress th.centre {

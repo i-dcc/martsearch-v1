@@ -122,6 +122,7 @@
   },
   post_display_hook: function( content_id ) {
     jQuery('#'+content_id+" a[rel^='prettyPhoto']").prettyPhoto();
+    jQuery('#'+content_id+" table.tablesorter").tablesorter({ widgets: ['zebra'], sortList: [[0,0]] });
     jQuery('#'+content_id+' .htgt_targ_allele_progress_clones_toggle').toggleControl('#'+content_id+' .htgt_targ_allele_progress_clones_content', { speed: "fast" });
     jQuery('#'+content_id+' .htgt_targ_allele_progress_toggle').toggleControl('#'+content_id+' .htgt_targ_allele_progress_content', { speed: "fast" });
   }
