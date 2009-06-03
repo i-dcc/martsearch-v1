@@ -1,6 +1,6 @@
 {
   active:             true,
-  debug_mode:         true,
+  debug_mode:         false,
   internal_name:      "kermits_mi_data",
   display_name:       "IKMC Mice",
   url:                "/htgt/biomart",

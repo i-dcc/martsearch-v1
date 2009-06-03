@@ -284,3 +284,169 @@ button.ui-button { width:auto; overflow:visible; } /* remove extra button width 
 .ui-toolbar { padding: .5em; margin: 0;  }
 .ui-toolbar .ui-buttonset { margin-right:1.5em; padding-left: 1px; }
 .ui-toolbar .ui-button { font-size: 1em;  }
+
+/* HTGT_TARG CSS */
+table.htgt_targ_allele_progress {
+  border-collapse: collapse;
+}
+
+table.htgt_targ_allele_progress tr {
+  border-bottom: 2px solid #fff;
+}
+
+table.htgt_targ_allele_progress td {
+  background-repeat: no-repeat;
+  background-position: right center;
+  vertical-align: middle;
+  text-align: center;
+  border: none;
+  padding: 5px 15px 5px 7px;
+  height: 35px;
+}
+
+table.htgt_targ_allele_progress table.with_border tr {
+  border: none;
+}
+
+table.htgt_targ_allele_progress table.with_border td,
+table.htgt_targ_allele_progress table.with_border th {
+  border: 1px solid #e2e2e2;
+}
+
+table.htgt_targ_allele_progress th.centre {
+  text-align: center !important;
+}
+
+table.htgt_targ_allele_progress td.incomp {
+  background-color: #ccc;
+}
+
+table.htgt_targ_allele_progress td.normal {
+  background: none;
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-color: #074987;
+}
+
+table.htgt_targ_allele_progress td.error {
+  background-color: #c1272d;
+}
+
+table.htgt_targ_allele_progress td.warn {
+  background: none;
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-color: #f7931e;
+}
+
+table.htgt_targ_allele_progress td.normal,
+table.htgt_targ_allele_progress td.error,
+table.htgt_targ_allele_progress td.warn {
+  color: #fff;
+  font-weight: bold;
+}
+
+table.htgt_targ_allele_progress td.normal_normal {
+  background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-comp-comp.png');
+}
+
+table.htgt_targ_allele_progress td.normal_incomp {
+  background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-comp-incomp.png');
+}
+
+table.htgt_targ_allele_progress td.normal_error {
+  background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-comp-error.png');
+}
+
+table.htgt_targ_allele_progress td.normal_warn {
+  background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-comp-warn.png');
+}
+
+table.htgt_targ_allele_progress td.incomp_incomp {
+  background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-incomp-incomp.png');
+}
+
+table.htgt_targ_allele_progress td.error_incomp {
+  background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-error-incomp.png');
+}
+
+table.htgt_targ_allele_progress td.warn_incomp {
+  background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-warn-incomp.png');
+}
+
+table.htgt_targ_allele_progress td.start_incomp {
+  background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-start-incomp.png');
+  background-color: #fff;
+}
+
+table.htgt_targ_allele_progress td.start_normal {
+  background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-start-comp.png');
+  background-color: #fff;
+}
+
+table.htgt_targ_allele_progress td.start_error {
+  background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-start-error.png');
+  background-color: #fff;
+}
+
+table.htgt_targ_allele_progress td.start_warn {
+  background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-start-warn.png');
+  background-color: #fff;
+}
+
+table.htgt_targ_allele_progress td.end_incomp {
+  background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-end-incomp.png');
+}
+
+table.htgt_targ_allele_progress td.end_normal {
+  background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-end-comp.png');
+}
+
+table.htgt_targ_allele_progress td.end_error {
+  background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-end-error.png');
+}
+
+table.htgt_targ_allele_progress td.end_warn {
+  background-image: url('http://www.sanger.ac.uk/htgt/static/images/progress-end-warn.png');
+}
+
+div.htgt_targ_allele_box {
+  padding: 5px;
+  margin: 4px;
+}
+
+div.htgt_targ_allele_box ul li {
+  margin: 0 !important;
+}
+
+/* Vertical text hacks */
+/*
+html>body .canv { display: none }
+html>body .obj  { display: block }
+.canv, .obj { height:160px; width: 12px; }
+*/
+
+/* Phenotyping */
+
+table.phenotyping td {
+	background: #fff;
+}
+
+table.phenotyping td.test_not_done {
+	cursor: pointer;
+}
+
+table.phenotyping td.significant_difference {
+	background-color: #c1272d;
+	cursor: pointer;
+}
+
+table.phenotyping td.no_significant_difference {
+	background-color: #074987;
+	cursor: pointer;
+}
+
+table.phenotyping td.not_applicable {
+	background-color: #f7931e;
+	cursor: pointer;
+}

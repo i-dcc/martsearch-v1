@@ -1,0 +1,49 @@
+<table class="phenotyping with_border">
+  <thead>
+    <tr>
+      <% for ( var i=0; i<dataset.enabled_attributes.length; i++ ) { %>
+        <% var attrib = dataset.enabled_attributes[i]; %>
+        <% if ( ! attrib.match("comment") ) { %>
+          <% if ( attrib.match("escell_clone_name|pipeline|colony_prefix") ) { %>
+            <th><%= dataset.attributes[ attrib ].displayname %></th>
+          <% } else { %>
+            <th></th>
+          <% } %>
+        <% } %>
+      <% } %>
+    </tr>
+  </thead>
+  <tbody>
+    <% for ( var i=0; i<results.length; i++ ) { %>
+      <tr>
+        <% var result = results[i] %>
+        <% for ( var j=0; j<dataset.enabled_attributes.length; j++ ) { %>
+          <% var attrib = dataset.enabled_attributes[j]; %>
+          <% if ( ! attrib.match("comment") ) { %>
+            <% if ( attrib.match("escell_clone_name|pipeline|colony_prefix") ) { %>
+              <td><%= result[attrib] %></td>
+            <% } else { %>
+              <%
+                var title_text = "<h4>" + dataset.attributes[ attrib ].displayname + "</h4>";
+              %>
+              <% if ( result[attrib] ) { %>
+                <%
+                  title_text += '<p><strong>Result:</strong> ' + result[attrib] + '</p>';
+                  if ( result[attrib + '_comment'] ) {
+                    title_text += '<p><strong>Comments:</strong> ' + result[attrib + '_comment'] + '</p>';
+                  }
+                %>
+                <td class="<%= result[attrib] %>" tooltip="<%= title_text %>" rel='qtip'></td>
+              <% } else { %>
+                <%
+                  title_text += '<p>Test not carried out.</p>';
+                %>
+                <td class="test_not_done" tooltip="<%= title_text %>" rel='qtip'></td>
+              <% } %>
+            <% } %>
+          <% } %>
+        <% } %>
+      </tr>
+    <% } %>
+  </tbody>
+</table>

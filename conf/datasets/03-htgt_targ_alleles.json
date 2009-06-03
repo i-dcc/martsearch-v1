@@ -1,6 +1,6 @@
 {
   active:             true,
-  debug_mode:         true,
+  debug_mode:         false,
   internal_name:      "htgt_targ_alleles",
   display_name:       "KOMP/EUCOMM Vectors and ES Cells",
   url:                "/htgt/biomart",
