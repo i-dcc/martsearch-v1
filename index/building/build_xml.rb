@@ -321,13 +321,16 @@ def search_product_marts( documents )
         unless attribute.match(/marker_symbol|comment/)
           
           if data[ attribute ] == "significant_difference"
-            text_to_index = attribute.gsub( "_", " " )
+            text_to_index = attribute
+            text_to_index.gsub!( "ip_gtt", "ip-gtt" )
+            text_to_index.gsub!( "x_ray", "x-ray" )
+            text_to_index.gsub!( "_", " " )
             document.phenotype.push( text_to_index )
             
             unless data[ attribute + '_comment' ].to_s.empty?
               document.phenotype_comments.push( data[ attribute + '_comment' ] )
               
-              # Also, try and extract MP terms
+              # Also, extract the MP terms
               if data[ attribute + '_comment' ].to_s.match(/MP\:\d+/)
                 document.mp_terms.push( data[ attribute + '_comment' ].to_s.match(/MP\:\d+/)[0] )
               end

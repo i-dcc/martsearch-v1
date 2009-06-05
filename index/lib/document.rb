@@ -63,6 +63,7 @@ class Document
     if ! self.marker_symbol.empty?
       
       xml.doc {
+        self.xml_singleValue( xml, self.marker_symbol,     "marker_symbol_key" )
         self.xml_singleValue( xml, self.marker_symbol,     "marker_symbol" )
         self.xml_singleValue( xml, self.mgi_accession_id,  "mgi_accession_id" )
         self.xml_singleValue( xml, self.type,              "type" )
