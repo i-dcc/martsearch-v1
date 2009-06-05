@@ -9,9 +9,8 @@
 #
 # == Example Usage
 #
-#   document = Document.new()
+#   document = Document.new( 'Cbx1' )
 #
-#   document.marker_symbol       = 'Cbx1'
 #   document.mgi_accession_id    = 'MGI:105369'
 #   document.marker_name         = 'chromobox homolog 1 (Drosophila HP1 beta)'
 #   document.type                = 'Gene'
@@ -33,7 +32,8 @@ class Document
   # Multi Value accessor
   attr_accessor :marker_names, :synonyms, :ensembl_gene_ids, :vega_gene_ids, 
     :entrez_gene_ids, :ccds_ids, :omim_ids, :targeting_designs, 
-    :intermediate_vectors, :targeting_vectors, :alleles, :escells
+    :intermediate_vectors, :targeting_vectors, :alleles, :escells, 
+    :phenotype, :phenotype_comments, :mp_terms
   
   # Sets the marker_symbol and initializes the multi-valued fields.
   def initialize( symbol )
@@ -50,6 +50,9 @@ class Document
     @targeting_vectors    = []
     @alleles              = []
     @escells              = []
+    @phenotype            = []
+    @phenotype_comments   = []
+    @mp_terms             = []
   end
   
   # Builds and returns the Solr document XML for this Document.
@@ -60,15 +63,14 @@ class Document
     if ! self.marker_symbol.empty?
       
       xml.doc {
-        xml.field( self.marker_symbol, :name => "marker_symbol" )
-
+        self.xml_singleValue( xml, self.marker_symbol,     "marker_symbol" )
         self.xml_singleValue( xml, self.mgi_accession_id,  "mgi_accession_id" )
         self.xml_singleValue( xml, self.type,              "type" )
         self.xml_singleValue( xml, self.chromosome,        "chromosome" )
         self.xml_singleValue( xml, self.coord_end,         "coord_end" )
         self.xml_singleValue( xml, self.strand,            "strand" )
              
-        self.xml_multiValue( xml, @marker_names,       "marker_name" )
+        self.xml_multiValue( xml, @marker_names,         "marker_name" )
         self.xml_multiValue( xml, @synonyms,             "synonym" )
         self.xml_multiValue( xml, @ensembl_gene_ids,     "ensembl_gene_id" )
         self.xml_multiValue( xml, @vega_gene_ids,        "vega_gene_id" )
@@ -80,7 +82,9 @@ class Document
         self.xml_multiValue( xml, @targeting_vectors,    "targeting_vector" )
         self.xml_multiValue( xml, @alleles,              "allele" )
         self.xml_multiValue( xml, @escells,              "escell" )
-
+        self.xml_multiValue( xml, @phenotype,            "phenotype" )
+        self.xml_multiValue( xml, @phenotype_comments,   "phenotype_comment" )
+        self.xml_multiValue( xml, @mp_terms,             "mp_term" )
       }
       
     end
