@@ -1,0 +1,111 @@
+{
+  active:             true,
+  debug_mode:         false,
+  internal_name:      "kermits_mi_data",
+  display_name:       "IKMC Mice",
+  url:                "/htgt/biomart",
+  full_url:           "http://www.sanger.ac.uk/htgt/biomart",
+  mart_dataset:       "kermits",
+  joined_index_field: "escell",
+  joined_filter:      "escell_clone_name",
+  enabled_attributes: [
+    "sponsor",
+    "escell_clone_name",
+    "escell_line_type",
+    "status",
+    "allele_name",
+    "mi_centre",
+    "test_cross_strain"
+  ],
+  required_attributes: [
+    "status"
+  ],
+  custom_result_parser: function ( data, ds, docs ) {
+    var data_by_line = data.split("\n");
+    data_by_line.pop(); // Remove the last entry - this is always empty
+    
+    if ( data_by_line.length > 0 ) {
+      var data_by_joined_field = {};
+      for (var i=0; i < data_by_line.length; i++) {
+          var tmp_hash = {};
+          var data_by_item = data_by_line[i].split("\t");
+          for (var j=0; j < data_by_item.length; j++) {
+            //specific check that discards mice that aren't genotype confirmed
+            tmp_hash[ ds.enabled_attributes[j] ] = data_by_item[j];
+          }
+
+          // Filter out unwanted rows...
+          var save_this_row = true;
+          if ( ds.required_attributes !== undefined ) {
+            for (var j=0; j < ds.required_attributes.length; j++) {
+              if ( tmp_hash[ ds.required_attributes[j] ] === "" ) {
+                save_this_row = false;
+              }
+            }
+          }
+
+          if ( save_this_row ) {
+            if(tmp_hash['status'] === 'Genotype Confirmed'){
+                if ( data_by_joined_field[ tmp_hash[ ds.joined_filter ] ] === undefined ) {
+                  data_by_joined_field[ tmp_hash[ ds.joined_filter] ] = [];
+                }
+                data_by_joined_field[ tmp_hash[ ds.joined_filter ] ].push(tmp_hash);
+            }
+          }
+      }
+    
+      var data_to_return = {};
+      if ( jQuery.keys(data_by_joined_field).length > 0 ) {
+        for (var i=0; i < docs.length; i++) {
+
+          // Calculate the content_id - The unique DOM element identifier that this
+          // returned data will be injected into
+          var content_id = docs[i][ ds.joined_index_field ];
+          if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); }
+          content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).replace( /\;/g, "-" ).substr(0,20);
+
+          // Set up a temp array to put all of our info into...
+          var tmp_array = [];
+
+          // Now collect each row of data that matches this 'joined_index_field'
+          if ( typeof docs[i][ ds.joined_index_field ] == 'string' ) {
+            // We only have a single value to match to...
+            var index_item = docs[i][ ds.joined_index_field ];
+            if ( data_by_joined_field[ index_item ] !== undefined ) {
+              for (var j=0; j < data_by_joined_field[ index_item ].length; j++) {
+                tmp_array.push( data_by_joined_field[ index_item ][j] );
+              }
+            }
+          }
+          else {
+            // We have an array of values to match to...
+            for (var j=0; j < docs[i][ ds.joined_index_field ].length; j++) {
+              var index_item = docs[i][ ds.joined_index_field ][j];
+
+              if ( data_by_joined_field[ index_item ] !== undefined ) {
+                for (var k=0; k < data_by_joined_field[ index_item ].length; k++) {
+                  tmp_array.push( data_by_joined_field[ index_item ][k] );
+                }
+              }
+            }
+          }
+
+          data_to_return[ ds.internal_name + '_' + content_id ] = tmp_array;
+        }
+
+      }
+      else {
+        data_to_return = false;
+      }
+
+      return data_to_return;
+ 
+    
+    }
+    else {
+      return false;
+    }
+
+    return {};
+  }
+}
