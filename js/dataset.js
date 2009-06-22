@@ -155,8 +155,8 @@ DataSet.prototype = {
         else {
           
           // Parse the returned results
-          if ( ds.custom_result_parser === undefined ) { results = ds._parse_biomart_data( data, docs ); }
-          else                                         { results = ds.custom_result_parser( data, ds ); }
+          if ( ds.custom_result_parser === undefined ) { results = ds._parse_biomart_data( data, ds, docs ); }
+          else                                         { results = ds.custom_result_parser( data, ds, docs ); }
           if ( ds.debug_mode ) { if ( typeof console.log !== "undefined" ) { console.log(results); } }
           
           // Now display the results for each 'doc'
@@ -266,8 +266,8 @@ DataSet.prototype = {
   * @return   {Object}  A JSON hash of result objects - keyed by the content_id 
   *                     used within the DOM of the results list.
   */
-  _parse_biomart_data: function ( data, docs ) {
-    var ds = this;
+  _parse_biomart_data: function ( data, ds, docs ) {
+    //var ds = this;
     
     // Split the tsv string on newlines, then each line on tabs
     // before building into the JSON output

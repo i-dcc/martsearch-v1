@@ -136,7 +136,7 @@ MartSearch.prototype = {
     jQuery('#query').focus();
     
     // Load any stored messages
-    ms.message.init();
+    //ms.message.init();
     
     // Build the browsable content
     if ( ms.browsable_content ) {
@@ -239,12 +239,12 @@ MartSearch.prototype = {
     * Make the doc 'bubbles' toggleable, and if there is a lot of results 
     * to go through, collapse them...
     */
-    //if ( index_response && index_response.response.numFound > ms.index.docs_per_page ) {
-    //  jQuery('.doc_title').toggleControl('.doc_content', { speed: "fast" });
-    //}
-    //else {
+    if ( index_response && index_response.response.numFound > ms.index.docs_per_page ) {
+      jQuery('.doc_title').toggleControl('.doc_content', { speed: "fast" });
+    }
+    else {
       jQuery('.doc_title').toggleControl('.doc_content', { hide: false, speed: "fast" });
-    //}
+    }
     
     // Hide the loading indicator
     jQuery("#"+search_or_browse+"_loading").fadeOut("fast");
