@@ -8,6 +8,7 @@
   mart_dataset:       "bacs",
   joined_index_field: "marker_symbol",
   joined_filter:      "marker_symbol",
+  template:           "sanger_bacs.ejs",
   enabled_attributes: [
     "marker_symbol",
     "library",
