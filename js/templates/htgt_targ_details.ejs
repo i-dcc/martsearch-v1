@@ -173,7 +173,7 @@
                     var conditional_clones = [];
                     var nonconditional_clones = [];
                     for ( var j=0; j<project["escells"].length; j++) {
-                      if ( project["escells"][j]["is_targeted_null_cond"].match("yes") ) {
+                      if ( project["escells"][j]["is_targeted_non_cond"].match("yes") ) {
                         nonconditional_clones.push( project["escells"][j] );
                       } else {
                         conditional_clones.push( project["escells"][j] );

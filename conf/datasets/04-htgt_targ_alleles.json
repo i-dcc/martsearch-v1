@@ -42,7 +42,7 @@
     "es_cell_line",
     "colonies_picked",
     "is_latest_for_gene",
-    "is_targeted_null_cond"
+    "is_targeted_non_cond"
   ],
   custom_result_parser: function ( data, ds, docs ) {
     var results = {};
@@ -103,7 +103,7 @@
           project[ singular_attributes[j] ] = result[ singular_attributes[j] ];
         };
 
-        if ( result["escell_clone_name"] && ( result["escell_distribute"] || result["is_targeted_null_cond"] ) ) {
+        if ( result["escell_clone_name"] && ( result["escell_distribute"] || result["is_targeted_non_cond"] ) ) {
           // Find or create ES Cell entries for the project
           if ( project["escells"] == undefined ) { project["escells"] = []; };
           
@@ -112,7 +112,7 @@
             es_cell_line:           result["es_cell_line"],
             colonies_picked:        result["colonies_picked"],
             escell_distribute:      result["escell_distribute"],
-            is_targeted_null_cond:  result["is_targeted_null_cond"]
+            is_targeted_non_cond:  result["is_targeted_non__cond"]
           });
         };
       };
