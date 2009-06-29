@@ -308,10 +308,7 @@
                     var conditional_clones = [];
                     var nonconditional_clones = [];
                     for ( var j=0; j<project["escells"].length; j++) {
-                      if ( (
-                        project["escells"][j]["is_targeted_non_cond"] != undefined) &&
-                        project["escells"][j]["is_targeted_non_cond"].match("yes")
-                      ){
+                      if (project["escells"][j]["show_in_trap_box"] ){
                         nonconditional_clones.push( project["escells"][j] );
                       } else {
                         conditional_clones.push( project["escells"][j] );
