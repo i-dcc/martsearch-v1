@@ -3,7 +3,7 @@
     <tr>
       <% for ( var i=0; i<dataset.enabled_attributes.length; i++ ) { %>
         <% var attrib = dataset.enabled_attributes[i]; %>
-        <% if ( ! attrib.match("comment") ) { %>
+        <% if ( ! attrib.match("comment") && ! attrib.match("marker_symbol") ) { %>
           <% if ( attrib.match("escell_clone_name|pipeline|colony_prefix") ) { %>
             <th><%= dataset.attributes[ attrib ].displayname %></th>
           <% } else { %>
@@ -19,7 +19,7 @@
         <% var result = results[i] %>
         <% for ( var j=0; j<dataset.enabled_attributes.length; j++ ) { %>
           <% var attrib = dataset.enabled_attributes[j]; %>
-          <% if ( ! attrib.match("comment") ) { %>
+          <% if ( ! attrib.match("comment") && ! attrib.match("marker_symbol") ) { %>
             <% if ( attrib.match("escell_clone_name|pipeline|colony_prefix") ) { %>
               <td><%= result[attrib] %></td>
             <% } else { %>

@@ -1,8 +1,8 @@
 {
   active:             true,
   debug_mode:         false,
-  internal_name:      "kermits_mi_data",
-  display_name:       "IKMC Mice",
+  internal_name:      "sanger_mice",
+  display_name:       "Sanger Mice",
   url:                "/htgt/biomart",
   full_url:           "http://www.sanger.ac.uk/htgt/biomart",
   mart_dataset:       "kermits",
@@ -14,7 +14,6 @@
     "escell_line_type",
     "status",
     "allele_name",
-    "mi_centre",
     "test_cross_strain"
   ],
   required_attributes: [

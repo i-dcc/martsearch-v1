@@ -18,6 +18,6 @@
     "end"
   ],
   post_display_hook: function ( content_id ) {
-    jQuery( '#'+content_id ).parent().parent().find("h3.dataset_title").click();
+    //jQuery( '#'+content_id ).parent().parent().find("h3.dataset_title").click();
   }
 }
