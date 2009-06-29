@@ -155,19 +155,17 @@ DataSet.prototype = {
         else {
           
           // Parse the returned results
-          if ( ds.custom_result_parser === undefined ) { results = ds._parse_biomart_data( data, ds, docs ); }
-          else                                         { results = ds.custom_result_parser( data, ds, docs ); }
+          if ( ds.custom_result_parser === undefined ) { results = ds._parse_biomart_data( data, docs ); }
+          else                                         { results = ds.custom_result_parser( data, docs ); }
           if ( ds.debug_mode ) { if ( typeof console.log !== "undefined" ) { console.log(results); } }
           
           // Now display the results for each 'doc'
           for (var i=0; i < docs.length; i++) {
-            var content_id = docs[i][ ds.joined_index_field ];
-            if ( content_id !== undefined && content_id !== "" ) {
+            
+            var content_id = ms._content_id( ds, docs[i][ ds.joined_index_field ] );
+            if ( content_id ) {
 
               // Figure out the DOM id
-              if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); }
-              content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).replace( /\;/g, "-" ).substr(0,20);
-              content_id = ds.internal_name + '_' + content_id;
               if ( ds.debug_mode ) { log.debug('processing '+ content_id); }
 
               if ( results[ content_id ] !== undefined && results[ content_id ].length !== 0 ) {
@@ -266,8 +264,8 @@ DataSet.prototype = {
   * @return   {Object}  A JSON hash of result objects - keyed by the content_id 
   *                     used within the DOM of the results list.
   */
-  _parse_biomart_data: function ( data, ds, docs ) {
-    //var ds = this;
+  _parse_biomart_data: function ( data, docs ) {
+    var ds = this;
     
     // Split the tsv string on newlines, then each line on tabs
     // before building into the JSON output
@@ -324,37 +322,38 @@ DataSet.prototype = {
 
           // Calculate the content_id - The unique DOM element identifier that this
           // returned data will be injected into
-          var content_id = docs[i][ ds.joined_index_field ];
-          if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); }
-          content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).replace( /\;/g, "-" ).substr(0,20);
+          var content_id = ms._content_id( ds, docs[i][ ds.joined_index_field ] );
+          
+          // If we have a content_id, process our data
+          if ( content_id ) {
+            // Set up a temp array to put all of our info into...
+            var tmp_array = [];
 
-          // Set up a temp array to put all of our info into...
-          var tmp_array = [];
-
-          // Now collect each row of data that matches this 'joined_index_field'
-          if ( typeof docs[i][ ds.joined_index_field ] == 'string' ) {
-            // We only have a single value to match to...
-            var index_item = docs[i][ ds.joined_index_field ];
-            if ( data_by_joined_field[ index_item ] !== undefined ) {
-              for (var j=0; j < data_by_joined_field[ index_item ].length; j++) {
-                tmp_array.push( data_by_joined_field[ index_item ][j] );
-              }
-            }
-          }
-          else {
-            // We have an array of values to match to...
-            for (var j=0; j < docs[i][ ds.joined_index_field ].length; j++) {
-              var index_item = docs[i][ ds.joined_index_field ][j];
-
+            // Now collect each row of data that matches this 'joined_index_field'
+            if ( typeof docs[i][ ds.joined_index_field ] == 'string' ) {
+              // We only have a single value to match to...
+              var index_item = docs[i][ ds.joined_index_field ];
               if ( data_by_joined_field[ index_item ] !== undefined ) {
-                for (var k=0; k < data_by_joined_field[ index_item ].length; k++) {
-                  tmp_array.push( data_by_joined_field[ index_item ][k] );
+                for (var j=0; j < data_by_joined_field[ index_item ].length; j++) {
+                  tmp_array.push( data_by_joined_field[ index_item ][j] );
                 }
               }
             }
-          }
+            else {
+              // We have an array of values to match to...
+              for (var j=0; j < docs[i][ ds.joined_index_field ].length; j++) {
+                var index_item = docs[i][ ds.joined_index_field ][j];
 
-          data_to_return[ ds.internal_name + '_' + content_id ] = tmp_array;
+                if ( data_by_joined_field[ index_item ] !== undefined ) {
+                  for (var k=0; k < data_by_joined_field[ index_item ].length; k++) {
+                    tmp_array.push( data_by_joined_field[ index_item ][k] );
+                  }
+                }
+              }
+            }
+
+            data_to_return[ content_id ] = tmp_array;
+          }
         }
 
       }
