@@ -42,9 +42,9 @@
     "es_cell_line",
     "colonies_picked",
     "is_latest_for_gene",
-    "is_targeted_null_cond"
+    "is_targeted_non_cond"
   ],
-  custom_result_parser: function ( data, ds ) {
+  custom_result_parser: function ( data, ds, docs ) {
     var results = {};
     var int_results = ds._biomart_tsv2json_ah( data );
     
@@ -102,7 +102,7 @@
           project[ singular_attributes[j] ] = result[ singular_attributes[j] ];
         };
 
-        if ( result["escell_clone_name"] && ( result["escell_distribute"] || result["is_targeted_null_cond"] ) ) {
+        if ( result["escell_clone_name"] && ( result["escell_distribute"] || result["is_targeted_non_cond"] ) ) {
           // Find or create ES Cell entries for the project
           if ( project["escells"] == undefined ) { project["escells"] = []; };
           
@@ -111,7 +111,7 @@
             es_cell_line:           result["es_cell_line"],
             colonies_picked:        result["colonies_picked"],
             escell_distribute:      result["escell_distribute"],
-            is_targeted_null_cond:  result["is_targeted_null_cond"]
+            is_targeted_non_cond:   result["is_targeted_non_cond"]
           });
         };
       };
@@ -122,6 +122,7 @@
   },
   post_display_hook: function( content_id ) {
     jQuery('#'+content_id+" a[rel^='prettyPhoto']").prettyPhoto();
+    jQuery('#'+content_id+" table.tablesorter").tablesorter({ widgets: ['zebra'], sortList: [[0,0]] });
     jQuery('#'+content_id+' .htgt_targ_allele_progress_clones_toggle').toggleControl('#'+content_id+' .htgt_targ_allele_progress_clones_content', { speed: "fast" });
     jQuery('#'+content_id+' .htgt_targ_allele_progress_toggle').toggleControl('#'+content_id+' .htgt_targ_allele_progress_content', { speed: "fast" });
   }
