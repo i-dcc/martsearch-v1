@@ -136,7 +136,7 @@ MartSearch.prototype = {
     jQuery('#query').focus();
     
     // Load any stored messages
-    //ms.message.init();
+    ms.message.init();
     
     // Build the browsable content
     if ( ms.browsable_content ) {
