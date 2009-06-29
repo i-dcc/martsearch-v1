@@ -12,8 +12,8 @@ jQuery.ajax({
 
 for (var i=0; i < ms.datasets.length; i++) {
   var ds = ms.datasets[i];
-  var ds_chk = datasets[i];
-  datasetTests(ds,ds_chk);
+  var ds_chk = new DataSet( datasets[i], ms.base_url );
+  datasetTests( ds, ds_chk );
 };
 
 function datasetTests ( ds, ds_chk ) {
@@ -76,10 +76,10 @@ function datasetTests ( ds, ds_chk ) {
         data:     { query: xml },
         success:  function ( data ) {
           if ( ds.custom_result_parser == undefined ) {
-            results = ds._parse_biomart_data( data, index_response.response.docs, ms.index.primary_field );
+            results = ds._parse_biomart_data( data, index_response.response.docs );
           }
           else {
-            results = ds.custom_result_parser( data, ds );
+            results = ds.custom_result_parser( data, index_response.response.docs );
           };
         }
       });
@@ -117,10 +117,10 @@ function datasetTests ( ds, ds_chk ) {
         data:     { query: xml },
         success:  function ( data ) {
           if ( ds.custom_result_parser == undefined ) {
-            results = ds._parse_biomart_data( data, index_response.response.docs, ms.index.primary_field );
+            results = ds._parse_biomart_data( data, index_response.response.docs );
           }
           else {
-            results = ds.custom_result_parser( data, ds );
+            results = ds.custom_result_parser( data, index_response.response.docs );
           };
         }
       });

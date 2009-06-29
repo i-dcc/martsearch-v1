@@ -200,6 +200,7 @@ MartSearch.prototype = {
       // Load in the doc skeleton...
       var docs = new EJS({ url: ms.base_url + "/js/templates/docs.ejs" }).render(
         {
+          ms:             ms,
           docs:           index_response.response.docs,
           primary_field:  ms.index.primary_field,
           datasets:       ms.datasets
@@ -259,6 +260,34 @@ MartSearch.prototype = {
   _pager: function ( new_page_index, pagination_container, search_or_browse ) {
     this.search( this.current_query, new_page_index, search_or_browse );
     return false;
+  },
+  
+  /**
+  * Helper function to produce the 'content_id' for each mart 'bubble'
+  * This is the unique DOM id of each 'bubble' so that we can know where to 
+  * inject our results.  It is made up of the datasets internal_name and a 
+  * string concatenation of the search terms used to search the mart in that 
+  * 'bubble' - in theory this should be sufficiently unique for our purposes.
+  */
+  _content_id: function ( dataset, search_terms ) {
+    var content_id = false;
+    if ( search_terms !== undefined && search_terms !== "" ) {
+      // Make the content_id equal to the search terms
+      content_id = search_terms;
+      
+      // If we're presented with an array, join the elements into a string
+      if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); }
+      
+      // Now parse out some unpleasant characters
+      content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).replace( /\;/g, "-" ).replace( /\./g, "-" );
+      
+      // Shrink the string to something manageable
+      content_id = content_id.substr(0,30);
+      
+      // Finally, prepend the dataset identifier
+      content_id = dataset.internal_name + '_' + content_id;
+    }
+    return content_id;
   }
 };
 

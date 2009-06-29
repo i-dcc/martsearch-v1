@@ -4,11 +4,9 @@
       Data returned from: 
       <% for ( var j=0; j<datasets.length; j++ ) { %>
         <%
-          var is_present_id = docs[i][ datasets[j].joined_index_field ];
-          if ( is_present_id !== undefined && is_present_id !== "" ) {
-            if ( typeof is_present_id != 'string' ) { is_present_id = is_present_id.join('_'); };
-            is_present_id = is_present_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).replace( /\;/g, "-" ).replace( /\./g, "-" ).substr(0,20);
-            is_present_id = datasets[j].internal_name + '_' + is_present_id + '_is_present';
+          var is_present_id = ms._content_id( datasets[j], docs[i][ datasets[j].joined_index_field ] );
+          if ( is_present_id ) {
+            is_present_id = is_present_id + '_is_present';
         %>
         <span id="<%= is_present_id %>" class="dataset_is_present"><%= datasets[j].display_name.replace( /\s/g, "&nbsp;" ) %></span>
         <% } %>
@@ -19,16 +17,14 @@
     <div class="doc_content">
       <% for ( var j=0; j<datasets.length; j++ ) { %>
         <%
-          var content_id = docs[i][ datasets[j].joined_index_field ];
-          if ( content_id !== undefined && content_id !== "" ) {
-            if ( typeof content_id != 'string' ) { content_id = content_id.join('_'); };
-            content_id = content_id.replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).replace( /\;/g, "-" ).replace( /\./g, "-" ).substr(0,20);
+          var content_id = ms._content_id( datasets[j], docs[i][ datasets[j].joined_index_field ] );
+          if ( content_id ) {
         %>
           <div class="dataset ui-widget-content ui-corner-all">
             <h3 class="dataset_title"><%= datasets[j].display_name %></h3>
             <div class="dataset_content">
-              <div id="<%= datasets[j].internal_name + '_' + content_id %>" class="content"></div>
-              <div id="<%= datasets[j].internal_name + '_' + content_id %>_credit" class="credit">
+              <div id="<%= content_id %>" class="content"></div>
+              <div id="<%= content_id %>_credit" class="credit">
                 <%
                   var link_url = datasets[j].search_link_url( docs[i][ datasets[j].joined_index_field ] );
                 %>
