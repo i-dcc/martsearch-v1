@@ -44,7 +44,8 @@
     "is_latest_for_gene",
     "is_targeted_non_cond"
   ],
-  custom_result_parser: function ( data, ds, docs ) {
+  custom_result_parser: function ( data, docs ) {
+    var ds = this;
     var results = {};
     var int_results = ds._biomart_tsv2json_ah( data );
     
@@ -53,10 +54,13 @@
       var result = int_results[i];
       
       // Only store a result if we have a htgt_project_id and it's not a regeneron project
-      if ( result["htgt_project_id"] && result["is_komp_regeneron"] !== "1" && result["is_norcomm"] !== "1"
-           && (result["status_sequence"] >= 95)) {
+      if (     result["htgt_project_id"] !== undefined
+            && result["is_komp_regeneron"] !== "1" 
+            && result["is_norcomm"] !== "1"
+            && result["status_sequence"] >= 95 ) {
+
         // Set the DOM element id we need to lookup
-        var content_id = ds.internal_name + '_' + result["marker_symbol"].replace( /\(/g, "-" ).replace( /\)/g, "-" ).replace( /\*/g, "-" ).substr(0,20);
+        var content_id = ms._content_id( ds, result["marker_symbol"] );
         
         // Find or create a result and project entry
         if ( results[ content_id ] == undefined ) { results[ content_id ] = {}; };
@@ -116,15 +120,19 @@
             es_cell_line:           result["es_cell_line"],
             colonies_picked:        result["colonies_picked"],
             escell_distribute:      result["escell_distribute"],
-            is_targeted_non_cond:  result["is_targeted_non_cond"],
-            show_in_trap_box:  show_in_trap_box
+            is_targeted_non_cond:   result["is_targeted_non_cond"],
+            show_in_trap_box:       show_in_trap_box
           });
         };
       };
       
     };
     
-    return results;
+    if ( jQuery.keys(results).length > 0 ) {
+      return results;
+    } else {
+      return false;
+    }
   },
   post_display_hook: function( content_id ) {
     jQuery('#'+content_id+" a[rel^='prettyPhoto']").prettyPhoto();
