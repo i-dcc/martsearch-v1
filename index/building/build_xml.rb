@@ -73,8 +73,8 @@ def build_chromosome_xml( query, filename )
   
   # Read in our temporarily hacked gene file, extract the gene info 
   # for this chromosome, and proceed as normal...
-  chr_data = ''
-  file = File.open( 'genes.txt', 'r' ) do |file|
+  chr_data = ""
+  file = File.open( "genes.txt", "r" ) do |file|
     while line = file.gets
       data_elements = line.split("\t")
       if data_elements[2] == query
@@ -86,37 +86,37 @@ def build_chromosome_xml( query, filename )
   dcc_data = dcc_mart.tsv2array( chr_data )
   
   dcc_data.each { |data|
-    document = documents[ data['marker_symbol'] ]
+    document = documents[ data["marker_symbol"] ]
 
     if document == nil
-      document = Document.new( data['marker_symbol'] )
+      document = Document.new( data["marker_symbol"] )
     end
 
     # Put in the singular data...
-    document.mgi_accession_id    = data['mgi_accession_id']
-    document.type                = data['marker_type']
-    document.chromosome          = data['chromosome']
-    document.coord_start         = data['coord_start']
-    document.coord_end           = data['coord_end']
-    document.strand              = data['strand']
+    document.mgi_accession_id    = data["mgi_accession_id"]
+    document.type                = data["marker_type"]
+    document.chromosome          = data["chromosome"]
+    document.coord_start         = data["coord_start"]
+    document.coord_end           = data["coord_end"]
+    document.strand              = data["strand"]
 
     # Now the multi-valued data...
-    add_to_multivalued_field( data['marker_names'], document.marker_names, '; ' )
-    add_to_multivalued_field( data['synonyms'], document.synonyms, ', ' )
-    add_to_multivalued_field( data['ensembl_gene_ids'], document.ensembl_gene_ids, ',' )
-    add_to_multivalued_field( data['vega_gene_ids'], document.vega_gene_ids, ',' )
-    add_to_multivalued_field( data['entrez_gene_ids'], document.entrez_gene_ids, ',' )
-    add_to_multivalued_field( data['ccds_ids'], document.ccds_ids, ',' )
-    add_to_multivalued_field( data['omim_ids'], document.omim_ids, ',' )
-    add_to_multivalued_field( data['expired_marker_names'], document.marker_names, '; ' )
-    add_to_multivalued_field( data['expired_synonyms'], document.synonyms, ', ' )
-    add_to_multivalued_field( data['expired_ensembl_gene_ids'], document.ensembl_gene_ids, ',' )
-    add_to_multivalued_field( data['expired_vega_gene_ids'], document.vega_gene_ids, ',' )
-    add_to_multivalued_field( data['expired_entrez_gene_ids'], document.entrez_gene_ids, ',' )
-    add_to_multivalued_field( data['expired_ccds_ids'], document.ccds_ids, ',' )
-    add_to_multivalued_field( data['expired_omim_ids'], document.omim_ids, ',' )
+    add_to_multivalued_field( data["marker_names"], document.marker_names, "; " )
+    add_to_multivalued_field( data["synonyms"], document.synonyms, ", " )
+    add_to_multivalued_field( data["ensembl_gene_ids"], document.ensembl_gene_ids, "," )
+    add_to_multivalued_field( data["vega_gene_ids"], document.vega_gene_ids, "," )
+    add_to_multivalued_field( data["entrez_gene_ids"], document.entrez_gene_ids, "," )
+    add_to_multivalued_field( data["ccds_ids"], document.ccds_ids, "," )
+    add_to_multivalued_field( data["omim_ids"], document.omim_ids, "," )
+    add_to_multivalued_field( data["expired_marker_names"], document.marker_names, "; " )
+    add_to_multivalued_field( data["expired_synonyms"], document.synonyms, ", " )
+    add_to_multivalued_field( data["expired_ensembl_gene_ids"], document.ensembl_gene_ids, "," )
+    add_to_multivalued_field( data["expired_vega_gene_ids"], document.vega_gene_ids, "," )
+    add_to_multivalued_field( data["expired_entrez_gene_ids"], document.entrez_gene_ids, "," )
+    add_to_multivalued_field( data["expired_ccds_ids"], document.ccds_ids, "," )
+    add_to_multivalued_field( data["expired_omim_ids"], document.omim_ids, "," )
     
-    documents[ data['marker_symbol'] ] = document
+    documents[ data["marker_symbol"] ] = document
   }
 
   # Search the related marts for info...
@@ -130,7 +130,7 @@ def build_chromosome_xml( query, filename )
   }
   output += "</add>\n"
 
-  File.open( filename, 'w' ) { |f| f.write(output) }
+  File.open( filename, "w" ) { |f| f.write(output) }
 
 end
 
@@ -174,7 +174,7 @@ def search_product_marts( documents )
   
   # Phenotyping Biomart
   pheno_mart = Biomart.new(
-    :url        => "http://htgt.internal.sanger.ac.uk:9002/dev/martsearch/htgtdev/biomart/martservice",
+    :url        => "http://htgt.internal.sanger.ac.uk:9002/biomart/martservice",
     :http       => @@http_agent,
     :dataset    => "phenotyping",
     :attributes => [
@@ -309,39 +309,37 @@ def search_product_marts( documents )
     
     pheno_data = pheno_mart.search( ["marker_symbol"], chunk.join(',') )
     pheno_data.each { |data|
-      document = documents[ data['marker_symbol'] ]
+      document = documents[ data["marker_symbol"] ]
       
       if document == nil
-        document = Document.new( data['marker_symbol'] )
+        document = Document.new( data["marker_symbol"] )
       end
       
       # Go through each of the pheno tests to see if we have a 
       # positive result - if yes, index the test name and any comments
       pheno_mart.attributes.each do |attribute|
+        
         unless attribute.match(/marker_symbol|comment/)
           
           if data[ attribute ] == "significant_difference"
-            text_to_index = attribute
-            text_to_index.gsub!( "ip_gtt", "ip-gtt" )
-            text_to_index.gsub!( "x_ray", "x-ray" )
-            text_to_index.gsub!( "_", " " )
-            document.phenotype.push( text_to_index )
+            document.phenotype.push( attribute.sub( "ip_gtt", "ip-gtt" ).sub( "x_ray", "x-ray" ).gsub( "_", " " ) )
             
-            unless data[ attribute + '_comment' ].to_s.empty?
-              document.phenotype_comments.push( data[ attribute + '_comment' ] )
+            unless data[ attribute + "_comment" ].to_s.empty?
+              document.phenotype_comments.push( data[ attribute + "_comment" ] )
               
               # Also, extract the MP terms
-              if data[ attribute + '_comment' ].to_s.match(/MP\:\d+/)
-                document.mp_terms.push( data[ attribute + '_comment' ].to_s.match(/MP\:\d+/)[0] )
+              if data[ attribute + "_comment" ].to_s.match(/MP\:\d+/)
+                document.mp_terms.push( data[ attribute + "_comment" ].to_s.match(/MP\:\d+/)[0] )
               end
             end
             
           end
           
         end
+        
       end
       
-      documents[ data['marker_symbol'] ] = document
+      documents[ data["marker_symbol"] ] = document
     }
     
   }
@@ -373,7 +371,7 @@ end
 #
 
 dcc_mart = Biomart.new( 
-  :url => "http://htgt.internal.sanger.ac.uk:9002/dev/martsearch/htgtdev/biomart/martservice", 
+  :url => "http://htgt.internal.sanger.ac.uk:9002/biomart/martservice", 
   :dataset => "dcc",
   :attributes => ["chromosome"],
   :http => @@http_agent
