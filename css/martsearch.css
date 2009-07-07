@@ -84,6 +84,21 @@ h4 span.subheading_counts {
 	padding: 10px;
 }
 
+#noscript_warning {
+	margin-bottom: 15px;
+	font-size: 12px;
+	padding: 10px;
+}
+
+#noscript_warning p {
+	margin-left: 19px;
+}
+
+#noscript_warning .ui-icon {
+	float: left;
+	margin-top: 11px;
+}
+
 /* Toggle Controls */
 
 .toggle-open, .toggle-close {
