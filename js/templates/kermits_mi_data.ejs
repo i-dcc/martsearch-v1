@@ -1,0 +1,37 @@
+<table id="<%= content_id %>_table" class="with_border">
+  <thead>
+    <tr>
+      <th>Sponsor</th>
+      <th>ES Cell Clone Name</th>
+      <th>ES Cell Line</th>
+      <th>ES Cell Strain</th>
+      <th>Status</th>
+      <th>Allele Name</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for ( var i=0; i<results.length; i++ ) { %>
+      <% var result = results[i]; %>
+      <tr>
+        <td><%= result["sponsor"] %></td>
+        <td><%= result["escell_clone_name"] %></td>
+        <td><%= result["escell_line"] %></td>
+        <td><%= result["escell_strain"] %></td>
+        <td><%= result["status"] %></td>
+        <td><%= result["allele_name"] %></td>
+        <td>
+          <%
+            var link = '#';
+            if ( result["sponsor"] === "EUCOMM" ) {
+              link = "http://www.emmanet.org/apps/springEmma/search?keyword=" + result["marker_symbol"] + "&amp;select_by=affectedGene&amp;search=ok";
+            } else if ( results[i]["sponsor"] === "KOMP" ) {
+              link = "mailto:mouseinterest@sanger.ac.uk?subject=Interest in Mouse for " + result["marker_symbol"];
+            }
+          %>
+          <a href="<%= link %>">Register Interest in a Mouse</a>
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>

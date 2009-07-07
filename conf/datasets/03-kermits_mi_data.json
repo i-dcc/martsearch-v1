@@ -1,20 +1,23 @@
 {
-  active:             true,
-  debug_mode:         false,
-  internal_name:      "sanger_mice",
-  display_name:       "Sanger Mice",
-  url:                "/htgt/biomart",
-  full_url:           "http://www.sanger.ac.uk/htgt/biomart",
-  mart_dataset:       "kermits",
-  joined_index_field: "escell",
-  joined_filter:      "escell_clone_name",
+  active:               true,
+  debug_mode:           false,
+  internal_name:        "sanger_mice",
+  display_name:         "Sanger Mice",
+  url:                  "/htgt/biomart",
+  full_url:             "http://www.sanger.ac.uk/htgt/biomart",
+  mart_dataset:         "kermits",
+  joined_index_field:   "escell",
+  joined_filter:        "escell_clone_name",
+  template:             "kermits_mi_data.ejs",
+  fetch_attribute_conf: false,
   enabled_attributes: [
+    "marker_symbol",
     "sponsor",
     "escell_clone_name",
-    "escell_line_type",
+    "escell_line",
+    "escell_strain",
     "status",
-    "allele_name",
-    "test_cross_strain"
+    "allele_name"
   ],
   required_attributes: [
     "status"
