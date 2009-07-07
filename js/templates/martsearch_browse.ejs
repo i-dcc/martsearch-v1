@@ -11,13 +11,27 @@
               <% if ( option instanceof Array ) { %>
                 <%
                   var search_term = browser.index_field + ":" + option[1];
-                  if ( browser.exact_search !== true ) { search_term += "*"; }
+                  if ( browser.exact_search !== true ) {
+                    // if the configuration doesnt already contains a grouped query 
+                    // make the search case insensitive (as we assume we are searching
+                    // on a solr string field - i.e. not interpreted in any way...)
+                    if ( ! option[1].match(/\)$/) ) {
+                      search_term = "(" + browser.index_field + ":" + option[1].toLowerCase() + "* OR " + browser.index_field + ":" + option[1].toUpperCase() + "*)";
+                    }
+                  }
                 %>
                 <a href="#" rel="<%= search_term %>"><%= option[0] %></a>
               <% } else { %>
                 <%
                   var search_term = browser.index_field + ":" + option;
-                  if ( browser.exact_search !== true ) { search_term += "*"; }
+                  if ( browser.exact_search !== true ) {
+                    // if the configuration doesnt already contains a grouped query 
+                    // make the search case insensitive (as we assume we are searching
+                    // on a solr string field - i.e. not interpreted in any way...)
+                    if ( ! search_term.match(/\)$/) ) {
+                      search_term = "(" + browser.index_field + ":" + option.toLowerCase() + "* OR " + browser.index_field + ":" + option.toUpperCase() + "*)";
+                    }
+                  }
                 %>
                 <a href="#" rel="<%= search_term %>"><%= option %></a>
               <% } %>
