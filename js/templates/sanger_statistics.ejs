@@ -1,0 +1,33 @@
+<table id="sanger_product_statistics" class="with_border">
+  <thead>
+    <tr>
+      <th>Funding: </th>
+      <% jQuery.each( searches, function( type, details ) { %>
+        <%
+          var funding_links = [];
+          jQuery.each( details.funding, function( index, funding_body ) {
+            var link_string = '<a href="' + funding_body.url + '">' + funding_body.name + '</a>';
+            funding_links.push(link_string);
+          });
+        %>
+        <th>
+          <%= funding_links.join('<br />') %>
+        </th>
+      <% }); %>
+    </tr>
+    <tr>
+      <th>Products: </th>
+      <% jQuery.each( searches, function( type ) { %>
+        <th><%= type %></th>
+      <% }); %>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <% jQuery.each( searches, function( type ) { %>
+        <td id="stats_<%= type.replace(/ /ig, '_').replace( /\//ig, '_') %>"></td>
+      <% }); %>
+    </tr>
+  </tbody>
+</table>

@@ -164,6 +164,11 @@ MartSearch.prototype = {
         }
       });
     
+    /*
+    * Finally, build the Sanger statistics table...
+    */
+    ms.sanger_statistics();
+    
     // If all goes well, return true.
     return init_status;
   },
@@ -288,6 +293,122 @@ MartSearch.prototype = {
       content_id = dataset.internal_name + '_' + content_id;
     }
     return content_id;
+  },
+  
+  /**
+  * Sanger specific function to generate the overall statistics table on page load.
+  * 
+  */
+  sanger_statistics: function () {
+    var ms = this;
+    
+    // Define the searches we're going to perform for our counts...
+    var searches = {
+      "Phenotyping": {
+        funding: [
+          { name: "WTSI",    url: "http://www.sanger.ac.uk/Teams/Team109/" },
+          { name: "EUMODIC", url: "http://www.eumodic.org/" }
+        ],
+        dataset: "phenotyping",
+        url: "/htgtdev",
+        filters: {}
+      },
+      "Mice": {
+        funding: [
+          { name: "WTSI",    url: "http://www.sanger.ac.uk/Teams/Team109/" },
+          { name: "EUMODIC", url: "http://www.eumodic.org/" }
+        ],
+        dataset: "kermits",
+        url: "/htgt",
+        filters: {
+          status_code: "GC"
+        }
+      },
+      "Targeted ES Cells": {
+        funding: [
+          { name: "KOMP",   url: "http://www.knockoutmouse.org/" },
+          { name: "EUCOMM", url: "http://www.eucomm.org/" }
+        ],
+        dataset: "htgt_targ",
+        url: "/htgt",
+        filters: {
+          status: "Mice - Genotype confirmed,Mice - Germline transmission,Mice - Microinjection in progress,ES Cells - Targeting Confirmed"
+        }
+      },
+      "Gene Targeting Vectors": {
+        funding: [
+          { name: "KOMP",   url: "http://www.knockoutmouse.org/" },
+          { name: "EUCOMM", url: "http://www.eucomm.org/" }
+        ],
+        dataset: "htgt_targ",
+        url: "/htgt",
+        filters: {
+          status: "Mice - Genotype confirmed,Mice - Germline transmission,Mice - Microinjection in progress,ES Cells - Targeting Confirmed,ES Cells - No QC Positives,ES Cells - Electroporation Unsuccessful,ES Cells - Electroporation in Progress,Vector - DNA Not Suitable for Electroporation,Vector Complete"
+        }
+      },
+      "MICER": {
+        funding: [
+          { name: "WT", url: "http://www.wellcome.ac.uk/" }
+        ],
+        dataset: "bacs",
+        url: "/htgtdev",
+        filters: {
+          library: "MICER"
+        }
+      },
+      "C57Bl/6J BACs": {
+        funding: [
+          { name: "WT", url: "http://www.wellcome.ac.uk/" }
+        ],
+        dataset: "bacs",
+        url: "/htgtdev",
+        filters: {
+          library: "C57Bl/6J"
+        }
+      },
+      "129S7 BACs": {
+        funding: [
+          { name: "WT", url: "http://www.wellcome.ac.uk/" }
+        ],
+        dataset: "bacs",
+        url: "/htgtdev",
+        filters: {
+          library: "129S7"
+        }
+      }
+    };
+    
+    // Draw the table skeleton...
+    var content = new EJS({ url: ms.base_url + "/js/templates/sanger_statistics.ejs" }).render({ searches: searches });
+    jQuery('#summary_statistics').html(content);
+    
+    // Prep and fire the searches...
+    jQuery.each( searches, function ( product_type, search_definition ) {
+      var dom_id = "#stats_" + product_type.replace(/ /ig, "_").replace( /\//ig, "_");
+      
+      // Build the XML file
+      var xml = '';
+      xml += '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE Query>';
+      xml += '<Query  virtualSchemaName="default" formatter="TSV" header="0" uniqueRows="1" count="1" datasetConfigVersion="0.6" >';
+      xml += '<Dataset name="' + search_definition.dataset + '" interface="default" >';
+      
+      jQuery.each( search_definition.filters, function ( filter, value ) {
+        xml += '<Filter name="' + filter + '" value="'+ value +'"/>'
+      });
+      
+      xml += '</Dataset>';
+      xml += '</Query>';
+      
+      // Fire the mart search and update the table cell
+      jQuery.ajax({
+        type: "POST",
+        url: search_definition.url + "/biomart/martservice",
+        async: true,
+        data: { "query": xml },
+        success: function ( data ) { jQuery(dom_id).html(data); }
+      });
+    });
+    
   }
 };
 
