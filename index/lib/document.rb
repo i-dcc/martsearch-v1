@@ -64,8 +64,6 @@ class Document
       
       xml.doc {
         self.xml_singleValue( xml, self.marker_symbol,     "marker_symbol_key" )
-        self.xml_singleValue( xml, self.marker_symbol,     "marker_symbol" )
-        self.xml_singleValue( xml, self.marker_symbol,     "marker_symbol_tight" )
         self.xml_singleValue( xml, self.mgi_accession_id,  "mgi_accession_id" )
         self.xml_singleValue( xml, self.type,              "type" )
         self.xml_singleValue( xml, self.chromosome,        "chromosome" )
