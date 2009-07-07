@@ -32,8 +32,8 @@
     <link rel="stylesheet" href="css/martsearch.css" type="text/css" media="screen" charset="utf-8" />
     <script type="text/javascript" charset="utf-8">
       jQuery(document).ready(function() {
-        ms = new MartSearch({});
-        //ms = new MartSearch({ base_url: "/dev/martsearch-sanger" });
+        //ms = new MartSearch({});
+        ms = new MartSearch({ base_url: "/dev/martsearch-sanger" });
         ms.init();
       });
     </script>
@@ -80,7 +80,7 @@
         <ul>
           <li><a href="#search">Search</a></li>
           <li><a href="#browse">Browse</a></li>
-          <li><a href="#configure">Configure</a></li>
+          <!--<li><a href="#configure">Configure</a></li>-->
           <li><a href="#help">Help</a></li>
           <li><a href="#about">About</a></li>
         </ul>
@@ -160,159 +160,175 @@
         </div>
         
         <!-- configuration options tab -->
-        <div id="configure"></div>
+        <!--<div id="configure"></div>-->
         
         <!-- help tab -->
         <div id="help">
-          <h2>Advanced Searching</h2>
-          <p>
-             MartSearch supports several advanced operators, which are query words that have 
-             special meaning to us. These operators modify the search in some way, or even 
-             tell us to do a totally different type of search. For instance, &quot;marker_symbol:&quot; 
-             is a special operator, and the query <strong>[marker_symbol:Cbx1]</strong> doesn't do a 
-             normal search but instead finds only the genes with the marker symbol 'Cbx1'.
-          </p>
-          
-          <h3>Query Modifiers</h3>
-          <p>
-          Using the following query modifiers will allow you to restrict the results of your 
-          searches in a controlled way.
-          </p>
-          <table class="with_border">
-            <tr>
-              <th>marker_symbol:</th>
-              <td>
-                <p>
-                  i.e. <strong>[marker_symbol:cbx1]</strong> would return the gene record for 'Cbx1'.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>marker_name:</th>
-              <td>
-                <p>
-                  i.e. <strong>[marker_name:chromobox*]</strong> would return all genes with a marker 
-                  name starting with 'chromobox'.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>chromosome:</th>
-              <td>
-                <p>
-                  i.e. <strong>[chromosome:X]</strong> would return all gene records for the X chromosome.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>mgi_accession_id:</th>
-              <td>
-                <p>
-                  i.e. <strong>[mgi_accession_id:MGI105369]</strong> would return the gene record for 'Cbx1'.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>ensembl_gene_id:</th>
-              <td>
-                <p>
-                  i.e. <strong>[ensembl_gene_id:ENSMUSG00000018666]</strong> would return the gene record for 'Cbx1'.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>vega_gene_id:</th>
-              <td>
-                <p>
-                  i.e. <strong>[vega_gene_id:OTTMUSG00000001636]</strong> would return the gene record for 'Cbx1'.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>entrez_gene_id:</th>
-              <td>
-                <p>
-                  i.e. <strong>[entrez_gene_id:12412]</strong> would return the gene record for 'Cbx1'.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>ccds_id:</th>
-              <td>
-                <p>
-                  i.e. <strong>[ccds_id:CCDS25303.1]</strong> would return the gene record for 'Cbx1'.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>omim_id:</th>
-              <td>
-                <p>
-                  i.e. <strong>[omim_id:113705]</strong> would return the gene record for 'Brca1'.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>targeting_design:</th>
-              <td>
-                <p>
-                  This will restrict your results to entries with the corresponding 
-                  <a href="http://www.komp.org">KOMP</a>/<a href="http://www.eucomm.org">EUCOMM</a> 
-                  targeting design plate/well identifier.
-                </p>
-                <p>
-                  i.e. <strong>[targeting_design:19_B11]</strong> would return the gene record for 'Cbx1' 
-                  (as this is the target for this design), whereas <strong>[targeting_design:19*]</strong> 
-                  would return a list of all genes targeted on design plate 19.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>intermediate_vector:</th>
-              <td>
-                <p>
-                  This will restrict your results to entries with the corresponding 
-                  <a href="http://www.komp.org">KOMP</a>/<a href="http://www.eucomm.org">EUCOMM</a> 
-                  intermediate vector plate/well identifier.
-                </p>
-                <p>
-                  i.e. <strong>[intermediate_vector:PCS00019_A_B11]</strong> would return the gene record for 'Cbx1', 
-                  (as this is the target for this vector), whereas <strong>[intermediate_vector:PCS00019_A*]</strong> 
-                  would return a list of all genes with vectors on plate PCS00019_A.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>targeting_vector:</th>
-              <td>
-                <p>
-                  This will restrict your results to entries with the corresponding 
-                  <a href="http://www.komp.org">KOMP</a>/<a href="http://www.eucomm.org">EUCOMM</a> 
-                  targeting vector plate/well identifier.
-                </p>
-                <p>
-                  i.e. <strong>[targeting_vector:PGS00019_A_B11]</strong> would return the gene record for 'Cbx1', 
-                  (as this is the target for this vector), whereas <strong>[targeting_vector:PGS00019_A*]</strong> 
-                  would return a list of all genes with vectors on plate PGS00019_A.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>escell:</th>
-              <td>
-                <p>
-                  This will restrict your results to entries with the corresponding 
-                  <a href="http://www.komp.org">KOMP</a>/<a href="http://www.eucomm.org">EUCOMM</a> 
-                  escell clone identifier.
-                </p>
-                <p>
-                  i.e. <strong>[escell:EPD0027_2_A01]</strong> would return the gene record for 'Cbx1', 
-                  (as this is the targeted gene in this cell), whereas <strong>[escell:EPD0027_2*]</strong> 
-                  would return a list of all genes with targeted cells on plate EPD0027_2.
-                </p>
-              </td>
-            </tr>
-          </table>
+          <div id="issues" class="help">
+            <h2>Reporting Issues/Bugs and Requests</h2>
+            <p>
+              We have tried our best to build this portal as free of problems as possible, but 
+              we may have still missed something.  If you have any issues or would like to 
+              request a new feature that we have not yet thought of, please submit a ticket to our 
+              <a href="http://dazoakley.lighthouseapp.com/projects/28425-martsearch">issue tracking 
+              system</a>.  If the problem you encounter is specific to some of the data found 
+              within this portal, we would ask that you please add the tag 
+              <em>'sanger-mouse-portal'</em> to your ticket so that we know it is an issue 
+              specific to <strong>this</strong> portal.
+            </p>
+          </div>
+          <div id="adv_search" class="help">
+            <h2 id="help_search">Advanced Searching</h2>
+            <p>
+               The WTSI Mouse Recource Portal supports several advanced operators, which are 
+               query words that have special meaning to us. These operators modify the search in 
+               some way, or even tell us to do a totally different type of search. For instance, 
+               &quot;marker_symbol:&quot; is a special operator, and the query 
+               <strong>[marker_symbol:Cbx1]</strong> doesn't do a normal search but instead finds 
+               only the genes with the marker symbol 'Cbx1'.
+            </p>
+
+            <h3>Query Modifiers</h3>
+            <p>
+            Using the following query modifiers will allow you to restrict the results of your 
+            searches in a controlled way.
+            </p>
+            <table class="with_border">
+              <tr>
+                <th>marker_symbol:</th>
+                <td>
+                  <p>
+                    i.e. <strong>[marker_symbol:cbx1]</strong> would return the gene record for 'Cbx1'.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <th>marker_name:</th>
+                <td>
+                  <p>
+                    i.e. <strong>[marker_name:chromobox*]</strong> would return all genes with a marker 
+                    name starting with 'chromobox'.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <th>chromosome:</th>
+                <td>
+                  <p>
+                    i.e. <strong>[chromosome:X]</strong> would return all gene records for the X chromosome.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <th>mgi_accession_id:</th>
+                <td>
+                  <p>
+                    i.e. <strong>[mgi_accession_id:MGI105369]</strong> would return the gene record for 'Cbx1'.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <th>ensembl_gene_id:</th>
+                <td>
+                  <p>
+                    i.e. <strong>[ensembl_gene_id:ENSMUSG00000018666]</strong> would return the gene record for 'Cbx1'.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <th>vega_gene_id:</th>
+                <td>
+                  <p>
+                    i.e. <strong>[vega_gene_id:OTTMUSG00000001636]</strong> would return the gene record for 'Cbx1'.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <th>entrez_gene_id:</th>
+                <td>
+                  <p>
+                    i.e. <strong>[entrez_gene_id:12412]</strong> would return the gene record for 'Cbx1'.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <th>ccds_id:</th>
+                <td>
+                  <p>
+                    i.e. <strong>[ccds_id:CCDS25303.1]</strong> would return the gene record for 'Cbx1'.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <th>omim_id:</th>
+                <td>
+                  <p>
+                    i.e. <strong>[omim_id:113705]</strong> would return the gene record for 'Brca1'.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <th>targeting_design:</th>
+                <td>
+                  <p>
+                    This will restrict your results to entries with the corresponding 
+                    <a href="http://www.komp.org">KOMP</a>/<a href="http://www.eucomm.org">EUCOMM</a> 
+                    targeting design plate/well identifier.
+                  </p>
+                  <p>
+                    i.e. <strong>[targeting_design:19_B11]</strong> would return the gene record for 'Cbx1' 
+                    (as this is the target for this design), whereas <strong>[targeting_design:19*]</strong> 
+                    would return a list of all genes targeted on design plate 19.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <th>intermediate_vector:</th>
+                <td>
+                  <p>
+                    This will restrict your results to entries with the corresponding 
+                    <a href="http://www.komp.org">KOMP</a>/<a href="http://www.eucomm.org">EUCOMM</a> 
+                    intermediate vector plate/well identifier.
+                  </p>
+                  <p>
+                    i.e. <strong>[intermediate_vector:PCS00019_A_B11]</strong> would return the gene record for 'Cbx1', 
+                    (as this is the target for this vector), whereas <strong>[intermediate_vector:PCS00019_A*]</strong> 
+                    would return a list of all genes with vectors on plate PCS00019_A.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <th>targeting_vector:</th>
+                <td>
+                  <p>
+                    This will restrict your results to entries with the corresponding 
+                    <a href="http://www.komp.org">KOMP</a>/<a href="http://www.eucomm.org">EUCOMM</a> 
+                    targeting vector plate/well identifier.
+                  </p>
+                  <p>
+                    i.e. <strong>[targeting_vector:PGS00019_A_B11]</strong> would return the gene record for 'Cbx1', 
+                    (as this is the target for this vector), whereas <strong>[targeting_vector:PGS00019_A*]</strong> 
+                    would return a list of all genes with vectors on plate PGS00019_A.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <th>escell:</th>
+                <td>
+                  <p>
+                    This will restrict your results to entries with the corresponding 
+                    <a href="http://www.komp.org">KOMP</a>/<a href="http://www.eucomm.org">EUCOMM</a> 
+                    escell clone identifier.
+                  </p>
+                  <p>
+                    i.e. <strong>[escell:EPD0027_2_A01]</strong> would return the gene record for 'Cbx1', 
+                    (as this is the targeted gene in this cell), whereas <strong>[escell:EPD0027_2*]</strong> 
+                    would return a list of all genes with targeted cells on plate EPD0027_2.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
         
         <!-- about tab -->
@@ -332,64 +348,16 @@
             from the Institute's primary screen.
           </p>
           
-          <h2>Using MartSearch to Make the WTSI Mouse Resource Portal</h2>
-          <p>
-            <ul>
-              <li>
-                <p>
-                  <strong>WHAT:</strong> Martsearch presents an integrated overview of mouse-data
-                </p>
-                <p>
-                  Martsearch focuses on mouse genes, the results of high-throughput gene knockout programs, 
-                  and related phenotypic and expression data.  Martsearch talks with Biomarts via 
-                  web-services to gather and present its data.
-                </p>
-              </li>
-              <li>
-                <p>
-                  <strong>WHY:</strong> Martsearch does not need a central data store or web server
-                </p>
-                <p>
-                  Does mouse informatics have an obvious single centre? Gene curation, the production of 
-                  mutant ES cells, the production of mutant mice, expression and phenotyping studies all 
-                  have important informatic data and presentation techniques to offer the end-user. 
-                  Martsearch allows these diverse groups to remain engaged in the portal's user interface 
-                  without having to centralise portal development and data in a single institute.
-                </p>
-              </li>
-              <li>
-                <p>
-                  <strong>HOW:</strong> Martsearch searches, indexes, retrieves and displays Biomart-served data
-                </p>
-                <p>
-                  The data that martseach displays must be first exposed as a Biomart by some group.
-                  By itself, the Biomart allows an end-user to make expert searches and bulk downloads.
-                  Biomart also allows service calls to be made by computers, and this is what MartSearch 
-                  does. Finally, Biomarts can federate data fetches, allowing queries to join
-                  information from different marts.
-                </p>
-                <p>
-                  MartSearch helps the user search this data by pre-indexing key search terms
-                  downloaded from each Biomart, to allow a rapid initial response, which is then
-                  backed up by further fetches from each mart.
-                </p>
-              </li>
-              <li>
-                <p>
-                  <strong>YOUR DATA HERE:</strong> To integrate your data and have it shown here, present it 
-                  as a Biomart
-                </p>
-                <p>
-                  If this portal can fetch your data, then you can tweak it to show the data as you please.
-                </p>
-              </li>
-            </ul>
-          </p>
-          
           <h2>Powered by MartSearch</h2>
           <p>
+            The WTSI Mouse Resource Portal is powered by software called 
+            <a href="http://github.com/dazoakley/martsearch/">MartSearch</a>, 
+            a rich javascript client for pulling together data from distributed data 
+            sources (housed in Biomarts) in a single unified view.
+          </p>
+          <p>
             MartSearch works by first building an Apache Solr index of all of the 
-            available search terms in the cloud of biomarts (each collection of 
+            available search terms in the cloud of Biomarts (each collection of 
             terms represents a gene).
           </p>
           <p>
@@ -404,8 +372,41 @@
           <div class="center">
             <img src="images/martsearch-design.png" alt="MartSearch Design" />
           </div>
+          
+          <h2>Using MartSearch to Make the WTSI Mouse Resource Portal</h2>
+          <p>
+            Here are some of the reasons we decided to use this approach to building 
+            this the WTSI Mouse Resource Portal.
+          </p>
+          <ul>
+            <li>
+              <p>
+                <strong>Presenting an Integrated Overview of Mouse Data</strong>
+              </p>
+              <p>
+                The WTSI Mouse Resource Portal focuses on mouse genes, the results 
+                of high-throughput gene knockout programs,  and related phenotypic 
+                and expression data. The WTSI Mouse Resource Portal talks with 
+                Biomarts via web-services to gather and present its data.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong>No Need for a Central Data Store or Web Server</strong>
+              </p>
+              <p>
+                Does mouse informatics have an obvious single centre? Gene curation, 
+                the production of mutant ES cells, the production of mutant mice, 
+                expression and phenotyping studies all have important informatic data 
+                and presentation techniques to offer the end-user. The software that 
+                has been developed for the purpose of this portal (MartSearch) allows 
+                these diverse groups to remain engaged in the portal's user interface 
+                without having to centralise portal development and data in a single 
+                institute.
+              </p>
+            </li>
+          </ul>
         </div>
-        
       </div>
       <!-- END: tabs -->
       
@@ -417,7 +418,13 @@
           <a href="http://www.biomart.org" title="Biomart"><img src="images/biomart.png" alt="Biomart" /></a> 
         </div>
         <div id="credits">
-          Powered by <a href="http://github.com/dazoakley/martsearch/">MartSearch</a>
+          Powered by <a href="http://github.com/dazoakley/martsearch/">MartSearch</a>, 
+          developed by the <a href="http://www.sanger.ac.uk">Wellcome Trust Sanger Institute</a>
+          
+          <div>
+            <p>Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK&nbsp;&nbsp;Tel:+44 (0)1223 834244</p>
+            <p>Registered charity number 210183</p>
+          </div>
         </div>
       </div>
       

@@ -1,8 +1,8 @@
 /* @override http://martsearch.site/css/martsearch.css */
 
 body{
-	margin: 50px;
 	font: 62.5% "Trebuchet MS", sans-serif;
+	margin: 0 50px 50px;
 }
 
 .center {
@@ -15,9 +15,34 @@ body{
 	height: 5px;
 }
 
+/* Help Sections */
+
+.help {
+	padding-left: 40px;
+}
+
+#issues {
+	background: url(../images/tango_icons/dialog-warning.png) no-repeat;
+}
+
+#adv_search {
+	background: url(../images/tango_icons/system-search.png) no-repeat;
+}
+
 /* Headings */
 
-h1 span.subhead {
+#header {
+	height: 66px;
+	text-align: right;
+	background: url(../images/swoosh_mice.png) no-repeat left top;
+}
+
+#header h1 {
+	margin: 0;
+	padding-top: 35px;
+}
+
+#header h1 span.subhead {
 	font-size: small;
 	color: #fa1614;
 	vertical-align: super;
