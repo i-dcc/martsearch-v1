@@ -469,3 +469,19 @@ table.phenotyping td.pheno_result {
 table.phenotyping td.pheno_result a img {
 	border: none;
 }
+
+/* Sanger Statistics Table */
+
+table#sanger_product_statistics {
+	width: 100%;
+}
+
+table#sanger_product_statistics tr th,
+table#sanger_product_statistics tr td {
+	text-align: center;
+}
+
+table#sanger_product_statistics thead tr :first-child {
+	text-align: left;
+	padding-left: 10px;
+}
