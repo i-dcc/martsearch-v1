@@ -4,7 +4,7 @@
   internal_name:        "phenotyping",
   display_name:         "Phenotyping",
   url:                  "/htgtdev/biomart",
-  full_url:             "http://htgt.internal.sanger.ac.uk:9002/dev/martsearch/htgtdev/biomart",
+  full_url:             "http://htgt.internal.sanger.ac.uk:9002/biomart",
   mart_dataset:         "phenotyping",
   joined_index_field:   "marker_symbol",
   joined_filter:        "marker_symbol",
