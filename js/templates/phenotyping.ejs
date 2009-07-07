@@ -3,7 +3,7 @@
     <tr>
       <% for ( var i=0; i<dataset.enabled_attributes.length; i++ ) { %>
         <% var attrib = dataset.enabled_attributes[i]; %>
-        <% if ( ! attrib.match("comment") && ! attrib.match("marker_symbol") ) { %>
+        <% if ( ! attrib.match("comment|url|marker_symbol") ) { %>
           <% if ( attrib.match("escell_clone_name|pipeline|colony_prefix") ) { %>
             <th><%= dataset.attributes[ attrib ].displayname %></th>
           <% } else { %>
@@ -19,7 +19,7 @@
         <% var result = results[i] %>
         <% for ( var j=0; j<dataset.enabled_attributes.length; j++ ) { %>
           <% var attrib = dataset.enabled_attributes[j]; %>
-          <% if ( ! attrib.match("comment") && ! attrib.match("marker_symbol") ) { %>
+          <% if ( ! attrib.match("comment|url|marker_symbol") ) { %>
             <% if ( attrib.match("escell_clone_name|pipeline|colony_prefix") ) { %>
               <td><%= result[attrib] %></td>
             <% } else { %>
@@ -28,17 +28,23 @@
               %>
               <% if ( result[attrib] ) { %>
                 <%
-                  title_text += '<p><strong>Result:</strong> ' + result[attrib] + '</p>';
-                  if ( result[attrib + '_comment'] ) {
-                    title_text += '<p><strong>Comments:</strong> ' + result[attrib + '_comment'] + '</p>';
+                  title_text += "<p><strong>Result:</strong> " + result[attrib] + "</p>";
+                  if ( result[attrib + "_comment"] ) {
+                    title_text += "<p><strong>Comments:</strong> " + result[attrib + "_comment"] + "</p>";
+                  }
+                  
+                  var link = '';
+                  if ( result[attrib + "_url"] ) {
+                    link = '<a href="http://www.sanger.ac.uk' + result[attrib + "_url"] + '" target="_blank"><img src="/images/silk_icons/bullet_go.png" /></a>';
+                    title_text += "<p><em>Click the arrow for more information on this test result.</em></p>"
                   }
                 %>
-                <td class="<%= result[attrib] %>" tooltip="<%= title_text %>" rel='qtip'></td>
+                <td class="<%= result[attrib] %> pheno_result" tooltip="<%= title_text %>" rel="qtip"><%= link %></td>
               <% } else { %>
                 <%
-                  title_text += '<p>Test not carried out.</p>';
+                  title_text += "<p>Test not carried out.</p>";
                 %>
-                <td class="test_not_done" tooltip="<%= title_text %>" rel='qtip'></td>
+                <td class="test_not_done pheno_result" tooltip="<%= title_text %>" rel="qtip"></td>
               <% } %>
             <% } %>
           <% } %>

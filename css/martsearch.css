@@ -459,3 +459,13 @@ table.phenotyping td.not_applicable {
 	background-color: #b8b8b8;
 	cursor: pointer;
 }
+
+table.phenotyping td.pheno_result {
+	width: 14px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+table.phenotyping td.pheno_result a img {
+	border: none;
+}
