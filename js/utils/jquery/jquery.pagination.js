@@ -84,21 +84,23 @@ jQuery.fn.pagination = function(maxentries, opts) {
       // Helper function for generating a single link (or a span tag if it's the current page)
       var appendItem = function(page_id, appendopts) {
         page_id = page_id < 0 ? 0: (page_id < np ? page_id: np - 1);
+        
         // Normalize page id to sane value
-        appendopts = jQuery.extend({
-          text: page_id + 1,
-          classes: ""
-        },
-        appendopts || {});
+        appendopts = jQuery.extend(
+          { text: page_id + 1, classes: "" },
+          appendopts || {}
+        );
+        
+        var lnk = {};
         if (page_id == current_page) {
           if (appendopts.text == 'Prev' || appendopts.text == 'Next') {
-            var lnk = jQuery("<span class='ui-state-disabled ui-corner-all'>" + (appendopts.text) + "</span>");
+            lnk = jQuery("<span class='ui-state-disabled ui-corner-all'>" + (appendopts.text) + "</span>");
           } else {
-            var lnk = jQuery("<span class='ui-state-highlight ui-corner-all'>" + (appendopts.text) + "</span>");
+            lnk = jQuery("<span class='ui-state-highlight ui-corner-all'>" + (appendopts.text) + "</span>");
           }
         }
         else {
-          var lnk = jQuery("<a class='ui-button ui-state-default ui-corner-all'>" + (appendopts.text) + "</a>")
+          lnk = jQuery("<a class='ui-button ui-state-default ui-corner-all'>" + (appendopts.text) + "</a>")
             .bind("click", getClickHandler(page_id))
             .attr('href', opts.link_to.replace(/__id__/, page_id))
             .hover(
@@ -137,8 +139,8 @@ jQuery.fn.pagination = function(maxentries, opts) {
       }
 
       // Generate interval links
-      for (var i = interval[0]; i < interval[1]; i++) {
-        appendItem(i);
+      for (var j = interval[0]; j < interval[1]; j++) {
+        appendItem(j);
       }
       
       // Generate ending points
@@ -147,8 +149,8 @@ jQuery.fn.pagination = function(maxentries, opts) {
           jQuery("<span>" + opts.ellipse_text + "</span>").appendTo(panel);
         }
         var begin = Math.max(np - opts.num_edge_entries, interval[1]);
-        for (var i = begin; i < np; i++) {
-          appendItem(i);
+        for (var k = begin; k < np; k++) {
+          appendItem(k);
         }
       }
 

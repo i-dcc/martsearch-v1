@@ -192,9 +192,9 @@ DataSet.prototype = {
                         size: 10 
                       }
                     );
-                  };
+                  }
                   
-                };
+                }
               }
               else {
                 jQuery( "#"+content_id ).parent().parent().fadeOut("fast");
@@ -296,8 +296,8 @@ DataSet.prototype = {
           // Filter out unwanted rows...
           var save_this_row = true;
           if ( ds.required_attributes !== undefined ) {
-            for (var j=0; j < ds.required_attributes.length; j++) {
-              if ( tmp_hash[ ds.required_attributes[j] ] === "" ) {
+            for (var k=0; k < ds.required_attributes.length; k++) {
+              if ( tmp_hash[ ds.required_attributes[k] ] === "" ) {
                 save_this_row = false;
               }
             }
@@ -318,11 +318,11 @@ DataSet.prototype = {
       // I apologise now for the horrendous nested de-referencing...
       var data_to_return = {};
       if ( jQuery.keys(data_by_joined_field).length > 0 ) {
-        for (var i=0; i < docs.length; i++) {
+        for (var l=0; l < docs.length; l++) {
 
           // Calculate the content_id - The unique DOM element identifier that this
           // returned data will be injected into
-          var content_id = ms._content_id( ds, docs[i][ ds.joined_index_field ] );
+          var content_id = ms._content_id( ds, docs[l][ ds.joined_index_field ] );
           
           // If we have a content_id, process our data
           if ( content_id ) {
@@ -330,23 +330,22 @@ DataSet.prototype = {
             var tmp_array = [];
 
             // Now collect each row of data that matches this 'joined_index_field'
-            if ( typeof docs[i][ ds.joined_index_field ] == 'string' ) {
+            if ( typeof docs[l][ ds.joined_index_field ] == 'string' ) {
               // We only have a single value to match to...
-              var index_item = docs[i][ ds.joined_index_field ];
+              var index_item = docs[l][ ds.joined_index_field ];
               if ( data_by_joined_field[ index_item ] !== undefined ) {
-                for (var j=0; j < data_by_joined_field[ index_item ].length; j++) {
-                  tmp_array.push( data_by_joined_field[ index_item ][j] );
+                for (var m=0; m < data_by_joined_field[ index_item ].length; m++) {
+                  tmp_array.push( data_by_joined_field[ index_item ][m] );
                 }
               }
             }
             else {
               // We have an array of values to match to...
-              for (var j=0; j < docs[i][ ds.joined_index_field ].length; j++) {
-                var index_item = docs[i][ ds.joined_index_field ][j];
-
-                if ( data_by_joined_field[ index_item ] !== undefined ) {
-                  for (var k=0; k < data_by_joined_field[ index_item ].length; k++) {
-                    tmp_array.push( data_by_joined_field[ index_item ][k] );
+              for (var n=0; n < docs[l][ ds.joined_index_field ].length; n++) {
+                var index_item_element = docs[l][ ds.joined_index_field ][n];
+                if ( data_by_joined_field[ index_item_element ] !== undefined ) {
+                  for (var o=0; o < data_by_joined_field[ index_item_element ].length; o++) {
+                    tmp_array.push( data_by_joined_field[ index_item_element ][o] );
                   }
                 }
               }

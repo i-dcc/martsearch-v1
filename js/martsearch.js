@@ -82,7 +82,7 @@ MartSearch.prototype = {
         jQuery("#search_result_list").html("");
         jQuery("#search_results .pagination").html("");
         jQuery('#intro_text').fadeIn("fast");
-      };
+      }
       return false;
     });
     
@@ -145,7 +145,7 @@ MartSearch.prototype = {
       jQuery("#browse_controls ul.browse_list li").click( function() {
         ms.search( jQuery(this).find("a").attr("rel"), 0, "browse" );
       });
-    };
+    }
     
     // Make form buttons respond to mouse interaction
     jQuery(".ui-button:not(.ui-state-disabled)")
