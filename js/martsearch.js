@@ -393,7 +393,7 @@ MartSearch.prototype = {
       xml += '<Dataset name="' + search_definition.dataset + '" interface="default" >';
       
       jQuery.each( search_definition.filters, function ( filter, value ) {
-        xml += '<Filter name="' + filter + '" value="'+ value +'"/>'
+        xml += '<Filter name="' + filter + '" value="'+ value +'"/>';
       });
       
       xml += '</Dataset>';
