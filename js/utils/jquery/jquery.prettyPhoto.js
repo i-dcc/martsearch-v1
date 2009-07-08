@@ -2,7 +2,7 @@
 	Class: prettyPhoto
 	Use: Lightbox clone for jQuery
 	Author: Stephane Caron (http://www.no-margin-for-errors.com)
-	Version: 2.4.2
+	Version: 2.4.3
 ------------------------------------------------------------------------- */
 
 var $pp_pic_holder;
@@ -24,11 +24,6 @@ var $ppt;
 		// Global elements
 		var $caller;
 		var $scrollPos = _getScroll();
-		
-		// Fallback to a supported theme for IE6
-		if($.browser.msie && $.browser.version == 6 && (settings.theme == 'light_rounded' || settings.theme == 'dark_rounded' || settings.theme == 'dark_square')){
-			settings.theme = "light_square";
-		}
 	
 		$(window).scroll(function(){ $scrollPos = _getScroll(); _centerPicture(); });
 		$(window).resize(function(){ _centerPicture(); _resizeOverlay(); });
@@ -59,6 +54,11 @@ var $ppt;
 			theme: 'light_rounded', /* light_rounded / dark_rounded / light_square / dark_square */
 			callback: function(){}
 		}, settings);
+		
+		// Fallback to a supported theme for IE6
+		if($.browser.msie && $.browser.version == 6){
+			settings.theme = "light_square";
+		}
 	
 		$(this).each(function(){
 			var hasTitle = false;
@@ -393,9 +393,9 @@ var $ppt;
 				imgPreloader.src = $caller.attr('href');
 			}else{
 				// Get the dimensions
-				movie_width = ( parseFloat(grab_param('width',$caller.attr('href'))) ) ? grab_param('width',$caller.attr('href')) : 425;
-				movie_height = ( parseFloat(grab_param('height',$caller.attr('href'))) ) ? grab_param('height',$caller.attr('href')) : 344;
-				
+				movie_width = ( parseFloat(grab_param('width',$caller.attr('href'))) ) ? grab_param('width',$caller.attr('href')) : "425";
+				movie_height = ( parseFloat(grab_param('height',$caller.attr('href'))) ) ? grab_param('height',$caller.attr('href')) : "344";
+
 				// If the size is % based
 				if(movie_width.indexOf('%') != -1 || movie_height.indexOf('%') != -1){
 					movie_height = ($(window).height() * parseFloat(movie_height) / 100) - 100;
@@ -425,7 +425,7 @@ var $ppt;
 					pp_typeMarkup = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="'+correctSizes['width']+'" height="'+correctSizes['height']+'"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="'+filename+'?'+flash_vars+'" /><embed src="'+filename+'?'+flash_vars+'" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="'+correctSizes['width']+'" height="'+correctSizes['height']+'"></embed></object>';
 				}else if(pp_type == 'iframe'){
 					movie_url = $caller.attr('href');
-					movie_url = movie_url.substr(0,movie_url.indexOf('?'));
+					movie_url = movie_url.substr(0,movie_url.indexOf('iframe')-1);
 
 					pp_typeMarkup = '<iframe src ="'+movie_url+'" width="'+(correctSizes['width']-10)+'" height="'+(correctSizes['height']-10)+'" frameborder="no"></iframe>';
 				}
