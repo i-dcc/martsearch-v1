@@ -117,13 +117,10 @@ Index.prototype = {
         }
       }
 
-      // 
       // Remove duplicate entries... 
-      // For this we use the jQuery.protify plugin to mimic Prototype's 
-      // (prototype.js) array manipulation capabilities.
       var keys = jQuery.keys(grouped_terms);
       for (var l=0; l < keys.length; l++) {
-        grouped_terms[ keys[l] ] = jQuery.protify( grouped_terms[ keys[l] ] ).uniq();
+        grouped_terms[ keys[l] ] = jQuery.uniq( grouped_terms[ keys[l] ] );
       }
       
       idx.grouped_terms = grouped_terms;
