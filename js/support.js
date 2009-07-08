@@ -2,12 +2,23 @@
 * Support Functions
 */
 
-// jQuery extension to allow us to extract the keys out of a hash object.
+/**
+* Simple jQuery extensions...
+*   - keys: used to extract the keys out of a hash
+*   - uniq: used to extract the uniq values out of an array
+*/
 jQuery.extend({
-  keys: function(obj){
+  keys: function ( obj ) {
     var a = [];
     jQuery.each(obj, function(k){ a.push(k); });
     return a;
+  },
+  uniq: function ( array ) {
+    var k = {};
+    for (var i=0; i < array.length; i++) {
+      k[ array[i] ] = "";
+    }
+    return jQuery.keys(k);
   }
 });
 
