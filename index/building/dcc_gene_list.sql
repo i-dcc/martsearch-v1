@@ -24,3 +24,10 @@ from
 	gene g
 	join combined_gene_ids_and_names gns on g._gene_key = gns._gene_key
 	join old_combined_gene_ids_and_names egns on g._gene_key = egns._gene_key
+where
+ 	(
+			g.type = 'Gene'
+		or 	g.type = 'Pseudogene'
+		or 	g.type = 'microRNA'
+	)
+	and 	gns.names not like '%predicted gene%'

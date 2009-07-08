@@ -42,8 +42,8 @@ def build_chromosome_xml( query, filename )
   
   # KOMP-DCC Biomart
   dcc_mart = Biomart.new(
-    :url        => "http://htgt.internal.sanger.ac.uk:9002/dev/martsearch/htgtdev/biomart/martservice",
-    :http => @@http_agent,
+    :url        => "http://htgt.internal.sanger.ac.uk:9002/biomart/martservice",
+    :http       => @@http_agent,
     :dataset    => "dcc",
     :attributes => [
       "marker_symbol",
@@ -77,12 +77,12 @@ def build_chromosome_xml( query, filename )
   file = File.open( "genes.txt", "r" ) do |file|
     while line = file.gets
       data_elements = line.split("\t")
-      if data_elements[2] == query
+      if data_elements[2].to_s == query.to_s
         chr_data.insert( chr_data.length, line )
       end
     end
   end
-
+  
   dcc_data = dcc_mart.tsv2array( chr_data )
   
   dcc_data.each { |data|
@@ -370,16 +370,20 @@ end
 # Main body of script
 #
 
-dcc_mart = Biomart.new( 
-  :url => "http://htgt.internal.sanger.ac.uk:9002/biomart/martservice", 
-  :dataset => "dcc",
-  :attributes => ["chromosome"],
-  :http => @@http_agent
-)
-dcc_data = dcc_mart.search( ["chromosome"], "" )
+#dcc_mart = Biomart.new( 
+#  :url => "http://htgt.internal.sanger.ac.uk:9002/biomart/martservice", 
+#  :dataset => "dcc",
+#  :attributes => ["chromosome"],
+#  :http => @@http_agent
+#)
+#dcc_data = dcc_mart.search( ["chromosome"], "" )
+dcc_data = Array(1..19).push('X').push('Y')
 
 dcc_data.each { |chr|
-  puts "Building XML for chromosome #{chr["chromosome"]}"
-  filename = "chr" + chr["chromosome"] + ".xml"
-  build_chromosome_xml( chr["chromosome"], filename )
+  #puts "Building XML for chromosome #{chr["chromosome"]}"
+  #filename = "chr" + chr["chromosome"] + ".xml"
+  #build_chromosome_xml( chr["chromosome"], filename )
+  filename = "chr#{chr}.xml"
+  puts "Building XML for chromosome #{chr} > #{filename}"
+  build_chromosome_xml( chr, filename )
 }

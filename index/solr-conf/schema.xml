@@ -278,8 +278,9 @@
    
    <field name="marker_symbol_key" type="string" indexed="true" stored="true" required="true" />
    <field name="marker_symbol" type="text" indexed="true" stored="true" />
-   <field name="marker_symbol_tight" type="textTight" indexed="true" stored="true" />
+   <field name="marker_symbol_tight" type="textTight" indexed="true" />
    <field name="mgi_accession_id" type="textTight" indexed="true" stored="true" />
+   <field name="MGI" type="textTight" indexed="true" />
    <field name="marker_name" type="text" indexed="true" multiValued="true" />
    <field name="type" type="text" indexed="true" />
    <field name="synonym" type="text" indexed="true" stored="true" multiValued="true" />
@@ -300,6 +301,7 @@
    <field name="phenotype" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="phenotype_comment" type="text" indexed="true" multiValued="true" />
    <field name="mp_term" type="textTight" indexed="true" stored="true" multiValued="true" />
+   <field name="MP" type="textTight" indexed="true" multiValued="true" />
    
    <!-- From the original example...
 
@@ -398,6 +400,9 @@
   -->
   <copyField source="marker_symbol_key" dest="marker_symbol"/>
   <copyField source="marker_symbol_key" dest="marker_symbol_tight"/>
+  
+  <copyField source="mgi_accession_id" dest="MGI"/>
+  <copyField source="mp_term" dest="MP"/>
   
   <copyField source="marker_symbol_key" dest="text"/>
   <copyField source="mgi_accession_id" dest="text"/>
