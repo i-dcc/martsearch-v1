@@ -87,8 +87,8 @@ MartSearch.prototype = {
     });
     
     // Activate links between the tabs
-    jQuery('a.help_link').click( function()  { jQuery('#tabs').tabs('select', 3); return false; } );
-    jQuery('a.about_link').click( function() { jQuery('#tabs').tabs('select', 4); return false; } );
+    jQuery('a.help_link').click( function()  { jQuery('#tabs').tabs('select', 2); return false; } );
+    jQuery('a.about_link').click( function() { jQuery('#tabs').tabs('select', 3); return false; } );
     
     /**
     * Load in the dataset config files
