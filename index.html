@@ -58,6 +58,7 @@
     <div id="content">
       
       <div id="header">
+        <a id="sanger_link" href="http://www.sanger.ac.uk"><img height="60" width="200" alt="" src="http://www.sanger.ac.uk/gfx/blank.gif"/></a>
         <h1>WTSI Mouse Resource Portal <span class="subhead">beta</span></h1>
       </div>
       
@@ -126,12 +127,38 @@
               trap insertions, mutant mouse lines, and phenotypic data generated 
               from the Institute's primary screen.
             </p>
-            <h2>Summary</h2>
-            <p>
-              The table below displays the number of unique genes with each individual 
-              product type produced at the Wellcome Trust Sanger Institute.
-            </p>
-            <div id="summary_statistics"></div>
+            <table width="100%">
+              <tr>
+                <td width="70%" style="padding-right: 10px;">
+                  
+                  <h2>Summary</h2>
+                  <p>
+                    The table below displays the number of unique genes with each individual 
+                    product type produced at the Wellcome Trust Sanger Institute.
+                  </p>
+                  <div id="summary_statistics"></div>
+                  
+                </td>
+                <td style="padding-left: 10px; vertical-align: top;">
+                  
+                  <h2>Phenotyping Overview</h2>
+                  <table>
+                    <tr>
+                      <td>
+                        <a href="pheno_overview.xls" title="Download the Phenotyping Overview">
+                          <img src="images/heatmap.png" alt="Download the Phenotyping Overview" />
+                        </a>
+                      </td>
+                      <td>
+                        <a href="pheno_overview.xls" title="Download the Phenotyping Overview">Download</a> 
+                        a heat map of phenotyping results by assay.
+                      </td>
+                    </tr>
+                  </table>
+                  
+                </td>
+              </tr>
+            </table>
           </div>
         </div>
         
@@ -494,13 +521,12 @@
           <a href="http://www.biomart.org" title="Biomart"><img src="images/biomart.png" alt="Biomart" /></a> 
         </div>
         <div id="credits">
-          Powered by <a href="http://github.com/dazoakley/martsearch/">MartSearch</a>, 
-          developed by the <a href="http://www.sanger.ac.uk">Wellcome Trust Sanger Institute</a>
-          
-          <div>
-            <p>Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK&nbsp;&nbsp;Tel:+44 (0)1223 834244</p>
-            <p>Registered charity number 210183</p>
-          </div>
+          <p>
+            Powered by <a href="http://github.com/dazoakley/martsearch/">MartSearch</a>, 
+            developed by the <a href="http://www.sanger.ac.uk">Wellcome Trust Sanger Institute</a>
+          </p>
+          <p>Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK&nbsp;&nbsp;Tel:+44 (0)1223 834244</p>
+          <p>Registered charity number 210183</p>
         </div>
       </div>
       

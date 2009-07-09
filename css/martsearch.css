@@ -529,3 +529,13 @@ table#sanger_product_statistics thead tr :first-child {
 	text-align: left;
 	padding-left: 10px;
 }
+
+/* Sanger Header Link */
+
+a#sanger_link {
+	float: left;
+}
+
+a#sanger_link img {
+	border: none;
+}

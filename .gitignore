@@ -4,3 +4,4 @@ test_coverage*
 messages/*.html
 messages/*.textile
 messages/*.markdown
+pheno_overview.xls
