@@ -13,7 +13,18 @@
     <% for ( var i=0; i<results.length; i++ ) { %>
       <% var result = results[i]; %>
       <tr>
-        <td><%= result["allele_name"] %></td>
+        <td>
+          <%
+            var allele_name = result["allele_name"];
+            if ( allele_name.match("<.+>.+</.+>") ) {
+              log.debug( "ALLELE - got HTML code - " + allele_name );
+            } else if ( allele_name.match("<.+>") ) {
+              var match = /(.+)<(.+)>(.*)/.exec(allele_name);
+              allele_name = match[1] + "<sup>" + match[2] + "</sup>" + match[3];
+            }
+          %>
+          <%= allele_name %>
+        </td>
         <td><%= result["colony_prefix"] %></td>
         <td><%= result["escell_clone_name"] %></td>
         <td>
