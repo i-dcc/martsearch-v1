@@ -1,5 +1,9 @@
 /* @override http://martsearch.site/css/martsearch.css */
 
+@import "jquery-ui-1.7.2.custom.css";
+@import "jquery.tablesorter.css";
+@import "jquery.prettyPhoto.css";
+
 body{
 	margin: 50px;
 	font: 62.5% "Trebuchet MS", sans-serif;
