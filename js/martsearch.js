@@ -1,6 +1,11 @@
 /*
 * MartSearch - the main object.  This is the governing object for the 
 * whole search application.
+* 
+* @depends support.js
+* @depends message.js
+* @depends index.js
+* @depends dataset.js
 */
 MartSearch = function ( params ) {
   var ms = this;
