@@ -79,12 +79,9 @@ DataSet.prototype = {
             }
         },
         error:    function( XMLHttpRequest, textStatus, errorThrown ) {
-          log.error( "Error fetching configuration for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")" );
-          ds.message.add( 
-            "Error fetching configuration for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")",
-            "error",
-            XMLHttpRequest.responseText
-          );
+          var error_msg = "Error fetching configuration for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")";
+          log.error( error_msg );
+          ds.message.add( error_msg, "error", XMLHttpRequest.responseText );
         }
       });
       
@@ -107,12 +104,9 @@ DataSet.prototype = {
           });
         },
         error:    function( XMLHttpRequest, textStatus, errorThrown ) {
-          log.error( "Error fetching configuration for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")" );
-          ds.message.add( 
-            "Error fetching configuration for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")",
-            "error",
-            XMLHttpRequest.responseText
-          );
+          var error_msg = "Error fetching configuration for - "+ ds.mart_dataset +" ("+ XMLHttpRequest.status +")";
+          log.error( error_msg );
+          ds.message.add( error_msg, "error", XMLHttpRequest.responseText );
         }
       });
       
@@ -145,12 +139,9 @@ DataSet.prototype = {
         
         // Catch a Biomart error (as biomart doesn't send 500 messages...)
         if ( data.search(/Query ERROR/) >= 0 ) {
-          log.error( "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query.toString().substr(0,30) +"...' (Biomart Error)" );
-          ds.message.add(
-            "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query.toString().substr(0,20) +"...' (Biomart Error)",
-            "error",
-            data
-          );
+          var error_msg = "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query.toString().substr(0,30) +"...' (Biomart Error)";
+          log.error( error_msg );
+          ds.message.add( error_msg, "error", data );
         }
         else {
           
@@ -207,12 +198,9 @@ DataSet.prototype = {
         
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
-        log.error( "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query +"' ("+ XMLHttpRequest.status +")" );
-        ds.message.add(
-          "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query +"' ("+ XMLHttpRequest.status +")",
-          "error",
-          XMLHttpRequest.responseText
-        );
+        var error_msg = "Error querying biomart '"+ ds.mart_dataset +"' for '"+ query +"' ("+ XMLHttpRequest.status +")";
+        log.error( error_msg );
+        ds.message.add( error_msg, "error", XMLHttpRequest.responseText );
       }
     });
     

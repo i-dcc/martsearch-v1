@@ -22,12 +22,9 @@ MartSearch = function ( params ) {
     },
     error:    function( XMLHttpRequest, textStatus, errorThrown ) {
       init_status = false;
-      log.error( "Error initializing MartSearch - " + textStatus + " ("+ XMLHttpRequest.status +")" );
-      ms.message.add(
-        "Error initializing MartSearch - " + textStatus + " ("+ XMLHttpRequest.status +") please reload the page.",
-        "error",
-        XMLHttpRequest.responseText
-      );
+      var error_msg = "Error initializing MartSearch - " + textStatus + " ("+ XMLHttpRequest.status +") please reload the page.";
+      log.error( error_msg );
+      ms.message.add( error_msg, "error", XMLHttpRequest.responseText );
     }
   });
   
@@ -107,12 +104,9 @@ MartSearch.prototype = {
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
         init_status = false;
-        log.error( "Error initializing datasets - " + textStatus + " ("+ XMLHttpRequest.status +")" );
-        ms.message.add(
-          "Error initializing martsearch datasets - " + textStatus + " ("+ XMLHttpRequest.status +")",
-          "error",
-          XMLHttpRequest.responseText
-        );
+        var error_msg = "Error initializing martsearch datasets - " + textStatus + " ("+ XMLHttpRequest.status +")";
+        log.error( error_msg );
+        ms.message.add( error_msg, "error", XMLHttpRequest.responseText );
       }
     });
     

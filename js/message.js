@@ -25,12 +25,9 @@ Message.prototype = {
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
         status = false;
-        log.error( "Error initializing martsearch messaging - " + textStatus + " ("+ XMLHttpRequest.status +")" );
-        message.add(
-          "Error initializing martsearch messaging - " + textStatus + " ("+ XMLHttpRequest.status +")",
-          "error",
-          XMLHttpRequest.responseText
-        );
+        var error_txt = "Error initializing martsearch messaging - " + textStatus + " ("+ XMLHttpRequest.status +")";
+        log.error( error_txt );
+        message.add( error_txt, "error", XMLHttpRequest.responseText );
       }
     });
     

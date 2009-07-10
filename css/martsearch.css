@@ -29,6 +29,12 @@ h4 span.subheading_counts {
 	font-style: italic;
 }
 
+/* Links */
+
+a img {
+	border: none;
+}
+
 /* Status Indicators */
 
 #search_loading {
