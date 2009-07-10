@@ -4,31 +4,16 @@
   <head>
     <title>The Wellcome Trust Sanger Institute Mouse Resource Portal</title>
     
-    <!-- jQuery (http://jquery.com) & jQuery UI (http://jqueryui.com) -->
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js" charset="utf-8"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/jquery-ui.min.js" charset="utf-8"></script>
-    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/redmond/jquery-ui.css" type="text/css" media="screen" charset="utf-8" />
-    
-    <!-- Supporting libraries and plugins -->
-    <script type="text/javascript" src="js/utils/ejs/ejs.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/utils/ejs/view.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/utils/ejs/ejs_fulljslint.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/utils/jquery/jquery.pagination.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/utils/jquery/jquery.togglecontrol.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/utils/jquery/jquery.prettyPhoto.js" charset="utf-8"></script>
-    <link rel="stylesheet" href="css/jquery.prettyPhoto.css" type="text/css" media="screen" charset="utf-8" />
-    <script type="text/javascript" src="js/utils/jquery/jquery.tablesorter.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/utils/jquery/jquery.tablesorter.pager.js" charset="utf-8"></script>
-    <link rel="stylesheet" href="css/jquery.tablesorter.css" type="text/css" media="screen" charset="utf-8" />
-    <script type="text/javascript" src="js/utils/jquery/jquery.qtip.js" charset="utf-8"></script>
+    <!-- jQuery - the only up-front dependency... -->
+    <script type="text/javascript" src="js/utils/jquery.min.js" charset="utf-8"></script>
     
     <!-- The MartSearch App -->
+    <link rel="stylesheet" href="css/martsearch.css" type="text/css" media="screen" charset="utf-8" />
     <script type="text/javascript" src="js/support.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/message.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/index.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/dataset.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/martsearch.js" charset="utf-8"></script>
-    <link rel="stylesheet" href="css/martsearch.css" type="text/css" media="screen" charset="utf-8" />
     <script type="text/javascript" charset="utf-8">
       jQuery(document).ready(function() {
         ms = new MartSearch({});
@@ -39,20 +24,7 @@
     
     <!-- Blackbird (http://www.gscottolson.com/blackbirdjs) - comment out for production -->
     <script src="js/utils/blackbirdjs/blackbird.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript" charset="utf-8">
-      jQuery(document).ready(function() {
-        jQuery('#bbird_controls').show();
-        jQuery('#bbird_toggle').click( function () { log.toggle(); });
-        jQuery('#bbird_move').click( function () { log.move(); });
-      });
-    </script>
     <link type="text/css" rel="Stylesheet" href="js/utils/blackbirdjs/blackbird.css" />
-
-    <!-- Firebug Lite (http://getfirebug.com/lite.html) - comment out for production -->
-    <!--
-    <script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>
-    <script type="text/javascript">firebug.env.height = 300;</script>
-    -->
   </head>
   <body>
     <div id="content">
@@ -532,4 +504,6 @@
       
     </div>
   </body>
+  <!-- Add in javascript libraries that do not need to be in the page header -->
+  <script type="text/javascript" src="js/utils/secondary_libs.js" charset="utf-8"></script>
 </html>

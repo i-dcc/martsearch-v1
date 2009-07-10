@@ -72,12 +72,9 @@ Index.prototype = {
         idx.raw_results = json;
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
-        log.error( "Error querying index @ '"+ idx.url +"' for '"+ query +"' ("+ XMLHttpRequest.status +")" );
-        idx.message.add(
-          "Error querying the search index for '"+ query +"' ("+ XMLHttpRequest.status +")",
-          "error",
-          XMLHttpRequest.responseText
-        );
+        var error_msg = "Error querying index @ '"+ idx.url +"' for '"+ query +"' ("+ XMLHttpRequest.status +")";
+        log.error( error_msg );
+        idx.message.add( error_msg, "error", XMLHttpRequest.responseText );
         idx.raw_results = false;
       }
     });
