@@ -309,7 +309,7 @@ MartSearch.prototype = {
           { name: "EUMODIC", url: "http://www.eumodic.org/" }
         ],
         dataset: "phenotyping",
-        url: "/htgtdev",
+        url: ms.base_url + "/htgtdev",
         filters: {}
       },
       "Mice": {
@@ -318,7 +318,7 @@ MartSearch.prototype = {
           { name: "EUMODIC", url: "http://www.eumodic.org/" }
         ],
         dataset: "kermits",
-        url: "/htgt",
+        url: ms.base_url + "/htgt",
         filters: {
           status_code: "GC"
         }
@@ -329,7 +329,7 @@ MartSearch.prototype = {
           { name: "EUCOMM", url: "http://www.eucomm.org/" }
         ],
         dataset: "htgt_targ",
-        url: "/htgt",
+        url: ms.base_url + "/htgt",
         filters: {
           status: "Mice - Genotype confirmed,Mice - Germline transmission,Mice - Microinjection in progress,ES Cells - Targeting Confirmed"
         }
@@ -340,7 +340,7 @@ MartSearch.prototype = {
           { name: "EUCOMM", url: "http://www.eucomm.org/" }
         ],
         dataset: "htgt_targ",
-        url: "/htgt",
+        url: ms.base_url + "/htgt",
         filters: {
           status: "Mice - Genotype confirmed,Mice - Germline transmission,Mice - Microinjection in progress,ES Cells - Targeting Confirmed,ES Cells - No QC Positives,ES Cells - Electroporation Unsuccessful,ES Cells - Electroporation in Progress,Vector - DNA Not Suitable for Electroporation,Vector Complete"
         }
@@ -350,7 +350,7 @@ MartSearch.prototype = {
           { name: "WT", url: "http://www.wellcome.ac.uk/" }
         ],
         dataset: "bacs",
-        url: "/htgtdev",
+        url: ms.base_url + "/htgtdev",
         filters: {
           library: "MICER"
         }
@@ -360,7 +360,7 @@ MartSearch.prototype = {
           { name: "WT", url: "http://www.wellcome.ac.uk/" }
         ],
         dataset: "bacs",
-        url: "/htgtdev",
+        url: ms.base_url + "/htgtdev",
         filters: {
           library: "C57Bl/6J"
         }
@@ -370,7 +370,7 @@ MartSearch.prototype = {
           { name: "WT", url: "http://www.wellcome.ac.uk/" }
         ],
         dataset: "bacs",
-        url: "/htgtdev",
+        url: ms.base_url + "/htgtdev",
         filters: {
           library: "129S7"
         }
