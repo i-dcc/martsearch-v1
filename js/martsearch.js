@@ -240,12 +240,12 @@ MartSearch.prototype = {
     * Make the doc 'bubbles' toggleable, and if there is a lot of results 
     * to go through, collapse them...
     */
-    //if ( index_response && index_response.response.numFound > ms.index.docs_per_page ) {
-    //  jQuery('.doc_title').toggleControl('.doc_content', { speed: "fast" });
-    //}
-    //else {
+    if ( index_response && index_response.response.numFound > ms.index.docs_per_page ) {
+      jQuery('.doc_title').toggleControl('.doc_content', { speed: "fast" });
+    }
+    else {
       jQuery('.doc_title').toggleControl('.doc_content', { hide: false, speed: "fast" });
-    //}
+    }
     
     // Hide the loading indicator
     jQuery("#"+search_or_browse+"_loading").fadeOut("fast");
