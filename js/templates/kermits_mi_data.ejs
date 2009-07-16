@@ -1,0 +1,54 @@
+<table id="<%= content_id %>_table" class="with_border">
+  <thead>
+    <tr>
+      <th>Allele Name</th>
+      <th>Colony Prefix</th>
+      <th>ES Cell Clone Name</th>
+      <th>Genetic Background</th>
+      <th>Status</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for ( var i=0; i<results.length; i++ ) { %>
+      <% var result = results[i]; %>
+      <tr>
+        <td>
+          <%
+            var allele_name = result["allele_name"];
+            if ( allele_name.match("<.+>.+</.+>") ) {
+              log.debug( "ALLELE - got HTML code - " + allele_name );
+            } else if ( allele_name.match("<.+>") ) {
+              var match = /(.+)<(.+)>(.*)/.exec(allele_name);
+              allele_name = match[1] + "<sup>" + match[2] + "</sup>" + match[3];
+            }
+          %>
+          <%= allele_name %>
+        </td>
+        <td><%= result["colony_prefix"] %></td>
+        <td><%= result["escell_clone_name"] %></td>
+        <td>
+          <%
+            var genetic_background = [];
+            if ( result["back_cross_strain"] ) { genetic_background.push(result["back_cross_strain"]); }
+            if ( result["test_cross_strain"] ) { genetic_background.push(result["test_cross_strain"]); }
+            if ( result["escell_strain"] )     { genetic_background.push(result["escell_strain"]); }
+          %>
+          <%= genetic_background.join(';') %>
+        </td>
+        <td><%= result["status"] %></td>
+        <td>
+          <%
+            var link = '#';
+            if ( result["sponsor"] === "EUCOMM" ) {
+              link = "http://www.emmanet.org/apps/springEmma/search?keyword=" + result["marker_symbol"] + "&amp;select_by=affectedGene&amp;search=ok";
+            } else if ( results[i]["sponsor"] === "KOMP" ) {
+              link = "mailto:mouseinterest@sanger.ac.uk?subject=Interest in Mouse for " + result["marker_symbol"];
+            }
+          %>
+          <a href="<%= link %>">Register Interest in a Mouse</a>
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
