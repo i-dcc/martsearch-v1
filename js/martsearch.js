@@ -1,6 +1,11 @@
 /*
 * MartSearch - the main object.  This is the governing object for the 
 * whole search application.
+* 
+* @depends support.js
+* @depends message.js
+* @depends index.js
+* @depends dataset.js
 */
 MartSearch = function ( params ) {
   var ms = this;
@@ -22,12 +27,9 @@ MartSearch = function ( params ) {
     },
     error:    function( XMLHttpRequest, textStatus, errorThrown ) {
       init_status = false;
-      log.error( "Error initializing MartSearch - " + textStatus + " ("+ XMLHttpRequest.status +")" );
-      ms.message.add(
-        "Error initializing MartSearch - " + textStatus + " ("+ XMLHttpRequest.status +") please reload the page.",
-        "error",
-        XMLHttpRequest.responseText
-      );
+      var error_msg = "Error initializing MartSearch - " + textStatus + " ("+ XMLHttpRequest.status +") please reload the page.";
+      log.error( error_msg );
+      ms.message.add( error_msg, "error", XMLHttpRequest.responseText );
     }
   });
   
@@ -82,7 +84,7 @@ MartSearch.prototype = {
         jQuery("#search_result_list").html("");
         jQuery("#search_results .pagination").html("");
         jQuery('#intro_text').fadeIn("fast");
-      };
+      }
       return false;
     });
     
@@ -107,12 +109,9 @@ MartSearch.prototype = {
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
         init_status = false;
-        log.error( "Error initializing datasets - " + textStatus + " ("+ XMLHttpRequest.status +")" );
-        ms.message.add(
-          "Error initializing martsearch datasets - " + textStatus + " ("+ XMLHttpRequest.status +")",
-          "error",
-          XMLHttpRequest.responseText
-        );
+        var error_msg = "Error initializing martsearch datasets - " + textStatus + " ("+ XMLHttpRequest.status +")";
+        log.error( error_msg );
+        ms.message.add( error_msg, "error", XMLHttpRequest.responseText );
       }
     });
     
@@ -145,7 +144,7 @@ MartSearch.prototype = {
       jQuery("#browse_controls ul.browse_list li").click( function() {
         ms.search( jQuery(this).find("a").attr("rel"), 0, "browse" );
       });
-    };
+    }
     
     // Make form buttons respond to mouse interaction
     jQuery(".ui-button:not(.ui-state-disabled)")
