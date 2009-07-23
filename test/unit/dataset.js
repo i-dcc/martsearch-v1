@@ -1,6 +1,22 @@
 module("dataset");
 
+// Basic functionallity tests first before moving onto testing 
+// the configured datasets...
+
+var dataset = ms.datasets[i];
+
+test( "Function test - _fix_superscript_text_in_attribute ", function() {
+  var test_str1 = 'C57BL/6-Tyr<c-Brd>';
+  var test_str2 = 'C57BL/6-Tyr<sup>c-Brd</sup>';
+  var expected_str = 'C57BL/6-Tyr<sup>c-Brd</sup>';
+  
+  expect(2);
+  equals( ds._fix_superscript_text_in_attribute(test_str1), expected_str, "Correctly removed the <> tags " );
+  equals( ds._fix_superscript_text_in_attribute(test_str2), expected_str, "Correctly left HTML code alone " );
+});
+
 // Load in the dataset configs so we can check some details...
+
 var datasets = [];
 jQuery.ajax({
   url:      ms.base_url + "/bin/dataset-feed.pl",

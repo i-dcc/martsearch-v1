@@ -160,7 +160,7 @@ DataSet.prototype = {
               if ( ds.debug_mode ) { log.debug('processing '+ content_id); }
 
               if ( results[ content_id ] !== undefined && results[ content_id ].length !== 0 ) {
-                // Run any post display functions
+                // Run any pre display functions
                 if ( ds.pre_display_hook ) { ds.pre_display_hook( content_id ); }
                 
                 var template = new EJS({ url: ds.template }).render({ 'results': results[ content_id ], dataset: ds, 'content_id': content_id });
@@ -384,6 +384,21 @@ DataSet.prototype = {
     }
     
     return array_of_hashes;
+  },
+  
+  /**
+  *
+  */
+  _fix_superscript_text_in_attribute: function ( attribute ) {
+    if ( attribute.match("<.+>.+</.+>") ) {
+      // HTML code - leave alone...
+    }
+    else if ( attribute.match("<.+>") ) {
+      var match = /(.+)<(.+)>(.*)/.exec(attribute);
+      attribute = match[1] + "<sup>" + match[2] + "</sup>" + match[3];
+    }
+    
+    return attribute;
   },
   
   /**
