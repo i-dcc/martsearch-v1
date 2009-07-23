@@ -37,7 +37,11 @@
           for (var j=0; j < data_by_item.length; j++) {
             tmp_hash[ ds.enabled_attributes[j] ] = data_by_item[j];
           }
-
+          
+          // Correct the <> notation in several attributes...
+          tmp_hash["allele_name"]       = ds._fix_superscript_text_in_attribute(tmp_hash["allele_name"]);
+          tmp_hash["back_cross_strain"] = ds._fix_superscript_text_in_attribute(tmp_hash["back_cross_strain"]);
+          
           // Filter out unwanted rows...
           var save_this_row = true;
           if ( ds.required_attributes !== undefined ) {
