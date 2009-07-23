@@ -6,7 +6,7 @@
       <th>ES Cell Clone Name</th>
       <th>Genetic Background</th>
       <th>Status</th>
-      <th></th>
+      <th>Order</th>
     </tr>
   </thead>
   <tbody>
@@ -27,15 +27,23 @@
         </td>
         <td><%= result["status"] %></td>
         <td>
-          <%
-            var link = '#';
-            if ( result["sponsor"] === "EUCOMM" ) {
-              link = "http://www.emmanet.org/apps/springEmma/search?keyword=" + result["marker_symbol"] + "&amp;select_by=affectedGene&amp;search=ok";
-            } else if ( results[i]["sponsor"] === "KOMP" ) {
-              link = "mailto:mouseinterest@sanger.ac.uk?subject=Interest in Mouse for " + result["marker_symbol"];
-            }
-          %>
-          <a href="<%= link %>">Register Interest in a Mouse</a>
+          <% if ( result["emma"].match("1") ) { %>
+            <%
+              var link = undefined;
+              if ( result["sponsor"] === "EUCOMM" ) {
+                link = "http://www.emmanet.org/apps/springEmma/search?keyword=" + result["marker_symbol"] + "&amp;select_by=affectedGene&amp;search=ok";
+              } else if ( results[i]["sponsor"] === "KOMP" ) {
+                link = "mailto:mouseinterest@sanger.ac.uk?subject=Interest in Mouse for " + result["marker_symbol"];
+              }
+            %>
+            <% if ( link !== undefined ) { %>
+              <a href="<%= link %>">Register Interest in a Mouse</a>
+            <% } else { %>
+              <em>currently unavailable</em>
+            <% } %>
+          <% } else { %>
+            <em>currently unavailable</em>
+          <% } %>
         </td>
       </tr>
     <% } %>

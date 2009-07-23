@@ -19,7 +19,8 @@
     "test_cross_strain",
     "back_cross_strain",
     "status",
-    "allele_name"
+    "allele_name",
+    "emma"
   ],
   required_attributes: [
     "status"
