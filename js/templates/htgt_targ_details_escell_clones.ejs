@@ -23,7 +23,7 @@
           <% } %>
         </td>
         <td><%= clone["es_cell_line"] %></td>
-        <td><%= project["allele_name"] %></td>
+        <td><%= clone["allele_name"] %></td>
         <td>
           <%= this.partial({ url: dataset.base_url + "/js/templates/htgt_targ_details_order.ejs" },{ dataset: dataset, project: project, order_type: 'clone' }) %>
         </td>
