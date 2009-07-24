@@ -43,10 +43,19 @@ MartSearch = function ( params ) {
   // Build the test_conf into the MartSearch object
   ms.test_conf = params.test_conf;
   
+  // Custom functions
+  ms.pre_search_hook  = params.pre_search_hook;
+  ms.post_search_hook = params.post_search_hook;
+  
   // Placeholder for dataset objects
   ms.datasets = [];
   
-  ms.current_query = "";
+  // Placeholders for useful globals
+  ms.current_query         = "";
+  ms.current_results       = {};
+  ms.current_results_total = 0;
+  ms.current_mode          = undefined;
+  ms.completed_searches    = 0;
 };
 
 MartSearch.prototype = {
@@ -179,10 +188,14 @@ MartSearch.prototype = {
     
     // Set the scope
     var ms = this;
-    ms.current_query = search_string;
+    
+    ms.current_query      = search_string;
+    ms.current_mode       = search_or_browse;
+    ms.searches_completed = 0;
+    ms.current_results    = {};
     
     // Show the loading indicator
-    jQuery("#"+search_or_browse+"_loading").fadeIn("fast");
+    jQuery("#"+ms.current_mode+"_loading").fadeIn("fast");
     
     // Calculate what our starting doc is
     var start_doc = 0;
@@ -190,8 +203,11 @@ MartSearch.prototype = {
     
     // Clear any messages and previous results
     if ( jQuery(".messages").html() !== "" ) { ms.message.clear(); }
-    jQuery("#"+search_or_browse+"_result_list").html("");
-    jQuery("#"+search_or_browse+"_results .pagination").html("");
+    jQuery("#"+ms.current_mode+"_result_list").html("");
+    jQuery("#"+ms.current_mode+"_results .pagination").html("");
+    
+    // Run any pre search functions
+    if ( ms.pre_search_hook ) { ms.pre_search_hook(); }
     
     // Query the index
     var index_response = ms.index.search( search_string, start_doc );
@@ -210,59 +226,96 @@ MartSearch.prototype = {
           datasets:       ms.datasets
         }
       );
-      jQuery("#"+search_or_browse+"_result_list").html(docs);
+      jQuery("#"+ms.current_mode+"_result_list").html(docs);
       
-      // See if we need to paginate results
-      // (Using the jquery.pagination plugin)
+      // See if we need to paginate results (using the jquery.pagination plugin)
       if ( index_response.response.numFound > ms.index.docs_per_page ) {
-        jQuery("#"+search_or_browse+"_results .pagination").pagination( 
+        jQuery("#"+ms.current_mode+"_results .pagination").pagination( 
           index_response.response.numFound,
           {
             items_per_page:       ms.index.docs_per_page,
             num_edge_entries:     1,
             num_display_entries:  5,
             current_page:         page,
-            callback:             function(page,dom_elem){ ms._pager(page,dom_elem,search_or_browse); }
+            callback:             function(page,dom_elem){ ms._pager(page,dom_elem); }
           }
         );
       }
-
-      // Load in each dataset...
-      for (var i=0; i < ms.datasets.length; i++) {
-        var ds = ms.datasets[i];
+      
+      // Kick off each dataset search...
+      for (var j=0; j < ms.datasets.length; j++) {
+        var ds = ms.datasets[j];
         if ( index_values[ ds.joined_index_field ] !== undefined && index_values[ ds.joined_index_field ] !== "" ) {
           ds.search( index_values[ ds.joined_index_field ], index_response.response.docs, ms.index.primary_field );
         }
       }
       
-    }
-    
-    // Make the dataset 'bubbles' toggleable
-    jQuery('.dataset_title').toggleControl('.dataset_content', { hide: false, speed: "fast" });
-    
-    /**
-    * Make the doc 'bubbles' toggleable, and if there is a lot of results 
-    * to go through, collapse them...
-    */
-    if ( index_response && index_response.response.numFound > ms.index.docs_per_page ) {
-      jQuery('.doc_title').toggleControl('.doc_content', { speed: "fast" });
+      // Finally, load the index results into the 'current_results' stash
+      ms.current_results_total = index_response.response.numFound;
+      for (var i=0; i < index_response.response.docs.length; i++) {
+        var doc = index_response.response.docs[i];
+        ms.current_results[ doc[ms.index.primary_field] ] = {};
+        ms.current_results[ doc[ms.index.primary_field] ]['doc'] = doc;
+      }
+      
     }
     else {
-      jQuery('.doc_title').toggleControl('.doc_content', { hide: false, speed: "fast" });
+      
+      // Cancel the loading/working indicator
+      jQuery("#"+ms.current_mode+"_loading").fadeOut("fast");
+      
     }
     
-    // Hide the loading indicator
-    jQuery("#"+search_or_browse+"_loading").fadeOut("fast");
-    
     return false;
+  },
+  
+  /**
+  * Helper function to be called after a biomart search has been completed. 
+  * This will allow the use of custom post-search functions to interact with 
+  * the returned data as a whole.
+  */
+  _search_completed: function () {
+    var ms = this;
+    
+    // We're being called, so increment the completed_search count
+    ms.completed_searches = ms.completed_searches + 1;
+    
+    if ( ms.completed_searches < ms.datasets.length ) {
+      // Do nothing - we're still waiting!
+    }
+    else {
+      // All searches completed!
+      
+      // Run any post search functions
+      if ( ms.post_search_hook ) { ms.post_search_hook(); }
+      
+      // Make the dataset 'bubbles' toggleable
+      jQuery('.dataset_title').toggleControl('.dataset_content', { hide: false, speed: "fast" });
+      
+      /**
+      * Make the doc 'bubbles' toggleable, and if there is a lot of results 
+      * to go through, collapse them...
+      */
+      if ( ms.current_results_total > ms.index.docs_per_page ) {
+        jQuery('.doc_title').toggleControl('.doc_content', { speed: "fast" });
+      }
+      else {
+        jQuery('.doc_title').toggleControl('.doc_content', { hide: false, speed: "fast" });
+      }
+      
+      // Finally, hide the loading/working indicator
+      jQuery("#"+ms.current_mode+"_loading").fadeOut("fast");
+      
+    }
+    
   },
   
   /**
   * Helper function to handle pagination of the search results
   * 
   */
-  _pager: function ( new_page_index, pagination_container, search_or_browse ) {
-    this.search( this.current_query, new_page_index, search_or_browse );
+  _pager: function ( new_page_index, pagination_container ) {
+    this.search( this.current_query, new_page_index, ms.current_mode );
     return false;
   },
   
