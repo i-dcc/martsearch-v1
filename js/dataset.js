@@ -193,8 +193,8 @@ DataSet.prototype = {
                 ms.current_results[current_results_key][ds.internal_name]['results'] = results[content_id];
               }
               else {
-                jQuery( "#"+content_id ).parent().parent().fadeOut("fast");
-                jQuery( "#"+content_id+'_is_present' ).fadeOut("fast");
+                jQuery( "#"+content_id ).parent().parent().remove();
+                jQuery( "#"+content_id+'_is_present' ).remove();
               }
 
             }
