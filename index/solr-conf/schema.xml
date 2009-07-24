@@ -279,6 +279,8 @@
    <field name="marker_symbol_key" type="string" indexed="true" stored="true" required="true" />
    <field name="marker_symbol" type="text" indexed="true" stored="true" />
    <field name="marker_symbol_tight" type="textTight" indexed="true" />
+   <field name="symbol" type="text" indexed="true" />
+   <field name="symbol_tight" type="textTight" indexed="true" />
    <field name="mgi_accession_id" type="textTight" indexed="true" stored="true" />
    <field name="MGI" type="textTight" indexed="true" />
    <field name="marker_name" type="text" indexed="true" multiValued="true" />
@@ -289,6 +291,8 @@
    <field name="coord_end" type="sint" indexed="true" />
    <field name="strand" type="string" />
    <field name="ensembl_gene_id" type="textTight" indexed="true" multiValued="true" />
+   <field name="ensembl_peptide_id" type="textTight" indexed="true" multiValued="true" />
+   <field name="ensembl_transcript_id" type="textTight" indexed="true" multiValued="true" />
    <field name="vega_gene_id" type="textTight" indexed="true" multiValued="true" />
    <field name="entrez_gene_id" type="sint" indexed="true" multiValued="true" />
    <field name="ccds_id" type="textTight" indexed="true" multiValued="true" />
@@ -302,6 +306,10 @@
    <field name="phenotype_comment" type="text" indexed="true" multiValued="true" />
    <field name="mp_term" type="textTight" indexed="true" stored="true" multiValued="true" />
    <field name="MP" type="textTight" indexed="true" multiValued="true" />
+   <field name="colony_prefix" type="textTight" indexed="true" multiValued="true" />
+   <field name="gene_biotype" type="textTight" indexed="true" multiValued="true" />
+   <field name="transcript_biotype" type="textTight" indexed="true" multiValued="true" />
+   <field name="biotype" type="textTight" indexed="true" multiValued="true" />
    
    <!-- From the original example...
 
@@ -400,15 +408,22 @@
   -->
   <copyField source="marker_symbol_key" dest="marker_symbol"/>
   <copyField source="marker_symbol_key" dest="marker_symbol_tight"/>
+  <copyField source="marker_symbol_key" dest="symbol"/>
+  <copyField source="marker_symbol_key" dest="symbol_tight"/>
   
   <copyField source="mgi_accession_id" dest="MGI"/>
   <copyField source="mp_term" dest="MP"/>
+  
+  <copyField source="gene_biotype" dest="biotype"/>
+  <copyField source="transcript_biotype" dest="biotype"/>
   
   <copyField source="marker_symbol_key" dest="text"/>
   <copyField source="mgi_accession_id" dest="text"/>
   <copyField source="marker_name" dest="text"/>
   <copyField source="synonym" dest="text"/>
   <copyField source="ensembl_gene_id" dest="text"/>
+  <copyField source="ensembl_peptide_id" dest="text"/>
+  <copyField source="ensembl_transcript_id" dest="text"/>
   <copyField source="vega_gene_id" dest="text"/>
   <copyField source="entrez_gene_id" dest="text"/>
   <copyField source="ccds_id" dest="text"/>
@@ -420,6 +435,9 @@
   <copyField source="phenotype" dest="text"/>
   <copyField source="phenotype_comment" dest="text"/>
   <copyField source="mp_term" dest="text"/>
+  <copyField source="colony_prefix" dest="text"/>
+  <copyField source="gene_biotype" dest="text"/>
+  <copyField source="transcript_biotype" dest="text"/>
   
   <!--
   <copyField source="incubationdate_dt" dest="incubationdate_s"/>

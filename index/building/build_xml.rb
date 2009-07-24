@@ -172,6 +172,17 @@ def search_product_marts( documents )
     ]
   )
   
+  # Kermits Biomart
+  kermits_mart = Biomart.new(
+    :url        => "http://www.sanger.ac.uk/htgt/biomart/martservice",
+    :http       => @@http_agent,
+    :dataset    => "kermits",
+    :attributes => [
+      "marker_symbol",
+      "colony_prefix"
+    ]
+  )
+  
   # Phenotyping Biomart
   pheno_mart = Biomart.new(
     :url        => "http://htgt.internal.sanger.ac.uk:9002/biomart/martservice",
@@ -254,6 +265,35 @@ def search_product_marts( documents )
     ]
   )
   
+  # EnsemblMart
+  ensembl_mart = Biomart.new(
+    :url        => "http://www.ensembl.org/biomart/martservice",
+    :http       => @@http_agent,
+    :dataset    => "mmusculus_gene_ensembl",
+    :attributes => [
+      "external_gene_id",
+      "ensembl_transcript_id",
+      "ensembl_peptide_id",
+      "human_ensembl_gene",
+      "human_homolog_ensembl_peptide",
+      "zebrafish_ensembl_gene",
+      "zebrafish_homolog_ensembl_peptide",
+      "rat_ensembl_gene",
+      "rat_homolog_ensembl_peptide"
+    ]
+  )
+  
+  ensembl_mart2 = Biomart.new(
+    :url        => "http://www.ensembl.org/biomart/martservice",
+    :http       => @@http_agent,
+    :dataset    => "mmusculus_gene_ensembl",
+    :attributes => [
+      "external_gene_id",
+      "gene_biotype",
+      "transcript_biotype"
+    ]
+  )
+  
   # Chunk the gene symbols into groups of 100 so that we don't 
   # swamp the martservices
   doc_chunks = documents.keys.chunk( documents.keys.size % 100 )
@@ -265,31 +305,31 @@ def search_product_marts( documents )
     targ_data = targ_mart.search( ["marker_symbol"], chunk.join(',') )
     targ_data.each { |data|
       document = documents[ data['marker_symbol'] ]
-
+    
       if document == nil
         document = Document.new( data['marker_symbol'] )
       end
-
+    
       unless ( data['design_plate'].to_s.empty? && data['design_well'].to_s.empty? )
         document.targeting_designs.push( data['design_plate'] + '_' + data['design_well'] )
       end
-
+    
       unless ( data['intvec_plate'].to_s.empty? && data['intvec_well'].to_s.empty? )
         document.intermediate_vectors.push( data['intvec_plate'] + '_' + data['intvec_well'] )
       end
-
+    
       unless ( data['targvec_plate'].to_s.empty? && data['targvec_well'].to_s.empty? )
         document.targeting_vectors.push( data['targvec_plate'] + '_' + data['targvec_well'] )
       end
-
+    
       unless data['allele_name'].to_s.empty?
         document.alleles.push( data['allele_name'] )
       end
-
+    
       unless data['escell_clone_name'].to_s.empty?
         document.escells.push( data['escell_clone_name'] )
       end
-
+    
       documents[ data['marker_symbol'] ] = document
     }
     
@@ -297,50 +337,106 @@ def search_product_marts( documents )
     trap_data = trap_mart.search( ["marker_symbol"], chunk.join(',') )
     trap_data.each { |data|
       document = documents[ data['marker_symbol'] ]
-
+    
       if document == nil
         document = Document.new( data['marker_symbol'] )
       end
-
+    
       document.escells.push( data['escell_clone_name'] )
-
+    
       documents[ data['marker_symbol'] ] = document
     }
     
+    # Kermits search
+    kermits_data = kermits_mart.search( ["marker_symbol"], chunk.join(',') )
+    kermits_data.each do |data|
+      document = documents[ data['marker_symbol'] ]
+    
+      if document == nil
+        document = Document.new( data['marker_symbol'] )
+      end
+    
+      document.colony_prefixes.push( data['colony_prefix'] )
+    
+      documents[ data['marker_symbol'] ] = document
+    end
+    
+    # Phenotyping search
     pheno_data = pheno_mart.search( ["marker_symbol"], chunk.join(',') )
-    pheno_data.each { |data|
+    pheno_data.each do |data|
       document = documents[ data["marker_symbol"] ]
-      
+    
       if document == nil
         document = Document.new( data["marker_symbol"] )
       end
-      
+    
       # Go through each of the pheno tests to see if we have a 
       # positive result - if yes, index the test name and any comments
       pheno_mart.attributes.each do |attribute|
-        
+    
         unless attribute.match(/marker_symbol|comment/)
-          
+    
           if data[ attribute ] == "significant_difference"
             document.phenotype.push( attribute.sub( "ip_gtt", "ip-gtt" ).sub( "x_ray", "x-ray" ).gsub( "_", " " ) )
-            
+    
             unless data[ attribute + "_comment" ].to_s.empty?
               document.phenotype_comments.push( data[ attribute + "_comment" ] )
-              
+    
               # Also, extract the MP terms
               if data[ attribute + "_comment" ].to_s.match(/MP\:\d+/)
                 document.mp_terms.push( data[ attribute + "_comment" ].to_s.match(/MP\:\d+/)[0] )
               end
             end
-            
+    
           end
-          
+    
         end
-        
+    
       end
-      
+    
       documents[ data["marker_symbol"] ] = document
-    }
+    end
+    
+    # EnsemblMart search
+    ensembl_search_ids = []
+    chunk.each do |symbol|
+      document = documents[symbol]
+      document.ensembl_gene_ids.each do |e|
+        ensembl_search_ids.push(e)
+      end
+    end
+    
+    ensembl_data = ensembl_mart.search( ["ensembl_gene_id"], ensembl_search_ids.join(',') )
+    ensembl_data.each do |data|
+      document = documents[ data["external_gene_id"] ]
+      
+      if document != nil
+        document.ensembl_gene_ids.push( data["human_ensembl_gene"] )
+        document.ensembl_gene_ids.push( data["zebrafish_ensembl_gene"] )
+        document.ensembl_gene_ids.push( data["rat_ensembl_gene"] )
+
+        document.ensembl_transcript_ids.push( data["ensembl_transcript_id"] )
+
+        document.ensembl_peptide_ids.push( data["ensembl_peptide_id"] )
+        document.ensembl_peptide_ids.push( data["human_homolog_ensembl_peptide"] )
+        document.ensembl_peptide_ids.push( data["zebrafish_homolog_ensembl_peptide"] )
+        document.ensembl_peptide_ids.push( data["rat_homolog_ensembl_peptide"] )
+
+        documents[ data["external_gene_id"] ] = document
+      end
+    end
+    
+    ensembl_data2 = ensembl_mart2.search( ["ensembl_gene_id"], ensembl_search_ids.join(',') )
+    ensembl_data2.each do |data|
+      document = documents[ data["external_gene_id"] ]
+      
+      if document != nil
+        document.gene_biotype.push( data["gene_biotype"] )
+        document.transcript_biotype.push( data["transcript_biotype"] )
+
+        documents[ data["external_gene_id"] ] = document
+      end
+    end
     
   }
   
