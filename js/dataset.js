@@ -188,8 +188,8 @@ DataSet.prototype = {
                 }
               }
               else {
-                jQuery( "#"+content_id ).parent().parent().fadeOut("fast");
-                jQuery( "#"+content_id+'_is_present' ).fadeOut("fast");
+                jQuery( "#"+content_id ).parent().parent().remove();
+                jQuery( "#"+content_id+'_is_present' ).remove();
               }
 
             }
