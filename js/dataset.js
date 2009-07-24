@@ -184,8 +184,13 @@ DataSet.prototype = {
                       }
                     );
                   }
-                  
                 }
+                
+                // Finally, load the biomart results into the 'current_results' stash
+                var current_results_key = docs[i][primary_index_field];
+                ms.current_results[current_results_key][ds.internal_name] = {};
+                ms.current_results[current_results_key][ds.internal_name]['content_id'] = content_id;
+                ms.current_results[current_results_key][ds.internal_name]['results'] = results[content_id];
               }
               else {
                 jQuery( "#"+content_id ).parent().parent().fadeOut("fast");
@@ -195,6 +200,9 @@ DataSet.prototype = {
             }
           }
         }
+        
+        // Signal that we're done...
+        ms._search_completed();
         
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
