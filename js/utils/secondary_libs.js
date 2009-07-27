@@ -59,7 +59,7 @@ jQuery.fn.pagination=function(a,b){b=jQuery.extend({items_per_page:10,num_displa
  *   http://www.gnu.org/licenses/gpl.html
  *
  */
-(function(a){a.fn.extend({toggleControl:function(c,e){var d={hide:true,speed:"normal",event:"click",openClass:"toggle-open",closeClass:"toggle-close"};var b=a.extend(d,e);return this.each(function(f){var g=a(this);a(this).each(function(j,h){if(b.hide){a(h).addClass(b.openClass);a(c).slideUp(b.speed)}else{a(h).addClass(b.closeClass)}a(h).unbind(b.event);a(h).bind(b.event,function(i){a(h).toggleClass(b.openClass);a(h).toggleClass(b.closeClass);a(c).eq(f).slideToggle(b.speed)})})})}})})(jQuery);
+(function(a){a.fn.extend({toggleControl:function(c,e){var d={hide:true,speed:"normal",event:"click",openClass:"toggle-open",closeClass:"toggle-close"};var b=a.extend(d,e);return this.each(function(f){var g=a(this);a(this).each(function(j,h){if(b.hide){a(h).addClass(b.openClass);if(a(c).attr("display")!=="none"){a(c).slideUp(b.speed)}}else{a(h).addClass(b.closeClass);if(a(c).attr("display")==="none"){a(c).slideDown(b.speed)}}a(h).unbind(b.event);a(h).bind(b.event,function(i){a(h).toggleClass(b.openClass);a(h).toggleClass(b.closeClass);a(c).eq(f).slideToggle(b.speed)})})})}})})(jQuery);
 
 /**
  * 
