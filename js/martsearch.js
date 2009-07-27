@@ -185,13 +185,12 @@ MartSearch.prototype = {
   *
   */
   search: function ( search_string, page, search_or_browse ) {
-    
     // Set the scope
     var ms = this;
     
     ms.current_query      = search_string;
     ms.current_mode       = search_or_browse;
-    ms.searches_completed = 0;
+    ms.completed_searches = 0;
     ms.current_results    = {};
     
     // Show the loading indicator
