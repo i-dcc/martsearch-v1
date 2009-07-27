@@ -70,12 +70,22 @@ Index.prototype = {
       },
       success:  function ( json ) {
         idx.raw_results = json;
+        
+        // Load the index results into the 'current_results' stash
+        ms.current_results_total = json.response.numFound;
+        for (var i=0; i < json.response.docs.length; i++) {
+          var doc = json.response.docs[i];
+          ms.current_results[ doc[idx.primary_field] ] = {};
+          ms.current_results[ doc[idx.primary_field] ]['doc'] = doc;
+        }
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
         var error_msg = "Error querying index @ '"+ idx.url +"' for '"+ query +"' ("+ XMLHttpRequest.status +")";
         log.error( error_msg );
         idx.message.add( error_msg, "error", XMLHttpRequest.responseText );
         idx.raw_results = false;
+        ms.current_results_total = 0;
+        ms.current_results = {};
       }
     });
     

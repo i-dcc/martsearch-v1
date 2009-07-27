@@ -245,14 +245,6 @@ MartSearch.prototype = {
         }
       }
       
-      // Finally, load the index results into the 'current_results' stash
-      ms.current_results_total = index_response.response.numFound;
-      for (var i=0; i < index_response.response.docs.length; i++) {
-        var doc = index_response.response.docs[i];
-        ms.current_results[ doc[ms.index.primary_field] ] = {};
-        ms.current_results[ doc[ms.index.primary_field] ]['doc'] = doc;
-      }
-      
     }
     else {
       
@@ -285,17 +277,17 @@ MartSearch.prototype = {
       if ( ms.post_search_hook ) { ms.post_search_hook(); }
       
       // Make the dataset 'bubbles' toggleable
-      jQuery('.dataset_title').toggleControl('.dataset_content', { hide: false, speed: "fast" });
+      jQuery('#'+ms.current_mode+'_results .dataset_title').toggleControl('#'+ms.current_mode+'_results .dataset_content', { hide: false, speed: "fast" });
       
       /**
       * Make the doc 'bubbles' toggleable, and if there is a lot of results 
       * to go through, collapse them...
       */
       if ( ms.current_results_total > ms.index.docs_per_page ) {
-        jQuery('.doc_title').toggleControl('.doc_content', { speed: "fast" });
+        jQuery('#'+ms.current_mode+'_results .doc_title').toggleControl('#'+ms.current_mode+'_results .doc_content', { speed: "fast" });
       }
       else {
-        jQuery('.doc_title').toggleControl('.doc_content', { hide: false, speed: "fast" });
+        jQuery('#'+ms.current_mode+'_results .doc_title').toggleControl('#'+ms.current_mode+'_results .doc_content', { hide: false, speed: "fast" });
       }
       
       // Finally, hide the loading/working indicator
