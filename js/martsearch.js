@@ -373,7 +373,8 @@ MartSearch.prototype = {
         dataset: "kermits",
         url: ms.base_url + "/htgt",
         filters: {
-          status_code: "GC"
+          status_code: "GC",
+          centre:      "WTSI"
         }
       },
       "Targeted ES Cells": {
