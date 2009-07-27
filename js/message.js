@@ -58,8 +58,8 @@ Message.prototype = {
       message_string += '<span class="ui-icon ui-icon-alert"></span>';
       message_string += '<p>' + message;
       if ( error_msg !== undefined || error_msg !== "" ) {
-        message_string += ' <small><a id="errortoggle'+ timestamp +'" href="#" class="error_toggle">full error message</a></small></p>';
-        message_string += '<div id="errormsg'+ timestamp +'" class="error_msg" style="display:none;">'+ error_msg +'</div>';
+        message_string += ' <small><a id="'+ms.current_mode+'_errortoggle'+timestamp+'" href="#" class="error_toggle">full error message</a></small></p>';
+        message_string += '<div id="'+ms.current_mode+'_errormsg'+timestamp+'" class="error_msg" style="display:none;">'+ error_msg +'</div>';
         message_string += '</div>';
       }
       else {
@@ -71,7 +71,7 @@ Message.prototype = {
       message_string += '<p>' + message + '</p></div>';
     }
     
-    jQuery(".messages").append( message_string ).show("fast");
-    jQuery('#errortoggle'+timestamp).toggleControl('#errormsg'+timestamp);
+    jQuery('#'+ms.current_mode+'_messages').append( message_string ).show("fast");
+    jQuery('#'+ms.current_mode+'_errortoggle'+timestamp).toggleControl('#'+ms.current_mode+'_errormsg'+timestamp);
   }
 };
