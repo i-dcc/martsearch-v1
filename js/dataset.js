@@ -160,7 +160,7 @@ DataSet.prototype = {
               if ( ds.debug_mode ) { log.debug('processing '+ content_id); }
 
               if ( results[ content_id ] !== undefined && results[ content_id ].length !== 0 ) {
-                // Run any post display functions
+                // Run any pre display functions
                 if ( ds.pre_display_hook ) { ds.pre_display_hook( content_id ); }
                 
                 var template = new EJS({ url: ds.template }).render({ 'results': results[ content_id ], dataset: ds, 'content_id': content_id });
@@ -184,17 +184,25 @@ DataSet.prototype = {
                       }
                     );
                   }
-                  
                 }
+                
+                // Finally, load the biomart results into the 'current_results' stash
+                var current_results_key = docs[i][primary_index_field];
+                ms.current_results[current_results_key][ds.internal_name] = {};
+                ms.current_results[current_results_key][ds.internal_name]['content_id'] = content_id;
+                ms.current_results[current_results_key][ds.internal_name]['results'] = results[content_id];
               }
               else {
-                jQuery( "#"+content_id ).parent().parent().fadeOut("fast");
-                jQuery( "#"+content_id+'_is_present' ).fadeOut("fast");
+                jQuery( "#"+content_id ).parent().parent().remove();
+                jQuery( "#"+content_id+'_is_present' ).remove();
               }
 
             }
           }
         }
+        
+        // Signal that we're done...
+        ms._search_completed();
         
       },
       error:    function( XMLHttpRequest, textStatus, errorThrown ) {
@@ -384,6 +392,21 @@ DataSet.prototype = {
     }
     
     return array_of_hashes;
+  },
+  
+  /**
+  *
+  */
+  _fix_superscript_text_in_attribute: function ( attribute ) {
+    if ( attribute.match("<.+>.+</.+>") ) {
+      // HTML code - leave alone...
+    }
+    else if ( attribute.match("<.+>") ) {
+      var match = /(.+)<(.+)>(.*)/.exec(attribute);
+      attribute = match[1] + "<sup>" + match[2] + "</sup>" + match[3];
+    }
+    
+    return attribute;
   },
   
   /**
