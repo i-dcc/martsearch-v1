@@ -353,7 +353,7 @@ MartSearch.prototype = {
           { name: "EUMODIC", url: "http://www.eumodic.org/" }
         ],
         dataset: "phenotyping",
-        url: ms.base_url + "/htgtdev",
+        url: ms.base_url + "/htgt",
         filters: {}
       },
       "Mice": {
@@ -365,7 +365,7 @@ MartSearch.prototype = {
         url: ms.base_url + "/htgt",
         filters: {
           status_code: "GC",
-          centre:      "WTSI"
+          mi_centre:   "WTSI"
         }
       },
       "Targeted ES Cells": {
@@ -395,7 +395,7 @@ MartSearch.prototype = {
           { name: "WT", url: "http://www.wellcome.ac.uk/" }
         ],
         dataset: "bacs",
-        url: ms.base_url + "/htgtdev",
+        url: ms.base_url + "/htgt",
         filters: {
           library: "MICER"
         }
@@ -405,7 +405,7 @@ MartSearch.prototype = {
           { name: "WT", url: "http://www.wellcome.ac.uk/" }
         ],
         dataset: "bacs",
-        url: ms.base_url + "/htgtdev",
+        url: ms.base_url + "/htgt",
         filters: {
           library: "C57Bl/6J"
         }
@@ -415,7 +415,7 @@ MartSearch.prototype = {
           { name: "WT", url: "http://www.wellcome.ac.uk/" }
         ],
         dataset: "bacs",
-        url: ms.base_url + "/htgtdev",
+        url: ms.base_url + "/htgt",
         filters: {
           library: "129S7"
         }

@@ -36,5 +36,28 @@
   test_conf: {
     safe_search: "cbx1",
     not_so_safe_search: "chromosome:1"
+  },
+  
+  // Pre-search hook
+  pre_search_hook: undefined,
+  
+  // Post-search hook
+  post_search_hook: function () {
+    // Fill in the phenotyping Allele name by looking it up via the kermits data...
+    jQuery.each( ms.current_results, function ( marker_symbol, resultset ) {
+      if ( resultset["phenotyping"] ) {
+        jQuery.each( resultset["phenotyping"]["results"], function ( pheno_index, pheno_result ) {
+          var escell_clone_name = pheno_result["escell_clone_name"];
+          if ( escell_clone_name === '' ) { escell_clone_name = pheno_result["marker_symbol"] + "-" + pheno_result["colony_prefix"]; }
+          
+          jQuery.each( resultset["sanger_mice"]["results"], function( mice_index, mice_result) {
+            if ( mice_result["escell_clone_name"] === escell_clone_name ) {
+              jQuery("tr#"+resultset["phenotyping"]["content_id"]+"_"+pheno_index+" td.allele_name").html(mice_result["allele_name"]);
+              jQuery("#"+resultset["phenotyping"]["content_id"]+"_"+pheno_index+" td.escell_clone_name").html(mice_result["escell_clone_name"]);
+            };
+          });
+        });
+      }
+    });
   }
 }

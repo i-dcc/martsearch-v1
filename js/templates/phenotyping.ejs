@@ -1,12 +1,14 @@
 <table class="phenotyping with_border">
   <thead>
     <tr>
+      <th>ES Cell Clone Name</th>
+      <th>Allele Name</th>
+      <th>Pipeline</th>
+      <th>Colony Prefix</th>
       <% for ( var i=0; i<dataset.enabled_attributes.length; i++ ) { %>
         <% var attrib = dataset.enabled_attributes[i]; %>
         <% if ( ! attrib.match("comment|url|marker_symbol") ) { %>
-          <% if ( attrib.match("escell_clone_name|pipeline|colony_prefix") ) { %>
-            <th><%= dataset.attributes[ attrib ].displayname %></th>
-          <% } else { %>
+          <% if ( ! attrib.match("escell_clone_name|pipeline|colony_prefix") ) { %>
             <th></th>
           <% } %>
         <% } %>
@@ -15,14 +17,16 @@
   </thead>
   <tbody>
     <% for ( var i=0; i<results.length; i++ ) { %>
-      <tr>
+      <tr id="<%= content_id %>_<%= i %>">
         <% var result = results[i] %>
+        <td class="escell_clone_name"><%= result["escell_clone_name"] %></td>
+        <td class="allele_name"></td>
+        <td><%= result["pipeline"] %></td>
+        <td><%= result["colony_prefix"] %></td>
         <% for ( var j=0; j<dataset.enabled_attributes.length; j++ ) { %>
           <% var attrib = dataset.enabled_attributes[j]; %>
           <% if ( ! attrib.match("comment|url|marker_symbol") ) { %>
-            <% if ( attrib.match("escell_clone_name|pipeline|colony_prefix") ) { %>
-              <td><%= result[attrib] %></td>
-            <% } else { %>
+            <% if ( ! attrib.match("escell_clone_name|pipeline|colony_prefix") ) { %>
               <%
                 var title_text = "<h4>" + dataset.attributes[ attrib ].displayname + "</h4>";
               %>
