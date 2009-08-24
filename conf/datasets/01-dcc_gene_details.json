@@ -11,18 +11,82 @@
   template:           "dcc_gene_details.ejs",
   enabled_attributes: [
     "marker_symbol",
-    "marker_names",
-    "synonyms",
-    "marker_type",
+    "name",
+    "synonym",
     "chromosome",
-    "coord_start",
-    "coord_end",
+    "start",
+    "end",
     "strand",
     "mgi_accession_id",
-    "ensembl_gene_ids",
-    "vega_gene_ids",
-    "entrez_gene_ids",
-    "ccds_ids",
-    "omim_ids"
-  ]
+    "ensembl_gene_id",
+    "vega_gene_id",
+    "entrez_gene_id",
+    "ccds_id",
+    "omim_id"
+  ],
+  custom_result_parser: function ( data, docs ) {
+    var ds = this;
+    var data_by_line = data.split("\n");
+    data_by_line.pop(); // Remove the last entry - this is always empty
+    
+    gene_info = {};
+    
+    if ( data_by_line.length > 0 ) {
+      var data_by_joined_field = {};
+      for (var i=0; i < data_by_line.length; i++) {
+        var tmp = {};
+        var data_by_item = data_by_line[i].split("\t");
+        for (var j=0; j < data_by_item.length; j++) {
+          tmp[ ds.enabled_attributes[j] ] = data_by_item[j];
+        }
+        
+        var content_id = ms._content_id( ds, tmp["marker_symbol"] );
+        
+        if ( gene_info[ content_id ] == undefined ) {
+          gene_info[ content_id ] = {
+            marker_names:     [],
+            synonyms:         [],
+            ensembl_gene_ids: [],
+            vega_gene_ids:    [],
+            entrez_gene_ids:  [],
+            ccds_ids:         [],
+            omim_ids:         []
+          };
+        }
+        
+        gene_info[ content_id ]["marker_symbol"]    = tmp["marker_symbol"];
+        gene_info[ content_id ]["mgi_accession_id"] = tmp["mgi_accession_id"];
+        gene_info[ content_id ]["chromosome"]       = tmp["chromosome"];
+        gene_info[ content_id ]["start"]            = tmp["start"];
+        gene_info[ content_id ]["end"]              = tmp["end"];
+        
+        gene_info[ content_id ]["marker_names"].push( tmp["name"] );
+        gene_info[ content_id ]["synonyms"].push( tmp["synonym"] );
+        gene_info[ content_id ]["ensembl_gene_ids"].push( tmp["ensembl_gene_id"] );
+        gene_info[ content_id ]["vega_gene_ids"].push( tmp["vega_gene_id"] );
+        gene_info[ content_id ]["entrez_gene_ids"].push( tmp["entrez_gene_id"] );
+        gene_info[ content_id ]["ccds_ids"].push( tmp["ccds_id"] );
+        gene_info[ content_id ]["omim_ids"].push( tmp["omim_id"] );
+        
+      } 
+    }
+    
+    // Finally ensure that the data in the arrays is unique
+    var genes = jQuery.keys(gene_info);
+    if ( genes.length > 0 ) {
+      for (var i=0; i < genes.length; i++) {
+        gene = genes[i];
+        
+        gene_info[ gene ]["marker_names"]     = jQuery.uniq( gene_info[ gene ]["marker_names"] );
+        gene_info[ gene ]["synonyms"]         = jQuery.uniq( gene_info[ gene ]["synonyms"] );
+        gene_info[ gene ]["ensembl_gene_ids"] = jQuery.uniq( gene_info[ gene ]["ensembl_gene_ids"] );
+        gene_info[ gene ]["vega_gene_ids"]    = jQuery.uniq( gene_info[ gene ]["vega_gene_ids"] );
+        gene_info[ gene ]["entrez_gene_ids"]  = jQuery.uniq( gene_info[ gene ]["entrez_gene_ids"] );
+        gene_info[ gene ]["ccds_ids"]         = jQuery.uniq( gene_info[ gene ]["ccds_ids"] );
+        gene_info[ gene ]["omim_ids"]         = jQuery.uniq( gene_info[ gene ]["omim_ids"] );
+      };
+    }
+    
+    return gene_info;
+  }
 }

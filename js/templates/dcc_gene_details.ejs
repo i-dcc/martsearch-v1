@@ -1,25 +1,21 @@
-<% var result = results[0]; %>
+<% var result = results; %>
 <table>
   <tr>
     <td style="text-align: left;" width="100%">
       <table>
         <tr>
           <th width="125px">Marker Name(s):</th>
-          <td><%= result['marker_names'] %></td>
+          <td><%= result['marker_names'].join(", ") %></td>
         </tr>
         <tr>
           <th>Synonyms:</th>
-          <td><%= result['synonyms'] %></td>
-        </tr>
-        <tr>
-          <th>Marker Type:</th>
-          <td><%= result['marker_type'] %></td>
+          <td><%= result['synonyms'].join(", ") %></td>
         </tr>
         <tr>
           <%
             var location_text = 'Chr' + result['chromosome'];
-            if ( result['coord_start'] ) { location_text += ':' + result['coord_start'] };
-            if ( result['coord_end'] )   { location_text += '-' + result['coord_end'] };
+            if ( result['start'] ) { location_text += ':' + result['start'] };
+            if ( result['end'] )   { location_text += '-' + result['end'] };
             if ( result['strand'] )      { location_text += '(' + result['strand'] + ')' };
           %>
           <th>Location:</th>
@@ -28,8 +24,8 @@
       </table>
     </td>
     <td style="text-align: right;">
-      <% if ( result['coord_start'] && result['coord_end'] ) { %>
-      <img src="http://gbrowse.informatics.jax.org/cgi-bin/gbrowse_img/thumbs_current/?abs=1;options=Everything;width=200;name=<%= result['chromosome'] %>%3A<%= result['coord_start'] %>-<%= result['coord_end'] %>" alt="" />
+      <% if ( result['start'] && result['end'] ) { %>
+      <img src="http://gbrowse.informatics.jax.org/cgi-bin/gbrowse_img/thumbs_current/?abs=1;options=Everything;width=200;name=<%= result['chromosome'] %>%3A<%= result['start'] %>-<%= result['end'] %>" alt="" />
       <% } %>
     </td>
   </tr>
@@ -42,7 +38,7 @@
     <td width="18%"><%= link_to( result['mgi_accession_id'], 'http://www.informatics.jax.org/searches/accession_report.cgi?id='+result['mgi_accession_id'] ) %></td>
     
     <%
-      var ensembl_ids = result['ensembl_gene_ids'].split(",");
+      var ensembl_ids = result['ensembl_gene_ids'];
       var ensembl_links = [];
       for ( var i=0; i<ensembl_ids.length; i++ ) {
         if ( ensembl_ids[i] != "" ) {
@@ -54,7 +50,7 @@
     <td width="18%"><%= ensembl_links.join(", ") %></td>
     
     <%
-      var vega_ids = result['vega_gene_ids'].split(",");
+      var vega_ids = result['vega_gene_ids'];
       var vega_links = [];
       for ( var i=0; i<vega_ids.length; i++ ) {
         if ( vega_ids[i] != "" ) {
@@ -67,7 +63,7 @@
   </tr>
   <tr>
     <%
-      var entrez_ids = result['entrez_gene_ids'].split(",");
+      var entrez_ids = result['entrez_gene_ids'];
       var entrez_links = [];
       for ( var i=0; i<entrez_ids.length; i++ ) {
         if ( entrez_ids[i] != "" ) {
@@ -79,7 +75,7 @@
     <td><%= entrez_links.join(", ") %></td>
     
     <%
-      var ccds_ids = result['ccds_ids'].split(",");
+      var ccds_ids = result['ccds_ids'];
       var ccds_links = [];
       for ( var i=0; i<ccds_ids.length; i++ ) {
         if ( ccds_ids[i] != "" ) {
@@ -91,7 +87,7 @@
     <td><%= ccds_links.join(", ") %></td>
     
     <%
-      var omim_ids = result['omim_ids'].split(",");
+      var omim_ids = result['omim_ids'];
       var omim_links = [];
       for ( var i=0; i<omim_ids.length; i++ ) {
         if ( omim_ids[i] != "" ) {
