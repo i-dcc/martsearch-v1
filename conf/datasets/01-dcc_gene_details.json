@@ -3,8 +3,8 @@
   debug_mode:           false,
   internal_name:        "dcc_gene_details",
   display_name:         "Gene Details",
-  url:                  "/htgtdev/biomart",
-  full_url:             "http://htgt.internal.sanger.ac.uk:9002/biomart",
+  url:                  "/htgt/biomart",
+  full_url:             "http://www.sanger.ac.uk/htgt/biomart",
   mart_dataset:         "dcc",
   joined_index_field:   "marker_symbol",
   joined_filter:        "marker_symbol",
@@ -12,7 +12,7 @@
   fetch_attribute_conf: false,
   enabled_attributes: [
     "marker_symbol",
-    "name",
+    "marker_name",
     "synonym",
     "chromosome",
     "start",
@@ -61,7 +61,7 @@
         gene_info[ content_id ]["start"]            = tmp["start"];
         gene_info[ content_id ]["end"]              = tmp["end"];
         
-        gene_info[ content_id ]["marker_names"].push( tmp["name"] );
+        gene_info[ content_id ]["marker_names"].push( tmp["marker_name"] );
         gene_info[ content_id ]["synonyms"].push( tmp["synonym"] );
         gene_info[ content_id ]["ensembl_gene_ids"].push( tmp["ensembl_gene_id"] );
         gene_info[ content_id ]["vega_gene_ids"].push( tmp["vega_gene_id"] );
