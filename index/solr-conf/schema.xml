@@ -282,6 +282,7 @@
    <field name="symbol" type="text" indexed="true" />
    <field name="symbol_tight" type="textTight" indexed="true" />
    <field name="mgi_accession_id" type="textTight" indexed="true" stored="true" />
+   <field name="secondary_mgi_accession_id" type="textTight" indexed="true" stored="true" multiValued="true" />
    <field name="MGI" type="textTight" indexed="true" />
    <field name="marker_name" type="text" indexed="true" multiValued="true" />
    <field name="type" type="text" indexed="true" />
@@ -412,6 +413,7 @@
   <copyField source="marker_symbol_key" dest="symbol_tight"/>
   
   <copyField source="mgi_accession_id" dest="MGI"/>
+  <copyField source="secondary_mgi_accession_id" dest="MGI"/>
   <copyField source="mp_term" dest="MP"/>
   
   <copyField source="gene_biotype" dest="biotype"/>
@@ -421,6 +423,7 @@
   <copyField source="mgi_accession_id" dest="text"/>
   <copyField source="marker_name" dest="text"/>
   <copyField source="synonym" dest="text"/>
+  <copyField source="secondary_mgi_accession_id" dest="text"/>
   <copyField source="ensembl_gene_id" dest="text"/>
   <copyField source="ensembl_peptide_id" dest="text"/>
   <copyField source="ensembl_transcript_id" dest="text"/>

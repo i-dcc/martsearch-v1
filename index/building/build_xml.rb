@@ -24,7 +24,8 @@ require "net/http"
 # Declare globals
 #
 
-@@http_agent = Net::HTTP::Proxy( "localhost", 3128 )
+@@http_agent = Net::HTTP::Proxy( "wwwcache.sanger.ac.uk", 3128 )
+#@@http_agent = Net::HTTP::Proxy( "localhost", 3128 )
 
 #
 # Declare methods
@@ -42,48 +43,39 @@ def build_chromosome_xml( query, filename )
   
   # KOMP-DCC Biomart
   dcc_mart = Biomart.new(
-    :url        => "http://htgt.internal.sanger.ac.uk:9002/biomart/martservice",
+    :url        => "http://www.sanger.ac.uk/htgt/biomart/martservice",
     :http       => @@http_agent,
     :dataset    => "dcc",
     :attributes => [
       "marker_symbol",
+      "marker_name",
       "mgi_accession_id",
       "chromosome",
-      "coord_start",
-      "coord_end",
       "strand",
-      "marker_type",
-      "marker_names",
-      "synonyms",
-      "ensembl_gene_ids",
-      "vega_gene_ids",
-      "entrez_gene_ids",
-      "ccds_ids",
-      "omim_ids",
-      "expired_marker_names",
-      "expired_synonyms",
-      "expired_ensembl_gene_ids",
-      "expired_vega_gene_ids",
-      "expired_entrez_gene_ids",
-      "expired_ccds_ids",
-      "expired_omim_ids"
+      "start",
+      "end",
+      "synonym",
+      "ensembl_gene_id",
+      "vega_gene_id",
+      "entrez_gene_id",
+      "ccds_id",
+      "omim_id"
     ]
   )
-  #dcc_data = dcc_mart.search( ["chromosome"], query )
+  dcc_data = dcc_mart.search( ["chromosome"], query )
   
   # Read in our temporarily hacked gene file, extract the gene info 
   # for this chromosome, and proceed as normal...
-  chr_data = ""
-  file = File.open( "genes.txt", "r" ) do |file|
-    while line = file.gets
-      data_elements = line.split("\t")
-      if data_elements[2].to_s == query.to_s
-        chr_data.insert( chr_data.length, line )
-      end
-    end
-  end
-  
-  dcc_data = dcc_mart.tsv2array( chr_data )
+  #chr_data = ""
+  #file = File.open( "genes.txt", "r" ) do |file|
+  #  while line = file.gets
+  #    data_elements = line.split("\t")
+  #    if data_elements[2].to_s == query.to_s
+  #      chr_data.insert( chr_data.length, line )
+  #    end
+  #  end
+  #end
+  #dcc_data = dcc_mart.tsv2array( chr_data )
   
   dcc_data.each { |data|
     document = documents[ data["marker_symbol"] ]
@@ -96,25 +88,18 @@ def build_chromosome_xml( query, filename )
     document.mgi_accession_id    = data["mgi_accession_id"]
     document.type                = data["marker_type"]
     document.chromosome          = data["chromosome"]
-    document.coord_start         = data["coord_start"]
-    document.coord_end           = data["coord_end"]
+    document.coord_start         = data["start"]
+    document.coord_end           = data["end"]
     document.strand              = data["strand"]
 
     # Now the multi-valued data...
-    add_to_multivalued_field( data["marker_names"], document.marker_names, "; " )
-    add_to_multivalued_field( data["synonyms"], document.synonyms, ", " )
-    add_to_multivalued_field( data["ensembl_gene_ids"], document.ensembl_gene_ids, "," )
-    add_to_multivalued_field( data["vega_gene_ids"], document.vega_gene_ids, "," )
-    add_to_multivalued_field( data["entrez_gene_ids"], document.entrez_gene_ids, "," )
-    add_to_multivalued_field( data["ccds_ids"], document.ccds_ids, "," )
-    add_to_multivalued_field( data["omim_ids"], document.omim_ids, "," )
-    add_to_multivalued_field( data["expired_marker_names"], document.marker_names, "; " )
-    add_to_multivalued_field( data["expired_synonyms"], document.synonyms, ", " )
-    add_to_multivalued_field( data["expired_ensembl_gene_ids"], document.ensembl_gene_ids, "," )
-    add_to_multivalued_field( data["expired_vega_gene_ids"], document.vega_gene_ids, "," )
-    add_to_multivalued_field( data["expired_entrez_gene_ids"], document.entrez_gene_ids, "," )
-    add_to_multivalued_field( data["expired_ccds_ids"], document.ccds_ids, "," )
-    add_to_multivalued_field( data["expired_omim_ids"], document.omim_ids, "," )
+    add_to_multivalued_field( data["marker_name"], document.marker_names )
+    add_to_multivalued_field( data["synonym"], document.synonyms )
+    add_to_multivalued_field( data["ensembl_gene_id"], document.ensembl_gene_ids )
+    add_to_multivalued_field( data["vega_gene_id"], document.vega_gene_ids )
+    add_to_multivalued_field( data["entrez_gene_id"], document.entrez_gene_ids )
+    add_to_multivalued_field( data["ccds_id"], document.ccds_ids )
+    add_to_multivalued_field( data["omim_id"], document.omim_ids )
     
     documents[ data["marker_symbol"] ] = document
   }
@@ -185,7 +170,7 @@ def search_product_marts( documents )
   
   # Phenotyping Biomart
   pheno_mart = Biomart.new(
-    :url        => "http://htgt.internal.sanger.ac.uk:9002/biomart/martservice",
+    :url        => "http://www.sanger.ac.uk/htgt/biomart/martservice",
     :http       => @@http_agent,
     :dataset    => "phenotyping",
     :attributes => [
@@ -204,6 +189,8 @@ def search_product_marts( documents )
       "brain_histology_comment",
       "calorimetry",
       "calorimetry_comment",
+      "citrobacter_challenge",
+      "citrobacter_challenge_comment",
       "core_temperature",
       "core_temperature_comment",
       "dexa",
@@ -254,6 +241,8 @@ def search_product_marts( documents )
       "recessive_lethal_study_comment",
       "rotarod",
       "rotarod_comment",
+      "salmonella_challenge",
+      "salmonella_challenge_comment",
       "serum_immunoglobulins",
       "serum_immunoglobulins_comment",
       "skin_screen",
@@ -296,7 +285,13 @@ def search_product_marts( documents )
   
   # Chunk the gene symbols into groups of 100 so that we don't 
   # swamp the martservices
-  doc_chunks = documents.keys.chunk( documents.keys.size % 100 )
+  no_of_chunks = documents.keys.size / 100
+  if no_of_chunks > 0
+    doc_chunks = documents.keys.chunk( no_of_chunks.round )
+  else
+    doc_chunks = documents
+  end
+  
   
   # Process the chunks one at a time...
   doc_chunks.each { |chunk|
@@ -401,40 +396,44 @@ def search_product_marts( documents )
     ensembl_search_ids = []
     chunk.each do |symbol|
       document = documents[symbol]
-      document.ensembl_gene_ids.each do |e|
-        ensembl_search_ids.push(e)
+      if document
+        document.ensembl_gene_ids.each do |e|
+          ensembl_search_ids.push(e)
+        end
       end
     end
     
-    ensembl_data = ensembl_mart.search( ["ensembl_gene_id"], ensembl_search_ids.join(',') )
-    ensembl_data.each do |data|
-      document = documents[ data["external_gene_id"] ]
-      
-      if document != nil
-        document.ensembl_gene_ids.push( data["human_ensembl_gene"] )
-        document.ensembl_gene_ids.push( data["zebrafish_ensembl_gene"] )
-        document.ensembl_gene_ids.push( data["rat_ensembl_gene"] )
+    if ensembl_search_ids.size > 0
+      ensembl_data = ensembl_mart.search( ["ensembl_gene_id"], ensembl_search_ids.join(',') )
+      ensembl_data.each do |data|
+        document = documents[ data["external_gene_id"] ]
 
-        document.ensembl_transcript_ids.push( data["ensembl_transcript_id"] )
+        if document != nil
+          document.ensembl_gene_ids.push( data["human_ensembl_gene"] )
+          document.ensembl_gene_ids.push( data["zebrafish_ensembl_gene"] )
+          document.ensembl_gene_ids.push( data["rat_ensembl_gene"] )
 
-        document.ensembl_peptide_ids.push( data["ensembl_peptide_id"] )
-        document.ensembl_peptide_ids.push( data["human_homolog_ensembl_peptide"] )
-        document.ensembl_peptide_ids.push( data["zebrafish_homolog_ensembl_peptide"] )
-        document.ensembl_peptide_ids.push( data["rat_homolog_ensembl_peptide"] )
+          document.ensembl_transcript_ids.push( data["ensembl_transcript_id"] )
 
-        documents[ data["external_gene_id"] ] = document
+          document.ensembl_peptide_ids.push( data["ensembl_peptide_id"] )
+          document.ensembl_peptide_ids.push( data["human_homolog_ensembl_peptide"] )
+          document.ensembl_peptide_ids.push( data["zebrafish_homolog_ensembl_peptide"] )
+          document.ensembl_peptide_ids.push( data["rat_homolog_ensembl_peptide"] )
+
+          documents[ data["external_gene_id"] ] = document
+        end
       end
-    end
-    
-    ensembl_data2 = ensembl_mart2.search( ["ensembl_gene_id"], ensembl_search_ids.join(',') )
-    ensembl_data2.each do |data|
-      document = documents[ data["external_gene_id"] ]
-      
-      if document != nil
-        document.gene_biotype.push( data["gene_biotype"] )
-        document.transcript_biotype.push( data["transcript_biotype"] )
 
-        documents[ data["external_gene_id"] ] = document
+      ensembl_data2 = ensembl_mart2.search( ["ensembl_gene_id"], ensembl_search_ids.join(',') )
+      ensembl_data2.each do |data|
+        document = documents[ data["external_gene_id"] ]
+
+        if document != nil
+          document.gene_biotype.push( data["gene_biotype"] )
+          document.transcript_biotype.push( data["transcript_biotype"] )
+
+          documents[ data["external_gene_id"] ] = document
+        end
       end
     end
     
@@ -450,36 +449,27 @@ end
 # *_Parameters_*
 # *data*::        The delimited data to be processed.
 # *target*::      The Document attribute (array) that the data is to be pushed onto.
-# *splitter*::    The delimiter used by the data.
 
-def add_to_multivalued_field( data, target, splitter )
-  
-  if data != nil
-    data.split( splitter ).each do |entry|
-      target.push( entry )
-    end
+def add_to_multivalued_field( data, target )
+  if data != nil and data != ""
+    target.push( data )
   end
-  
 end
 
 #
 # Main body of script
 #
 
-#dcc_mart = Biomart.new( 
-#  :url => "http://htgt.internal.sanger.ac.uk:9002/biomart/martservice", 
-#  :dataset => "dcc",
-#  :attributes => ["chromosome"],
-#  :http => @@http_agent
-#)
-#dcc_data = dcc_mart.search( ["chromosome"], "" )
-dcc_data = Array(1..19).push('X').push('Y')
+dcc_mart = Biomart.new( 
+  :url => "http://www.sanger.ac.uk/htgt/biomart/martservice", 
+  :dataset => "dcc",
+  :attributes => ["chromosome"],
+  :http => @@http_agent
+)
+dcc_data = dcc_mart.search( ["chromosome"], "" )
 
 dcc_data.each { |chr|
-  #puts "Building XML for chromosome #{chr["chromosome"]}"
-  #filename = "chr" + chr["chromosome"] + ".xml"
-  #build_chromosome_xml( chr["chromosome"], filename )
-  filename = "chr#{chr}.xml"
-  puts "Building XML for chromosome #{chr} > #{filename}"
-  build_chromosome_xml( chr, filename )
+  filename = "chr#{chr['chromosome']}.xml"
+  puts "Building XML for chromosome #{chr['chromosome']} > #{filename}"
+  build_chromosome_xml( chr['chromosome'], filename )
 }
