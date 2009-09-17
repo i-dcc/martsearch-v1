@@ -126,17 +126,20 @@ a img {
 	padding: 10px;
 }
 
-#noscript_warning {
+#noscript_warning,
+#ie_warning {
 	margin-bottom: 15px;
 	font-size: 12px;
 	padding: 10px;
 }
 
-#noscript_warning p {
+#noscript_warning p,
+#ie_warning p {
 	margin-left: 19px;
 }
 
-#noscript_warning .ui-icon {
+#noscript_warning .ui-icon,
+#ie_warning .ui-icon {
 	float: left;
 	margin-top: 11px;
 }
