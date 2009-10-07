@@ -56,6 +56,9 @@ MartSearch = function ( params ) {
   ms.current_results_total = 0;
   ms.current_mode          = undefined;
   ms.completed_searches    = 0;
+  
+  // Debug mode?
+  ms.debug_mode = params.debug_mode;
 };
 
 MartSearch.prototype = {
@@ -206,13 +209,36 @@ MartSearch.prototype = {
     jQuery("#"+ms.current_mode+"_results .pagination").html("");
     
     // Run any pre search functions
-    if ( ms.pre_search_hook ) { ms.pre_search_hook(); }
+    if ( ms.pre_search_hook ) {
+      if ( ms.debug_mode ) {
+        log.debug("running pre-search functions");
+        log.profile("pre-search functions");
+      };
+      
+      ms.pre_search_hook();
+      
+      if ( ms.debug_mode ) {
+        log.profile("pre-search functions");
+      };
+    }
     
     // Query the index
+    if ( ms.debug_mode ) {
+      log.debug( "[index]: " + search_string + " (page " + start_doc + ")" );
+      log.profile( "[index] search for: " + search_string );
+    };
     var index_response = ms.index.search( search_string, start_doc );
+    if ( ms.debug_mode ) {
+      log.profile( "[index] search for: " + search_string );
+    };
     
     // Only continue if the index has returned something... (No point otherwise!)
     if ( index_response ) {
+      if ( ms.debug_mode ) {
+        log.debug( "[index] redering doc skeleton" );
+        log.profile( "[index] render doc skeleton for: " + search_string );
+      };
+      
       // Fetch the pre-computed mart search terms from the index search
       var index_values = ms.index.grouped_query_terms();
       
@@ -227,8 +253,13 @@ MartSearch.prototype = {
       );
       jQuery("#"+ms.current_mode+"_result_list").html(docs);
       
+      if ( ms.debug_mode ) {
+        log.profile( "[index] render doc skeleton for: " + search_string );
+      };
+      
       // See if we need to paginate results (using the jquery.pagination plugin)
       if ( index_response.response.numFound > ms.index.docs_per_page ) {
+        if ( ms.debug_mode ) { log.profile( "[index] adding pagination for: " + search_string ); };
         jQuery("#"+ms.current_mode+"_results .pagination").pagination( 
           index_response.response.numFound,
           {
@@ -239,6 +270,7 @@ MartSearch.prototype = {
             callback:             function(page,dom_elem){ ms._pager(page,dom_elem); }
           }
         );
+        if ( ms.debug_mode ) { log.profile( "[index] adding pagination for: " + search_string ); };
       }
       
       // Kick off each dataset search...
@@ -278,9 +310,24 @@ MartSearch.prototype = {
       // All searches completed!
       
       // Run any post search functions
-      if ( ms.post_search_hook ) { ms.post_search_hook(); }
+      if ( ms.post_search_hook ) {
+        if ( ms.debug_mode ) {
+          log.debug("running post-search functions");
+          log.profile("post-search functions");
+        };
+
+        ms.post_search_hook();
+
+        if ( ms.debug_mode ) {
+          log.profile("post-search functions");
+        };
+      }
       
       // Make the dataset 'bubbles' toggleable
+      if ( ms.debug_mode ) {
+        log.debug("adding toggles to the page");
+        log.profile("adding toggles");
+      };
       jQuery('#'+ms.current_mode+'_results .dataset_title').toggleControl('#'+ms.current_mode+'_results .dataset_content', { hide: false, speed: "fast" });
       
       /**
@@ -293,6 +340,10 @@ MartSearch.prototype = {
       else {
         jQuery('#'+ms.current_mode+'_results .doc_title').toggleControl('#'+ms.current_mode+'_results .doc_content', { hide: false, speed: "fast" });
       }
+      
+      if ( ms.debug_mode ) {
+        log.profile("adding toggles");
+      };
       
       // Finally, hide the loading/working indicator
       jQuery("#"+ms.current_mode+"_loading").fadeOut("fast");

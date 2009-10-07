@@ -35,6 +35,7 @@ DataSet = function( params, base_url ) {
   // Test/debug mode?
   this.test_mode           = params.test_mode ? params.test_mode : false;
   this.debug_mode          = params.debug_mode ? params.debug_mode : false;
+  if ( ms.debug_mode ) { this.debug_mode = true; };
 };
 
 DataSet.prototype = {
@@ -74,7 +75,6 @@ DataSet.prototype = {
                 ds.attributes[ attr_info[0] ] = {
                   displayname: attr_info[1]
                 };
-                //attributes[ attr_info[0] ] = attr_info[1]
               }
             }
         },
@@ -93,7 +93,6 @@ DataSet.prototype = {
         type:     "GET",
         async:    run_async,
         data:     { type: "configuration", dataset: ds.mart_dataset },
-        //dataType: (jQuery.browser.msie) ? "xml" : "text/xml",
         success:  function ( xml ) {
           jQuery(xml).find("attributedescription").each( function() {
             ds.attributes[ jQuery(this).attr("internalname") ] = {
@@ -124,7 +123,9 @@ DataSet.prototype = {
   */
   search: function ( query, docs, primary_index_field ) {
     var ds = this;
-    log.profile("[mart - '"+ ds.mart_dataset +"']: "+ query);
+    if ( ds.debug_mode ) {
+      log.profile( "["+ ds.mart_dataset +"] full search cycle: "+ query );
+    };
     
     var run_async = true;
     if ( ds.test_mode ) { run_async = false; }
@@ -161,13 +162,27 @@ DataSet.prototype = {
 
               if ( results[ content_id ] !== undefined && results[ content_id ].length !== 0 ) {
                 // Run any pre display functions
-                if ( ds.pre_display_hook ) { ds.pre_display_hook( content_id ); }
+                if ( ds.pre_display_hook ) {
+                  if ( ds.debug_mode ) {
+                    log.debug( "["+ ds.mart_dataset +"] running pre-display functions" );
+                    log.profile( "["+ ds.mart_dataset +"] pre-display functions" );
+                  };
+                  
+                  ds.pre_display_hook( content_id );
+                  
+                  if ( ds.debug_mode ) {
+                    log.profile( "["+ ds.mart_dataset +"] pre-display functions" );
+                  };
+                }
                 
+                // Render the template
+                if ( ds.debug_mode ) { log.profile( "["+ ds.mart_dataset +"] rendering templates" ); };
                 var template = new EJS({ url: ds.template }).render({ 'results': results[ content_id ], dataset: ds, 'content_id': content_id });
-                jQuery( "#"+content_id ).html(template);
+                if ( ds.debug_mode ) { log.profile( "["+ ds.mart_dataset +"] rendering templates" ); };
                 
-                // Run any post display functions
-                if ( ds.post_display_hook ) { ds.post_display_hook( content_id ); }
+                if ( ds.debug_mode ) { log.profile( "["+ ds.mart_dataset +"] inserting templates" ); };
+                jQuery( "#"+content_id ).html(template);
+                if ( ds.debug_mode ) { log.profile( "["+ ds.mart_dataset +"] inserting templates" ); };
                 
                 // If we're using the default template, add some table sorting/pagination...
                 if ( ds.template.match("default_dataset.ejs") ) {
@@ -184,6 +199,20 @@ DataSet.prototype = {
                       }
                     );
                   }
+                }
+                
+                // Run any post display functions
+                if ( ds.post_display_hook ) {
+                  if ( ds.debug_mode ) {
+                    log.debug( "["+ ds.mart_dataset +"] running post-display functions" );
+                    log.profile( "["+ ds.mart_dataset +"] post-display functions" );
+                  };
+                  
+                  ds.post_display_hook( content_id );
+                  
+                  if ( ds.debug_mode ) {
+                    log.profile( "["+ ds.mart_dataset +"] post-display functions" );
+                  };
                 }
                 
                 // Finally, load the biomart results into the 'current_results' stash
@@ -212,7 +241,9 @@ DataSet.prototype = {
       }
     });
     
-    log.profile("[mart - '"+ ds.mart_dataset +"']: "+ query);
+    if ( ds.debug_mode ) {
+      log.profile( "["+ ds.mart_dataset +"] full search cycle: "+ query );
+    };
     return results;
   },
   
