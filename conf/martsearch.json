@@ -1,5 +1,8 @@
 {
   
+  // Debugging environment?
+  debug_mode: true,
+  
   // Configure the main index
   index_conf: {
     url:            "/solr",
