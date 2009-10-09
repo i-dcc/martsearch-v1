@@ -46,20 +46,48 @@
   
   // Post-search hook
   post_search_hook: function () {
-    // Fill in the phenotyping Allele name by looking it up via the kermits data...
+    // Fill in ...
+    //  - the phenotyping Allele name by looking it up via the kermits data
+    //  - the phenotyping cassette type by looking it up via the htgt_targ data
     jQuery.each( ms.current_results, function ( marker_symbol, resultset ) {
       if ( resultset["phenotyping"] ) {
-        jQuery.each( resultset["phenotyping"]["results"], function ( pheno_index, pheno_result ) {
-          var escell_clone_name = pheno_result["escell_clone_name"];
-          if ( escell_clone_name === '' ) { escell_clone_name = pheno_result["marker_symbol"] + "-" + pheno_result["colony_prefix"]; }
+        
+        for (var pheno_index=0; pheno_index < resultset["phenotyping"]["results"].length; pheno_index++) {
+          var pheno_result = resultset["phenotyping"]["results"][pheno_index];
           
-          jQuery.each( resultset["sanger_mice"]["results"], function( mice_index, mice_result) {
+          var escell_clone_name = pheno_result["escell_clone_name"] ? pheno_result["escell_clone_name"] : "-";
+          var allele_name       = "-";
+          var allele_type       = "-";
+          var cassette_type     = "-";
+          
+          if ( escell_clone_name === "-" ) {
+            escell_clone_name = pheno_result["marker_symbol"] + "-" + pheno_result["colony_prefix"];
+          }
+          
+          for (var i=0; i < resultset["sanger_mice"]["results"].length; i++) {
+            var mice_result = resultset["sanger_mice"]["results"][i];
             if ( mice_result["escell_clone_name"] === escell_clone_name ) {
-              jQuery("tr#"+resultset["phenotyping"]["content_id"]+"_"+pheno_index+" td.allele_name").html(mice_result["allele_name"]);
-              jQuery("#"+resultset["phenotyping"]["content_id"]+"_"+pheno_index+" td.escell_clone_name").html(mice_result["escell_clone_name"]);
-            };
+              allele_name = mice_result["allele_name"];
+              allele_type = mice_result["allele_type"];
+            }
+          }
+          
+          jQuery.each( resultset["sanger_vectors_es_cells"]["results"], function ( cells_index, cells_results ) {
+            for (var j=0; j < cells_results["escells"].length; j++) {
+              cell_info = cells_results["escells"][j];
+              if ( cell_info["escell_clone_name"] === escell_clone_name ) {
+                if ( cells_results["cassette"].match(/_P/) ) { cassette_type = "Promotor Driven" }
+                else                                         { cassette_type = "Promotorless" }
+              }
+            }
           });
-        });
+          
+          jQuery("#"+resultset["phenotyping"]["content_id"]+"_"+pheno_index).find("td.allele_name").html(allele_name);
+          jQuery("#"+resultset["phenotyping"]["content_id"]+"_"+pheno_index).find("td.allele_type").html(allele_type);
+          jQuery("#"+resultset["phenotyping"]["content_id"]+"_"+pheno_index).find("td.escell_clone_name").html(escell_clone_name);
+          jQuery("#"+resultset["phenotyping"]["content_id"]+"_"+pheno_index).find("td.cassette_type").html(cassette_type);
+          
+        }
       }
     });
   }

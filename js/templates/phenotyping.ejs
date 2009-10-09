@@ -3,8 +3,8 @@
     <tr>
       <th>ES Cell Clone Name</th>
       <th>Allele Name</th>
-      <th>Pipeline</th>
-      <th>Colony Prefix</th>
+      <th>Allele Type</th>
+      <th>Cassette Type</th>
       <% for ( var i=0; i<dataset.enabled_attributes.length; i++ ) { %>
         <% var attrib = dataset.enabled_attributes[i]; %>
         <% if ( ! attrib.match("comment|url|marker_symbol") ) { %>
@@ -21,8 +21,8 @@
         <% var result = results[i] %>
         <td class="escell_clone_name"><%= result["escell_clone_name"] %></td>
         <td class="allele_name"></td>
-        <td><%= result["pipeline"] %></td>
-        <td><%= result["colony_prefix"] %></td>
+        <td class="allele_type"></td>
+        <td class="cassette_type"></td>
         <% for ( var j=0; j<dataset.enabled_attributes.length; j++ ) { %>
           <% var attrib = dataset.enabled_attributes[j]; %>
           <% if ( ! attrib.match("comment|url|marker_symbol") ) { %>

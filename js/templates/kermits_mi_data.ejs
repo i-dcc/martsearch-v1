@@ -2,10 +2,10 @@
   <thead>
     <tr>
       <th>Allele Name</th>
+      <th>Allele Type</th>
       <th>Colony Prefix</th>
       <th>ES Cell Clone Name</th>
       <th>Genetic Background</th>
-      <th>Status</th>
       <th>Order</th>
     </tr>
   </thead>
@@ -14,6 +14,16 @@
       <% var result = results[i]; %>
       <tr>
         <td><%= result["allele_name"] %></td>
+        <td>
+          <%
+            var allele_type = "-"
+            if      ( result["allele_name"].match(/tm\d+a/) ) { allele_type = "Conditional Knockout-First" }
+            else if ( result["allele_name"].match(/tm\d+e/) ) { allele_type = "Targeted Trap" }
+            else if ( result["allele_name"].match(/tm\d\(/) ) { allele_type = "Deletion" }
+            result["allele_type"] = allele_type
+          %>
+          <%= result["allele_type"] %>
+        </td>
         <td><%= result["colony_prefix"] %></td>
         <td><%= result["escell_clone_name"] %></td>
         <td>
@@ -25,7 +35,6 @@
           %>
           <%= genetic_background.join(';') %>
         </td>
-        <td><%= result["status"] %></td>
         <td>
           <% if ( result["emma"].match("1") ) { %>
             <%
