@@ -114,7 +114,7 @@
     "x_ray_imaging_url"
   ],
   post_display_hook: function ( content_id ) {
-    jQuery('#'+content_id+" td[rel^='qtip']").each( function() {
+    jQuery('#'+content_id).find("td[rel^='qtip']").each( function() {
       jQuery(this).qtip({
          content: jQuery(this).attr('tooltip'),
          show: 'mouseover',
