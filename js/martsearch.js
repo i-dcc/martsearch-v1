@@ -175,6 +175,19 @@ MartSearch.prototype = {
         }
       });
     
+    // Add the toggling observers for results...
+    jQuery(".dataset_title").live("click", function () {
+      jQuery(this).parent().find(".dataset_content").slideToggle("fast");
+      jQuery(this).toggleClass("toggle-open");
+      jQuery(this).toggleClass("toggle-close");
+    });
+    
+    jQuery(".doc_title").live("click", function () {
+      jQuery(this).parent().find(".doc_content").slideToggle("fast");
+      jQuery(this).toggleClass("toggle-open");
+      jQuery(this).toggleClass("toggle-close");
+    });
+    
     /*
     * Finally, build the Sanger statistics table...
     */
@@ -325,24 +338,17 @@ MartSearch.prototype = {
       
       // Make the dataset 'bubbles' toggleable
       if ( ms.debug_mode ) {
-        log.debug("adding toggles to the page");
-        log.profile("adding toggles");
+        log.debug("toggling content on page");
+        log.profile("toggling content");
       };
-      jQuery('#'+ms.current_mode+'_results .dataset_title').toggleControl('#'+ms.current_mode+'_results .dataset_content', { hide: false, speed: "fast" });
       
-      /**
-      * Make the doc 'bubbles' toggleable, and if there is a lot of results 
-      * to go through, collapse them...
-      */
+      // If there are a lot of results to display, collapse the doc bubbles
       if ( ms.current_results_total > ms.index.docs_per_page ) {
-        jQuery('#'+ms.current_mode+'_results .doc_title').toggleControl('#'+ms.current_mode+'_results .doc_content', { speed: "fast" });
-      }
-      else {
-        jQuery('#'+ms.current_mode+'_results .doc_title').toggleControl('#'+ms.current_mode+'_results .doc_content', { hide: false, speed: "fast" });
+        jQuery('#'+ms.current_mode+'_results .doc_title').click();
       }
       
       if ( ms.debug_mode ) {
-        log.profile("adding toggles");
+        log.profile("toggling content");
       };
       
       // Finally, hide the loading/working indicator
