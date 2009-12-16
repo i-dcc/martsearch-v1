@@ -3,8 +3,8 @@
   debug_mode:           false,
   internal_name:        "dcc_gene_details",
   display_name:         "Gene Details",
-  url:                  "/htgt/biomart",
-  full_url:             "http://www.sanger.ac.uk/htgt/biomart",
+  url:                  "/idcc/biomart",
+  full_url:             "http://www.i-dcc.org/biomart",
   mart_dataset:         "dcc",
   joined_index_field:   "marker_symbol",
   joined_filter:        "marker_symbol",
@@ -21,7 +21,7 @@
     "mgi_accession_id",
     "ensembl_gene_id",
     "vega_gene_id",
-    "entrez_gene_id",
+    "ncbi_gene_id",
     "ccds_id",
     "omim_id"
   ],
@@ -49,7 +49,7 @@
             synonyms:         [],
             ensembl_gene_ids: [],
             vega_gene_ids:    [],
-            entrez_gene_ids:  [],
+            ncbi_gene_ids:  [],
             ccds_ids:         [],
             omim_ids:         []
           };
@@ -65,7 +65,7 @@
         gene_info[ content_id ]["synonyms"].push( tmp["synonym"] );
         gene_info[ content_id ]["ensembl_gene_ids"].push( tmp["ensembl_gene_id"] );
         gene_info[ content_id ]["vega_gene_ids"].push( tmp["vega_gene_id"] );
-        gene_info[ content_id ]["entrez_gene_ids"].push( tmp["entrez_gene_id"] );
+        gene_info[ content_id ]["ncbi_gene_ids"].push( tmp["ncbi_gene_id"] );
         gene_info[ content_id ]["ccds_ids"].push( tmp["ccds_id"] );
         gene_info[ content_id ]["omim_ids"].push( tmp["omim_id"] );
         
@@ -82,7 +82,7 @@
         gene_info[ gene ]["synonyms"]         = jQuery.uniq( gene_info[ gene ]["synonyms"] );
         gene_info[ gene ]["ensembl_gene_ids"] = jQuery.uniq( gene_info[ gene ]["ensembl_gene_ids"] );
         gene_info[ gene ]["vega_gene_ids"]    = jQuery.uniq( gene_info[ gene ]["vega_gene_ids"] );
-        gene_info[ gene ]["entrez_gene_ids"]  = jQuery.uniq( gene_info[ gene ]["entrez_gene_ids"] );
+        gene_info[ gene ]["ncbi_gene_ids"]  = jQuery.uniq( gene_info[ gene ]["ncbi_gene_ids"] );
         gene_info[ gene ]["ccds_ids"]         = jQuery.uniq( gene_info[ gene ]["ccds_ids"] );
         gene_info[ gene ]["omim_ids"]         = jQuery.uniq( gene_info[ gene ]["omim_ids"] );
       };

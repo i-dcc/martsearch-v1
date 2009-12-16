@@ -421,7 +421,7 @@ MartSearch.prototype = {
         dataset: "kermits",
         url: ms.base_url + "/htgt",
         filters: {
-          status_code: "GC",
+          status: "Genotype Confirmed",
           mi_centre:   "WTSI"
         }
       },

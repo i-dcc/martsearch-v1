@@ -13,7 +13,7 @@
   enabled_attributes: [
     "marker_symbol",
     "sponsor",
-    "escell_clone_name",
+    "escell_clone",
     "colony_prefix",
     "escell_strain",
     "test_cross_strain",

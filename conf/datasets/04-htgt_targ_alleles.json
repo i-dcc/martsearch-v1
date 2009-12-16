@@ -24,7 +24,7 @@
     "status_description",
     "status_sequence",
     "pipeline_stage",
-    "htgt_project_id",
+    "ikmc_project_id",
     "bac",
     "design_id",
     "design_plate",
@@ -38,12 +38,12 @@
     "backbone",
     "cassette",
     "allele_name",
-    "escell_clone_name",
+    "escell_clone",
     "escell_distribute",
-    "es_cell_line",
+    "escell_line",
     "colonies_picked",
     "is_latest_for_gene",
-    "is_targeted_non_cond"
+    "targeted_trap"
   ],
   custom_result_parser: function ( data, docs ) {
     var ds = this;
@@ -54,8 +54,8 @@
     for (var i=0; i < int_results.length; i++) {
       var result = int_results[i];
       
-      // Only store a result if we have a htgt_project_id and it's not a regeneron project
-      if (     result["htgt_project_id"] !== undefined
+      // Only store a result if we have a ikmc_project_id and it's not a regeneron project
+      if (     result["ikmc_project_id"] !== undefined
             && result["is_komp_regeneron"] !== "1" 
             && result["is_norcomm"] !== "1"
             && result["status_sequence"] >= 95 ) {
@@ -66,11 +66,11 @@
         // Find or create a result and project entry
         if ( results[ content_id ] == undefined ) { results[ content_id ] = {}; };
 
-        if ( results[ content_id ][ result["htgt_project_id"] ] == undefined ) {
-          results[ content_id ][ result["htgt_project_id"] ] = {};
+        if ( results[ content_id ][ result["ikmc_project_id"] ] == undefined ) {
+          results[ content_id ][ result["ikmc_project_id"] ] = {};
         };
 
-        var project = results[ content_id ][ result["htgt_project_id"] ];
+        var project = results[ content_id ][ result["ikmc_project_id"] ];
 
         // Extract the singular (per project) values
         var singular_attributes = [
@@ -87,7 +87,7 @@
           "status_description",
           "status_sequence",
           "pipeline_stage",
-          "htgt_project_id",
+          "ikmc_project_id",
           "bac",
           "design_id",
           "design_plate",
@@ -108,21 +108,21 @@
           project[ singular_attributes[j] ] = result[ singular_attributes[j] ];
         };
 
-        if ( result["escell_clone_name"] && ( result["escell_distribute"] || result["is_targeted_non_cond"] ) ) {
+        if ( result["escell_clone"] && ( result["escell_distribute"] || result["targeted_trap"] ) ) {
           var show_in_trap_box = 0;
-          if( result ["is_targeted_non_cond"] ){
+          if( result ["targeted_trap"] ){
             show_in_trap_box = 1;
           }
           // Find or create ES Cell entries for the project
           if ( project["escells"] == undefined ) { project["escells"] = []; };
           
           project["escells"].push({
-            escell_clone_name:      result["escell_clone_name"],
+            escell_clone_name:      result["escell_clone"],
             allele_name:            result["allele_name"],
-            es_cell_line:           result["es_cell_line"],
+            escell_line:           result["escell_line"],
             colonies_picked:        result["colonies_picked"],
             escell_distribute:      result["escell_distribute"],
-            is_targeted_non_cond:   result["is_targeted_non_cond"],
+            targeted_trap:   result["targeted_trap"],
             show_in_trap_box:       show_in_trap_box
           });
         };
