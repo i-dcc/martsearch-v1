@@ -1,3 +1,9 @@
-h1. MartSearch
+This project is currently on hold, and has been superseded by 
+"MartSearchr":http://github.com/dazoakley/martsearchr, a server-side 
+implementation of MartSearch written in Ruby.
 
-MartSearch is a configurable web services based search interface for Biomart. The idea is simple, take the sometimes complicated search interface of MartView, and replace it with a single free text search box. How this is achieved is not so simple however…
+The reason for this change in direction are simple, the vast majority of our 
+users use IE, and the javascript engine is far too slow to be able to handle 
+the complex queries and logic that MartSearch involves in a usable way.  When/if 
+the javascript engine in IE catches up with the competition (maybe IE9), we 
+might be able to start using this code again...
