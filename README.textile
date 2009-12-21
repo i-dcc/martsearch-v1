@@ -1,9 +1,3 @@
-This project is currently on hold, and has been superseded by 
-"MartSearchr":http://github.com/dazoakley/martsearchr, a server-side 
-implementation of MartSearch written in Ruby.
+This project is currently on hold, and has been superseded by "MartSearchr":http://github.com/dazoakley/martsearchr, a server-side implementation of MartSearch written in Ruby.
 
-The reason for this change in direction are simple, the vast majority of our 
-users use IE, and the javascript engine is far too slow to be able to handle 
-the complex queries and logic that MartSearch involves in a usable way.  When/if 
-the javascript engine in IE catches up with the competition (maybe IE9), we 
-might be able to start using this code again...
+The reason for this change in direction are simple, the vast majority of our users use IE, and the javascript engine is far too slow to be able to handle the complex queries and logic that MartSearch involves in a usable way.  When/if the javascript engine in IE catches up with the competition (maybe IE9), we might be able to start using this code again...
